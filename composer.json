@@ -9,13 +9,13 @@
     {"name": "Philipp Scheit", "email": "p.scheit@ps-webforge.com"}
   ],
   "require": {
-    "php": ">=5.3.2",
-    "webforge/collections": "^1.0@dev"
+    "php": ">=5.3.2"
   },
   "require-dev": {
     "mikey179/vfsStream": "1.2.*@stable",
     "mockery/mockery": "@stable",
-    "satooshi/php-coveralls": "dev-master"
+    "satooshi/php-coveralls": "dev-master",
+    "webforge/collections": "^1.0@dev"
   },
   "autoload": {
     "psr-0": {"Webforge\\Common": ["src/php/", "tests/php/"]}
