@@ -12,7 +12,7 @@ class FileTest extends TestCase {
   protected $dir, $dirPath;
 
   public static function setUpBeforeClass() {
-    self::$absPathPrefix = Util::isWindows() ? 'D:\\' : '/';
+    self::$absPathPrefix = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:\\' : '/';
   }
   
   public function setUp() {
@@ -56,7 +56,7 @@ class FileTest extends TestCase {
   }
   
   public function testWrappedConstructor() {
-    $fileString = 'phar://'.($pf = Util::isWindows() ? 'D:/' : '/').'does/not/matter/my.phar.gz/i/am/wrapped/class.php';
+    $fileString = 'phar://'.($pf = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:/' : '/').'does/not/matter/my.phar.gz/i/am/wrapped/class.php';
     
     $file = new File($fileString);
     $this->assertEquals('php',$file->getExtension());

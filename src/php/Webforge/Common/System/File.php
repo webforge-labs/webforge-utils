@@ -234,9 +234,10 @@ class File {
       throw new Exception('Das ZielVerzeichnis von move existiert nicht: '.$fileDestination->getDirectory());
     }
    
-    if ($fileDestination->exists() && $overwrite && Util::isWindows()) {
+    if ($fileDestination->exists() && $overwrite && substr(PHP_OS, 0, 3) == 'WIN') {
       $fileDestination->delete();
     }
+    
     $ret = rename((string) $this, (string) $fileDestination);
     
     if ($ret) {
