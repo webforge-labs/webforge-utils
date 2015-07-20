@@ -1,0 +1,15 @@
+{
+  "name": "some json testfile",
+  "type": "just a file!",
+  "description": "this file has json contents, of course",
+  "keywords": ["framework"],
+  "authors": [
+    {"name": "Philipp Scheit", "email": "p.scheit@ps-webforge.com"}
+  ],
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-0": {"Webforge\\Common": ["lib", "tests"]}
+  },
+  "minimum-stability": "dev"
+}

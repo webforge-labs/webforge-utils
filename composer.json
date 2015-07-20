@@ -1,0 +1,29 @@
+{
+  "name": "webforge/utils",
+  "type": "library",
+  "description": "A basic lib for file system and utils",
+  "keywords": ["framework", "util", "system"],
+  "homepage": "http://github.com/webforge-labs/webforge-utils",
+  "license": "MIT",
+  "authors": [
+    {"name": "Philipp Scheit", "email": "p.scheit@ps-webforge.com"}
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "webforge/collections": "^1.0@dev"
+  },
+  "require-dev": {
+    "mikey179/vfsStream": "1.2.*@stable",
+    "mockery/mockery": "@stable",
+    "satooshi/php-coveralls": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {"Webforge\\Common": ["src/php/", "tests/php/"]}
+  },
+  "minimum-stability": "dev",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
