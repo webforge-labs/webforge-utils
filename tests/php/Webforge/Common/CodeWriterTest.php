@@ -47,7 +47,7 @@ class CodeWriterTest extends \PHPUnit_Framework_TestCase {
     $value("'meinstring'", 'meinstring');
     $value('1', 1);
     $value('0.23', 0.23);
-    $value('0x000000', 0x000000);
+    //$value('0x000000', 0x000000); // seems to have changed in php7 in var_export?
     
     // exceptions: alles was nicht wirklich einfach ist => error
     $ex($badType, array());

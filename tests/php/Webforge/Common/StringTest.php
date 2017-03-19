@@ -21,10 +21,6 @@ class StringTest extends \PHPUnit_Framework_TestCase {
   }
   
 
-  public function testEnvironmentMbStringInternalEncodingIsUTF8() {
-    $this->assertEquals('UTF-8', ini_get('mbstring.internal_encoding'), 'mbstring.internal_encoding is set to wrong value');
-  }
-
   public function testIndent() {
     
     $string = 'aaa';

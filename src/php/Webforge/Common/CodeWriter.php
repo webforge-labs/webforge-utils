@@ -123,7 +123,7 @@ class CodeWriter {
     if (!$this->isBaseType($value)) {
       throw new RuntimeException('export kann keine Komplexen Datentypen wie: '.gettype($value).' exportieren');
     }
-    
+
     return var_export($value, TRUE);
   }
   
