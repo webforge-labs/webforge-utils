@@ -1,7 +1,5 @@
 language: php
 php:
-  - 5.3
-  - 5.4
   - 7.1
 
 sudo: false
@@ -9,6 +7,9 @@ sudo: false
 branches:
   only:
     - master
+
+before_install:
+  - composer require --dev --no-update phpunit/phpunit ~5.7
 
 install: composer install
 
