@@ -2,11 +2,10 @@
 
 namespace Psc;
 
-use PHPUnit_Framework_TestCase;
 use Webforge\Common\ArrayUtil AS A;
 use Webforge\Common\PHPClass;
 
-class ArrayUtilTest extends PHPUnit_Framework_TestCase {
+class ArrayUtilTest extends \PHPUnit_Framework_TestCase {
   
   public function testPeek() {
     $array = array('s1','s2');

@@ -82,7 +82,7 @@ class StringUtil {
     $cnt = $begin;
     $linedCode = Preg::replace_callback($code, '/(.*?)'.$eol.'/',
       function ($match) use (&$cnt, $padWhite) {
-        return sprintf('%s %s', self::padRight((string) $cnt++, $padWhite,' '), $match[0]);
+        return sprintf('%s %s', StringUtil::padRight((string) $cnt++, $padWhite,' '), $match[0]);
       }
     );
     
