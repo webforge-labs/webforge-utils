@@ -2,6 +2,8 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 7.1
+
 sudo: false
 
 branches:
@@ -10,10 +12,7 @@ branches:
 
 install: composer install
 
-script: phpunit --coverage-clover build/logs/clover.xml
-
-after_script:
-  - php vendor/bin/coveralls -v
+script: phpunit
 
 notifications:
   hipchat: 1fbdbbbaa517c485f935a6d72f1110@239240
