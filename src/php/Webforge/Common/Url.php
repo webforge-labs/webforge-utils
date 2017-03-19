@@ -2,7 +2,7 @@
 
 namespace Webforge\Common;
 
-use Webforge\Common\String AS S;
+use Webforge\Common\StringUtil AS S;
 use RuntimeException;
 
 class Url {

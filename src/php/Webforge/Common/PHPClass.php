@@ -3,7 +3,7 @@
 namespace Webforge\Common;
 
 use ReflectionClass;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 
 class PHPClass implements ClassInterface {
 

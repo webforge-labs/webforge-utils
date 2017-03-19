@@ -2,7 +2,7 @@
 
 namespace Webforge\Common;
 
-use Webforge\Common\String AS S;
+use Webforge\Common\StringUtil AS S;
 
 class StringTest extends \PHPUnit_Framework_TestCase {
   

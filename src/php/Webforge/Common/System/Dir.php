@@ -2,7 +2,7 @@
 
 namespace Webforge\Common\System;
 
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\Preg;
 use Webforge\Common\ArrayUtil AS A;
 use Webforge\Common\DateTime\DateTime;

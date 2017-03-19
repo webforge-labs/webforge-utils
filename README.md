@@ -32,6 +32,10 @@ Use [Composer](http://getcomposer.org) to install.
 composer require webforge/utils
 ```
 
+## migrate to 1.1.x
+
+`Webforge\Common\String` was renamed to `Webforge\Common\StringUtil`
+
 ## license
 
 Copyright (c) 2015 ps-webforge.com

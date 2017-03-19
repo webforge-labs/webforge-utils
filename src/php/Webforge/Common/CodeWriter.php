@@ -4,7 +4,7 @@ namespace Webforge\Common;
 
 use stdClass;
 use Webforge\Common\ArrayUtil AS A;
-use Webforge\Common\String as S;
+use Webforge\Common\StringUtil as S;
 use Webforge\Common\ClassInterface;
 use Webforge\Common\PHPClass;
 use RuntimeException;

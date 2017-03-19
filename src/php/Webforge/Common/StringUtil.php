@@ -2,7 +2,7 @@
 
 namespace Webforge\Common;
 
-class String {
+class StringUtil {
   
   const END = 'end';
   const START = 'start';
@@ -82,7 +82,7 @@ class String {
     $cnt = $begin;
     $linedCode = Preg::replace_callback($code, '/(.*?)'.$eol.'/',
       function ($match) use (&$cnt, $padWhite) {
-        return sprintf('%s %s', String::padRight((string) $cnt++, $padWhite,' '), $match[0]);
+        return sprintf('%s %s', self::padRight((string) $cnt++, $padWhite,' '), $match[0]);
       }
     );
     
