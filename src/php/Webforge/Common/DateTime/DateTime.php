@@ -231,7 +231,6 @@ class DateTime extends \DateTime {
 
       case 'fr':
       case 'fr_FR':
-      default:
         $transl = new TranslationFR();
         break;
     }
