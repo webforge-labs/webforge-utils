@@ -24,7 +24,7 @@ class Preg {
    * @see PHP::preg_match
    * @see PHP::preg_match_all
    */
-  public static function match ($subject, $pattern, &$matches=NULL, $flags=NULL, $offset=NULL) {
+  public static function match ($subject, $pattern, &$matches=NULL, $flags=NULL, $offset=0) {
     $pattern = self::set_u_modifier($pattern, TRUE);
     
     $delimiter = mb_substr($pattern,0 ,1);
