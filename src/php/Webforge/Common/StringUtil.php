@@ -314,15 +314,17 @@ class StringUtil
      */
     public static function miniTemplate($string, array $vars)
     {
-        $string = str_replace(
-      // replace %key%
-      array_map(create_function('$a', 'return "%".$a."%"; '), array_keys($vars)),
-      // with values
-      array_values($vars),
-      // in
-      $string
+        return str_replace(
+            // replace %key%
+            array_map(
+                function ($a) {
+                    return "%" . $a . "%";
+                },
+                array_keys($vars)
+            ),
+            array_values($vars),
+            $string
         );
-        return $string;
     }
 
     /**
