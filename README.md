@@ -32,6 +32,10 @@ Use [Composer](http://getcomposer.org) to install.
 composer require webforge/utils
 ```
 
+## migrate to 2.0.x
+
+- use php 8.1
+
 ## migrate to 1.1.x
 
 `Webforge\Common\String` was renamed to `Webforge\Common\StringUtil`
