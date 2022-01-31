@@ -1,8 +1,5 @@
 # webforge-utils
 
-[![Build Status](https://travis-ci.org/webforge-labs/webforge-utils.svg)](https://travis-ci.org/webforge-labs/webforge-utils)
-[![Coverage Status](https://coveralls.io/repos/webforge-labs/webforge-utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/webforge-labs/webforge-utils?branch=master)
-
 
 ## whats included
 
