@@ -38,6 +38,7 @@ class Preg {
       if ($flags === NULL) $flags = PREG_SET_ORDER; // default to PREG_SET_ORDER
       $ret = preg_match_all($pattern, $subject, $matches, $flags, $offset);
     } else {
+      if ($flags === NULL) $flags = 0;
       $ret = preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
