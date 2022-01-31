@@ -48,16 +48,16 @@ class Time
             $negative = $timespan < 0;
             $timespan = (int) abs($timespan);
 
+            $now = new DateTime();
 
-            $d2 = new DateTime();
+            $d2 = clone $now;
             $d2->add(new DateInterval('PT'.$timespan.'S'));
 
-            $di = $d2->diff(new DateTime());
-            $usec = $frac;
-            $di->setUS($usec);
-            $di->invert = (int) $negative;
+            $dateInterval = $d2->diff($now);
+            $dateInterval->setUS($frac);
+            $dateInterval->invert = (int) $negative;
 
-            return $di;
+            return $dateInterval;
         }
     }
     /**
