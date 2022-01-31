@@ -2,145 +2,146 @@
 
 namespace Webforge\Common;
 
+use http\Exception\RuntimeException;
+
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
-  /**
-   * @dataProvider provideTestAPI
-   */
+    /**
+     * @dataProvider provideTestAPI
+     */
     public function testAPI($sURL, $expectedURL, $scheme, $hostParts, $path, $query)
     {
-        //$verbose = 'aktuelle URL: '.$sURL;
-    $verbose = null; // geilo der der Sebastian hats schon geil gebaut
+        $verbose = '';
 
-    if ($expectedURL === null) {
-        $expectedURL = $sURL;
-    }
+        if ($expectedURL === null) {
+            $expectedURL = $sURL;
+        }
 
 
         $url = new Url($sURL);
 
         /* String Parsing + Conversion */
-        $this->assertEquals($expectedURL, $url->toString(), $verbose);
-        $this->assertEquals($expectedURL, (string) $url, $verbose);
+        self::assertEquals($expectedURL, $url->toString(), $verbose);
+        self::assertEquals($expectedURL, (string)$url, $verbose);
 
         /* Scheme */
-        $this->assertEquals($scheme, $url->getScheme(), $verbose);
+        self::assertEquals($scheme, $url->getScheme(), $verbose);
 
         if ($url->getScheme() === 'http') {
-            $this->assertTrue($url->isHTTP(), $verbose);
-            $this->assertEquals($url->getScheme(), Url::HTTP);
+            self::assertTrue($url->isHTTP(), $verbose);
+            self::assertEquals($url->getScheme(), Url::HTTP);
         }
 
         if ($url->getScheme() === 'https') {
-            $this->assertTrue($url->isHTTPs(), $verbose);
-            $this->assertEquals($url->getScheme(), Url::HTTPS);
+            self::assertTrue($url->isHTTPs(), $verbose);
+            self::assertEquals($url->getScheme(), Url::HTTPS);
         }
 
         /* host und host parts */
-        $this->assertEquals($hostParts, $url->getHostParts(), $verbose);
-        $this->assertEquals(implode('.', $hostParts), $url->getHost(), $verbose);
-        $this->assertInstanceOf(__NAMESPACE__.'\Url', $url->getHostURL(), $verbose);
+        self::assertEquals($hostParts, $url->getHostParts(), $verbose);
+        self::assertEquals(implode('.', $hostParts), $url->getHost(), $verbose);
+        self::assertInstanceOf(__NAMESPACE__ . '\Url', $url->getHostURL(), $verbose);
 
         /* Path */
-        $this->assertEquals($path, $url->getPath(), $verbose);
+        self::assertEquals($path, $url->getPath(), $verbose);
 
         /* QueryString */
-        $this->assertEquals($query, $url->getQuery(), $verbose);
+        self::assertEquals($query, $url->getQuery(), $verbose);
     }
 
     public function provideTestApi()
     {
         $urls = array();
         $urls[0] = array(
-      'http://stechuhr.ps-webforge.com/index.php',
-      null,
-      'http',
-      array('stechuhr','ps-webforge','com'),
-      array('index.php'),
-      array()
-    );
+            'http://stechuhr.ps-webforge.com/index.php',
+            null,
+            'http',
+            array('stechuhr', 'ps-webforge', 'com'),
+            array('index.php'),
+            array()
+        );
 
         $urls[1] = array(
-      'http://sebastian-bergmann.de/archives/797-Global-Variables-and-PHPUnit.html',
-      null,
-      'http',
-      array('sebastian-bergmann','de'),
-      array('archives', '797-Global-Variables-and-PHPUnit.html'),
-      array()
-    );
+            'http://sebastian-bergmann.de/archives/797-Global-Variables-and-PHPUnit.html',
+            null,
+            'http',
+            array('sebastian-bergmann', 'de'),
+            array('archives', '797-Global-Variables-and-PHPUnit.html'),
+            array()
+        );
 
         $urls[2] = array(
-      'http://tiptoi.philipp.zpintern/test',
-      null,
-      'http',
-      array('tiptoi','philipp','zpintern'),
-      array('test'),
-      array()
-    );
+            'http://tiptoi.philipp.zpintern/test',
+            null,
+            'http',
+            array('tiptoi', 'philipp', 'zpintern'),
+            array('test'),
+            array()
+        );
 
         $urls[3] = array(
-      'http://www.google.com/',
-      null,
-      'http',
-      array('www','google','com'),
-      array(),
-      array()
-    );
+            'http://www.google.com/',
+            null,
+            'http',
+            array('www', 'google', 'com'),
+            array(),
+            array()
+        );
 
         $urls[4] = array(
-      'https://www.google.com/analytics',
-      null,
-      'https',
-      array('www','google','com'),
-      array('analytics'),
-      array(),
-    );
+            'https://www.google.com/analytics',
+            null,
+            'https',
+            array('www', 'google', 'com'),
+            array('analytics'),
+            array(),
+        );
 
         // %20 oder + in der url als whitespace?
         $urls[5] = array(
-      'http://www.google.de/search?q=symfony+request+handler&ie=utf-8',
-      null,
-      'http',
-      array('www','google','de'),
-      array('search'),
-      array('q'=>'symfony request handler', 'ie'=>'utf-8')
-    );
+            'http://www.google.de/search?q=symfony+request+handler&ie=utf-8',
+            null,
+            'http',
+            array('www', 'google', 'de'),
+            array('search'),
+            array('q' => 'symfony request handler', 'ie' => 'utf-8')
+        );
 
         $urls[6] = array(
-      'http://127.0.0.1:8888/',
-      null,
-      'http',
-      array('127','0','0','1'),
-      array(),
-      array()
-    );
+            'http://127.0.0.1:8888/',
+            null,
+            'http',
+            array('127', '0', '0', '1'),
+            array(),
+            array()
+        );
 
         $urls[7] = array(
-      'http://ongaku.de/?lang=en',
-      null,
-      'http',
-      array('ongaku','de'),
-      array(),
-      array('lang'=>'en'),
-    );
+            'http://ongaku.de/?lang=en',
+            null,
+            'http',
+            array('ongaku', 'de'),
+            array(),
+            array('lang' => 'en'),
+        );
 
         $urls[8] = array(
-      'http://stechuhr.ps-webforge.com/index.php/path/to/heaven?lang=nix',
-      null,
-      'http',
-      array('stechuhr','ps-webforge','com'),
-      array('index.php','path','to','heaven'),
-      array('lang'=>'nix')
-    );
+            'http://stechuhr.ps-webforge.com/index.php/path/to/heaven?lang=nix',
+            null,
+            'http',
+            array('stechuhr', 'ps-webforge', 'com'),
+            array('index.php', 'path', 'to', 'heaven'),
+            array('lang' => 'nix')
+        );
 
         $urls[9] = array(
-      'http://stechuhr.ps-webforge.com/index.php/path/to/heaven/?lang=nix',
-      null,
-      'http',
-      array('stechuhr','ps-webforge','com'),
-      array('index.php','path','to','heaven'),
-      array('lang'=>'nix')
-    );
+            'http://stechuhr.ps-webforge.com/index.php/path/to/heaven/?lang=nix',
+            null,
+            'http',
+            array('stechuhr', 'ps-webforge', 'com'),
+            array('index.php', 'path', 'to', 'heaven'),
+            array('lang' => 'nix')
+        );
 
         return $urls;
     }
@@ -154,10 +155,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $combinedUrl = $url->addRelativeUrl($relativeUrl);
 
-        $this->assertSame($combinedUrl, $url);
-        $this->assertEquals(
+        self::assertSame($combinedUrl, $url);
+        self::assertEquals(
             $resultUrl,
-            (string) $combinedUrl
+            (string)$combinedUrl
         );
     }
 
@@ -166,22 +167,22 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $tests = array();
 
         $tests[] = array(
-      'http://www.example.com',
-      '/relative/url/file.html',
-      'http://www.example.com/relative/url/file.html'
-    );
+            'http://www.example.com',
+            '/relative/url/file.html',
+            'http://www.example.com/relative/url/file.html'
+        );
 
         $tests[] = array(
-      'http://www.example.com/',
-      '/relative/url/file.html',
-      'http://www.example.com/relative/url/file.html'
-    );
+            'http://www.example.com/',
+            '/relative/url/file.html',
+            'http://www.example.com/relative/url/file.html'
+        );
 
         $tests[] = array(
-      'http://www.example.com/sub/dir',
-      '/relative/url/file.html',
-      'http://www.example.com/sub/dir/relative/url/file.html'
-    );
+            'http://www.example.com/sub/dir',
+            '/relative/url/file.html',
+            'http://www.example.com/sub/dir/relative/url/file.html'
+        );
 
         /* YAGNI? */
         /*
@@ -195,11 +196,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testNoPartsException()
     {
+        $this->expectException(\RuntimeException::class);
         new Url('myproject.dev1.domain');
     }
 
@@ -208,9 +207,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $url = new Url('http://tvstt.laptop.ps-webforge.net/');
         $url->addSubDomain('test');
 
-        $this->assertEquals(
+        self::assertEquals(
             'http://test.tvstt.laptop.ps-webforge.net/',
-            (string) $url
+            (string)$url
         );
     }
 
@@ -219,10 +218,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $url = new Url($s = 'https://www.google.com/analytics');
         $url->setPathTrailingSlash(true);
 
-        $this->assertEquals((string) $url, $s.'/');
+        self::assertEquals((string)$url, $s . '/');
 
         $url->setPathTrailingSlash(false);
 
-        $this->assertEquals((string) $url, $s);
+        self::assertEquals((string)$url, $s);
     }
 }

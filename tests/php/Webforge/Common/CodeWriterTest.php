@@ -22,14 +22,14 @@ class CodeWriterTest extends \PHPUnit\Framework\TestCase
 
         /* Exception Test */
         if (isset($exception)) {
-            $this->assertException($exception, function () use ($codeWriter, $var) {
+            self::assertException($exception, function () use ($codeWriter, $var) {
                 $codeWriter->exportBaseTypeValue($var);
             });
 
 
         /* Value Test */
         } else {
-            $this->assertEquals($expectedPHP, $codeWriter->exportBaseTypeValue($var));
+            self::assertEquals($expectedPHP, $codeWriter->exportBaseTypeValue($var));
         }
     }
 
@@ -64,7 +64,7 @@ class CodeWriterTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportList($expectedPHP, $export)
     {
-        $this->assertEquals($expectedPHP, $this->codeWriter->exportList($export));
+        self::assertEquals($expectedPHP, $this->codeWriter->exportList($export));
     }
 
     public static function provideTestExportList()
@@ -134,7 +134,7 @@ class CodeWriterTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportListException($exceptionClass, $export)
     {
-        $this->setExpectedException($exceptionClass);
+        $this->expectException($exceptionClass);
 
         $this->codeWriter->exportList($export);
     }
@@ -172,7 +172,7 @@ class CodeWriterTest extends \PHPUnit\Framework\TestCase
      */
     public function testWriteConstructor($expectedPHP, $class, array $parameters)
     {
-        $this->assertEquals($expectedPHP, $this->codeWriter->exportConstructor($class, $parameters));
+        self::assertEquals($expectedPHP, $this->codeWriter->exportConstructor($class, $parameters));
     }
 
     public static function provideConstructor()

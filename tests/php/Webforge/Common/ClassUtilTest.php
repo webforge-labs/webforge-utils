@@ -11,7 +11,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     {
         $refl = new \ReflectionClass($className);
 
-        $this->assertEquals($namespace, $refl->getNamespaceName());
+        self::assertEquals($namespace, $refl->getNamespaceName());
     }
 
     /**
@@ -21,7 +21,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     {
         $refl = new \ReflectionClass($fqn);
 
-        $this->assertEquals($expectedClassName, $refl->getShortName());
+        self::assertEquals($expectedClassName, $refl->getShortName());
     }
 
     /**
@@ -29,7 +29,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetClassName($fqn, $expectedClassName)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expectedClassName,
             ClassUtil::getClassName($fqn)
         );
@@ -40,7 +40,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetNamespace($className, $expectedNamespace)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expectedNamespace,
             ClassUtil::getNamespace($className)
         );
@@ -52,7 +52,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testExpandNamespace($className, $namespace, $expectedFQN)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expectedFQN,
             ClassUtil::expandNamespace($className, $namespace)
         );
@@ -86,7 +86,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetNamespace($className, $namespace, $expectedFQN)
     {
-        $this->assertEquals($expectedFQN, ClassUtil::setNamespace($className, $namespace));
+        self::assertEquals($expectedFQN, ClassUtil::setNamespace($className, $namespace));
     }
 
     public static function provideSetNamespace()
@@ -158,16 +158,16 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     public function testCreatesNewInstancesOfObjectsWithNewClassInstance()
     {
         $refl = ClassUtil::newClassInstance('ReflectionClass', array(__CLASS__));
-        $this->assertEquals(__CLASS__, $refl->getName());
+        self::assertEquals(__CLASS__, $refl->getName());
 
 
         $refl = ClassUtil::newClassInstance(new \ReflectionClass('ReflectionClass'), array(__CLASS__));
-        $this->assertEquals(__CLASS__, $refl->getName());
+        self::assertEquals(__CLASS__, $refl->getName());
     }
 
     public function testNewClassInstanceCanOnlyDoStringOrReflectionClass()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         ClassUtil::newClassInstance(7, array());
     }
 }

@@ -9,13 +9,13 @@ class DateTest extends \Webforge\Common\TestCase
         // createm from datetime
         $dateTime = new DateTime('21.11.84 21:12');
         $date = Date::createFromDateTime($dateTime);
-        $this->assertInstanceOf('Webforge\Common\DateTime\Date', $date);
-        $this->assertEquals('21.11.1984 00:00:00', $date->format('d.m.Y H:i:s'));
+        self::assertInstanceOf('Webforge\Common\DateTime\Date', $date);
+        self::assertEquals('21.11.1984 00:00:00', $date->format('d.m.Y H:i:s'));
     }
 
     public function testInvalidDate()
     {
-        $this->setExpectedException('Webforge\Common\DateTime\ParsingException');
+        $this->expectException(\Webforge\Common\DateTime\ParsingException::class);
 
         $date = new Date('29.02.2011'); // 2012 ist das schaltjahr
 

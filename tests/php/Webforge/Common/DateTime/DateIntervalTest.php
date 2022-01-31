@@ -15,7 +15,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
 
     public function testConstruct()
     {
-        $this->assertInstanceOf('Webforge\Common\DateTime\DateInterval', $this->interval);
+        self::assertInstanceOf('Webforge\Common\DateTime\DateInterval', $this->interval);
     }
 
     /**
@@ -25,7 +25,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
     {
         $format = '%R %Y %M %D %H %I %S';
         $actualInterval = new DateInterval($testSpec);
-        $this->assertEquals($expectedInterval->format($format), $actualInterval->format($format));
+        self::assertEquals($expectedInterval->format($format), $actualInterval->format($format));
     }
 
     public static function provideSimpleSpec()
@@ -51,7 +51,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
         $start = DateTime::create('21.11.1984 13:00');
         $iv = DateInterval::create('1 DAY');
 
-        $this->assertEquals('22.11.1984 13:00', $iv->addTo($start)->format('d.m.Y H:i'));
-        $this->assertEquals('21.11.1984 13:00', $start->format('d.m.Y H:i'));
+        self::assertEquals('22.11.1984 13:00', $iv->addTo($start)->format('d.m.Y H:i'));
+        self::assertEquals('21.11.1984 13:00', $start->format('d.m.Y H:i'));
     }
 }

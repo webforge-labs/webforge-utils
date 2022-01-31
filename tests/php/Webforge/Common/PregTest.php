@@ -18,13 +18,13 @@ class PregTest extends \PHPUnit\Framework\TestCase
     public function testPregReplaceIsMultiByteSafe()
     {
         // internal test: preg_replace is not overloaded or something
-        $this->assertNotEquals(
+        self::assertNotEquals(
             'Upper„Word“',
             preg_replace('/(„)(Nerd)(“)/', 'Upper„Nerd“', '\\1Word\\3'),
             'failed asserting that php function is NOT multibytesafe'
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             'Upper„Word“',
             Preg::replace('Upper„Nerd“', '/(„)(Nerd)(“)/', '\\1Word\\3')
         );
@@ -36,13 +36,13 @@ class PregTest extends \PHPUnit\Framework\TestCase
         $pattern = '/^\x{201E}Nerd“$/';
         $subject = '„Nerd“';
 
-        $this->assertEquals(
+        self::assertEquals(
             1,
             Preg::match($subject, $pattern)
         );
 
         // this will fail, but i cant find an example where preg_match does not fail with error but still does not match
-    //$this->assertEquals(
+    //self::assertEquals(
     //  0,
     //  preg_match($pattern, $subject, $match),
     //  'failed asserting that php function preg_match is NOT multibytesafe'
@@ -55,12 +55,12 @@ class PregTest extends \PHPUnit\Framework\TestCase
         $pattern = '/([0-9]{1})/';
         $subject = '123';
 
-        $this->assertEquals(
+        self::assertEquals(
             3,
             Preg::match($subject, $pattern.'g')
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             1,
             Preg::match($subject, $pattern)
         );
@@ -68,7 +68,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testPregMatchThrowsExceptionIfInternalErrorAccurs()
     {
-        $this->setExpectedException('Webforge\Common\Exception');
+        $this->expectException(\Webforge\Common\Exception::class);
 
         Preg::match(
             '{aaaaaaaaaaaaaaaaaa{aaaaaaaaaaa{aaaaaaaaaaaaaaaaaaaaaaaaaaa}',
@@ -78,7 +78,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchArrayMatchesOnElementFromRegexArray()
     {
-        $this->assertNotEquals(
+        self::assertNotEquals(
             'two',
             Preg::matchArray(
           $this->matchers,
@@ -88,7 +88,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
     }
     public function testMatchArrayMatchesTHEFIRSTRegexFromArray()
     {
-        $this->assertEquals(
+        self::assertEquals(
             'one',
             Preg::matchArray(
           $this->matchers,
@@ -99,7 +99,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testFullMatchArrayMatchesAllFromArray()
     {
-        $this->assertEquals(
+        self::assertEquals(
             array('one','three'),
             Preg::matchFullArray(
           $this->matchers,
@@ -110,7 +110,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchFullArrayCanReturnNoMatchDefaultValue()
     {
-        $this->assertEquals(
+        self::assertEquals(
             'noMatchDefaultValue',
             Preg::matchFullArray(
           $this->matchers,
@@ -122,7 +122,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchArrayCanReturnNoMatchDefaultValue()
     {
-        $this->assertEquals(
+        self::assertEquals(
             'noMatchDefaultValue',
             Preg::matchArray(
           $this->matchers,
@@ -134,7 +134,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchFullArrayCanAssertAMatch()
     {
-        $this->setExpectedException('Webforge\Common\NoMatchException');
+        $this->expectException(\Webforge\Common\NoMatchException::class);
 
         Preg::matchFullArray(
             $this->matchers,
@@ -144,7 +144,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchArrayThrowsExceptionWhenAnyRegexDoesNotMatch()
     {
-        $this->setExpectedException('Webforge\Common\NoMatchException');
+        $this->expectException(\Webforge\Common\NoMatchException::class);
 
         Preg::matchArray($this->matchers, 'nix');
     }
@@ -153,7 +153,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD';
 
-        $this->assertEquals(
+        self::assertEquals(
             'WEB-DL',
             Preg::matchArray(
           array(
@@ -167,7 +167,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testSetModifierCanRemoveUModifierFromPattern()
     {
-        $this->assertEquals(
+        self::assertEquals(
             '/something/i',
             Preg::setModifier('/something/ui', 'u', false)
         );
@@ -175,7 +175,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     public function testSetModifierCanAddUModifierToPattern()
     {
-        $this->assertEquals(
+        self::assertEquals(
             '/something/iu',
             Preg::setModifier('/something/i', 'u', true)
         );
@@ -186,7 +186,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
      */
     public function testqmatch($string, $rx, $set, $expectedReturn)
     {
-        $this->assertEquals($expectedReturn, Preg::qmatch($string, $rx, $set));
+        self::assertEquals($expectedReturn, Preg::qmatch($string, $rx, $set));
     }
 
     public static function provideTestqmatch()

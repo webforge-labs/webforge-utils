@@ -10,7 +10,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 {
     public function testTraversablePreCondition()
     {
-        $this->assertInstanceOf('Traversable', new ArrayIterator(array(1,2,3)));
+        self::assertInstanceOf('Traversable', new ArrayIterator(array(1,2,3)));
     }
 
     /**
@@ -18,7 +18,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testTypeInfoAcceptance($typeSample)
     {
-        $this->assertNotEmpty(Util::typeInfo($typeSample));
+        self::assertNotEmpty(Util::typeInfo($typeSample));
     }
 
     /**
@@ -26,7 +26,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testVarInfoAcceptance($typeSample)
     {
-        $this->assertNotEmpty(Util::varInfo($typeSample));
+        self::assertNotEmpty(Util::varInfo($typeSample));
     }
 
     public function provideAllTypes()
@@ -76,7 +76,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testCastArray($item, $expected)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expected,
             Util::castArray($item)
         );

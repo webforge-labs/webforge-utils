@@ -11,7 +11,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $string = 'EnvironmentEncoding';
         $prefix = 'Environment';
 
-        $this->assertTrue(S::startsWith($string, $prefix));
+        self::assertTrue(S::startsWith($string, $prefix));
     }
 
     public function testStartsWithChecksIfStringStartNOTWithPrefix()
@@ -19,7 +19,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $string = 'EnvironmentEncoding';
         $prefix = 'other';
 
-        $this->assertFalse(S::startsWith($string, $prefix));
+        self::assertFalse(S::startsWith($string, $prefix));
     }
 
 
@@ -27,7 +27,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
     {
         $string = 'aaa';
         $expect = '  aaa';
-        $this->assertEquals($expect, S::indent($string, 2));
+        self::assertEquals($expect, S::indent($string, 2));
 
         $string  = "aaa\n";
         $string .= "bbb\n";
@@ -36,7 +36,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expect  = "  aaa\n";
         $expect .= "  bbb\n";
         $expect .= "  cccc\n";
-        $this->assertEquals($expect, S::indent($string, 2));
+        self::assertEquals($expect, S::indent($string, 2));
 
         $string  = "aaa\n";
         $string .= "bbb\n";
@@ -45,19 +45,19 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expect  = "  aaa\n";
         $expect .= "  bbb\n";
         $expect .= "  cccc";
-        $this->assertEquals($expect, S::indent($string, 2));
+        self::assertEquals($expect, S::indent($string, 2));
 
         $string  = "aaa\n";
         $string .= "bbb\n";
         $string .= "cccc\n";
-        $this->assertEquals($string, S::indent($string, 0));
+        self::assertEquals($string, S::indent($string, 0));
     }
 
     public function testPrefix()
     {
         $string = 'aaa';
         $expect = '[prefix]aaa';
-        $this->assertEquals($expect, S::prefixLines($string, '[prefix]'));
+        self::assertEquals($expect, S::prefixLines($string, '[prefix]'));
 
         $string  = "aaa\n";
         $string .= "bbb\n";
@@ -66,7 +66,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expect  = "[prefix]aaa\n";
         $expect .= "[prefix]bbb\n";
         $expect .= "[prefix]cccc\n";
-        $this->assertEquals($expect, S::prefixLines($string, '[prefix]'));
+        self::assertEquals($expect, S::prefixLines($string, '[prefix]'));
 
         $string  = "\r\naaa\r\n";
         $string .= "bbb\r\n";
@@ -75,7 +75,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expect  = "[prefix]\r\n[prefix]aaa\r\n";
         $expect .= "[prefix]bbb\r\n";
         $expect .= "[prefix]cccc\r\n";
-        $this->assertEquals($expect, S::prefixLines($string, '[prefix]'));
+        self::assertEquals($expect, S::prefixLines($string, '[prefix]'));
     }
 
     public function testLineNumbersWithEOLOnEnd()
@@ -86,7 +86,7 @@ class StringTest extends \PHPUnit\Framework\TestCase
         $expect  = "1 line1\n";
         $expect .= "2 line2\n";
 
-        $this->assertEquals($expect, S::lineNumbers($string));
+        self::assertEquals($expect, S::lineNumbers($string));
     }
 
     public function testLineNumbersWithoutEOLOnEnd()
@@ -117,20 +117,20 @@ JAVASCRIPT;
 10 });
 JAVASCRIPT;
 
-        $this->assertEquals($expect, S::lineNumbers($string));
+        self::assertEquals($expect, S::lineNumbers($string));
     }
 
 
     public function testExpandEnd()
     {
-        $this->assertEquals('StringType', S::expand('String', 'Type', S::END));
-        $this->assertEquals('StringType', S::expand('StringType', 'Type', S::END));
+        self::assertEquals('StringType', S::expand('String', 'Type', S::END));
+        self::assertEquals('StringType', S::expand('StringType', 'Type', S::END));
     }
 
     public function testExpandStart()
     {
-        $this->assertEquals('@return', S::expand('return', '@', S::START));
-        $this->assertEquals('@return', S::expand('@return', '@', S::START));
+        self::assertEquals('@return', S::expand('return', '@', S::START));
+        self::assertEquals('@return', S::expand('@return', '@', S::START));
     }
 
     public function testCutAtLast()
@@ -140,19 +140,19 @@ JAVASCRIPT;
         $ender = '...';
 
         // no cutting-test
-        $this->assertEquals($sentence, S::cutAtLast($sentence, 18, ' ', $ender));
+        self::assertEquals($sentence, S::cutAtLast($sentence, 18, ' ', $ender));
 
         // cutting at whitespace not inbetween "sentence"
-        $this->assertEquals('this is a'.$ender, S::cutAtLast($sentence, 12, ' ', $ender));
+        self::assertEquals('this is a'.$ender, S::cutAtLast($sentence, 12, ' ', $ender));
 
         // cutting at whitespace not inbetween "sentence"
-        $this->assertEquals('this is a'.$ender, S::cutAtLast($sentence, 17, ' ', $ender));
+        self::assertEquals('this is a'.$ender, S::cutAtLast($sentence, 17, ' ', $ender));
 
         // cutting at whitespace not inbetween "is"
-        $this->assertEquals('this'.$ender, S::cutAtLast($sentence, 5, ' ', $ender));
+        self::assertEquals('this'.$ender, S::cutAtLast($sentence, 5, ' ', $ender));
 
         // non defined
-        $this->assertEquals(''.$ender, S::cutAtLast($sentence, 17, 'b', $ender));
+        self::assertEquals(''.$ender, S::cutAtLast($sentence, 17, 'b', $ender));
     }
 
     public function testCut()
@@ -162,43 +162,43 @@ JAVASCRIPT;
         $ender = '...';
 
         // no cutting-test (edge case)
-        $this->assertEquals($sentence, S::cut($sentence, 18, $ender));
+        self::assertEquals($sentence, S::cut($sentence, 18, $ender));
 
         // cutting hard at 12
-        $this->assertEquals('this is a se'.$ender, S::cut($sentence, 12, $ender));
+        self::assertEquals('this is a se'.$ender, S::cut($sentence, 12, $ender));
 
         // cutting hard at 0 (rubbish test)
-        $this->assertEquals(''.$ender, S::cut($sentence, 0, $ender));
+        self::assertEquals(''.$ender, S::cut($sentence, 0, $ender));
     }
 
     public function testRandomAcceptance_ReturnsAStringFromLengthWithAZ09()
     {
         $length = 12;
         for ($i = 1; $i <= 10; $i++) {
-            $this->assertRegExp('/^[a-z0-9]{'.$length.'}$/', S::random($length));
+            self::assertMatchesRegularExpression('/^[a-z0-9]{'.$length.'}$/', S::random($length));
         }
     }
 
     public function testUCFirstUpcasesFirstLetter()
     {
-        $this->assertEquals('UpperWord', S::ucfirst('upperWord'));
+        self::assertEquals('UpperWord', S::ucfirst('upperWord'));
     }
 
     public function testUCFirstUpcasesFirstLetter_MultiByteSafe()
     {
-        $this->assertEquals('Upper„Word“', S::ucfirst('upper„Word“')); // <- this would also be multibyte safe with php (interestingly)
-        $this->assertEquals('ÖpperWort', S::ucfirst('öpperWort'));
+        self::assertEquals('Upper„Word“', S::ucfirst('upper„Word“')); // <- this would also be multibyte safe with php (interestingly)
+        self::assertEquals('ÖpperWort', S::ucfirst('öpperWort'));
     }
 
     public function testLCFirstLowCasesFirstLetter_MultiByteSafe()
     {
-        $this->assertEquals('lower„Word“', S::lcfirst('Lower„Word“'));
-        $this->assertEquals('äuer', S::lcfirst('Äuer'));
+        self::assertEquals('lower„Word“', S::lcfirst('Lower„Word“'));
+        self::assertEquals('äuer', S::lcfirst('Äuer'));
     }
 
     public function testEOLVisibleMarksEOLs()
     {
-        $this->assertEquals(
+        self::assertEquals(
             "some-n-\nstring-rn-\r\n",
             S::eolVisible("some\nstring\r\n")
         );
@@ -218,7 +218,7 @@ JAVASCRIPT;
         $expectedText .= "fourthLine\n";
         $expectedText .= "\n";
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedText,
             S::fixEOL($textWithMixed)
         );
@@ -226,19 +226,19 @@ JAVASCRIPT;
 
     public function testDebugEqualsAcceptance()
     {
-        $this->assertNotEmpty(S::debugEquals('value1', 'value2'));
+        self::assertNotEmpty(S::debugEquals('value1', 'value2'));
     }
 
     public function testPadLeft_padsTheStringOnTheLeft()
     {
-        $this->assertEquals('01', S::padLeft('01', 2, '0'));
-        $this->assertEquals('01', S::padLeft('1', 2, '0'));
-        $this->assertEquals('11', S::padLeft('11', 2, '0'));
+        self::assertEquals('01', S::padLeft('01', 2, '0'));
+        self::assertEquals('01', S::padLeft('1', 2, '0'));
+        self::assertEquals('11', S::padLeft('11', 2, '0'));
     }
 
     public function testWrapWrapsWithAChar()
     {
-        $this->assertEquals('"its wrapped"', S::wrap('its wrapped', '"'));
+        self::assertEquals('"its wrapped"', S::wrap('its wrapped', '"'));
     }
 
     /**
@@ -247,7 +247,7 @@ JAVASCRIPT;
      */
     public function testSubstringIsStringCuttingFROMPosition_TOPosition_NotIncludingPosition($expectedString, $string, $from, $to)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expectedString,
             S::substring($string, $from, $to)
         );
@@ -288,7 +288,7 @@ JAVASCRIPT;
      */
     public function testSymmetricWrap($input, $symmetric, $expected)
     {
-        $this->assertEquals($expected, S::swrap($input, $symmetric));
+        self::assertEquals($expected, S::swrap($input, $symmetric));
     }
 
     public static function getSymmetricWrapTests()
@@ -333,7 +333,7 @@ JAVASCRIPT;
      */
     public function testMiniTemplate($template, $vars, $expected)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expected,
             S::miniTemplate($template, $vars)
         );
@@ -368,7 +368,7 @@ JAVASCRIPT;
      */
     public function testCamelCaseToDash($camelName, $dashName)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $dashName,
             S::camelCaseToDash($camelName)
         );
@@ -379,7 +379,7 @@ JAVASCRIPT;
      */
     public function testDashToCamelCase($camelName, $dashName)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $camelName,
             S::dashToCamelCase($dashName)
         );

@@ -13,7 +13,7 @@ class FileTest extends TestCase
 
     protected $dirPath;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$absPathPrefix = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:\\' : '/';
     }
@@ -41,9 +41,9 @@ class FileTest extends TestCase
 
     public function testFactoryReturnsAFile()
     {
-        $this->assertInstanceOf('Webforge\Common\System\File', File::factory($this->dirPath.'somefile.txt'));
-        $this->assertInstanceOf('Webforge\Common\System\File', File::factory($this->dir, 'somefile.txt'));
-        $this->assertInstanceOf('Webforge\Common\System\File', File::factory('somefile.txt', $this->dir));
+        self::assertInstanceOf('Webforge\Common\System\File', File::factory($this->dirPath.'somefile.txt'));
+        self::assertInstanceOf('Webforge\Common\System\File', File::factory($this->dir, 'somefile.txt'));
+        self::assertInstanceOf('Webforge\Common\System\File', File::factory('somefile.txt', $this->dir));
     }
 
     public function testConstructor()
@@ -54,13 +54,13 @@ class FileTest extends TestCase
         $filename = 'banane.php';
 
         $file = new File($dir, $filename);
-        $this->assertEquals($fileString, (string) $file);
+        self::assertEquals($fileString, (string) $file);
 
         $file = new File($fileString);
-        $this->assertEquals($fileString, (string) $file);
+        self::assertEquals($fileString, (string) $file);
 
         $file = new File($filename, $dir);
-        $this->assertEquals($fileString, (string) $file);
+        self::assertEquals($fileString, (string) $file);
     }
 
     public function testWrappedConstructor()
@@ -68,10 +68,10 @@ class FileTest extends TestCase
         $fileString = 'phar://'.($pf = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:/' : '/').'does/not/matter/my.phar.gz/i/am/wrapped/class.php';
 
         $file = new File($fileString);
-        $this->assertEquals('php', $file->getExtension());
-        $this->assertEquals('class.php', $file->getName());
-        $this->assertEquals('phar://'.$pf.'does/not/matter/my.phar.gz/i/am/wrapped/', (string) $file->getDirectory());
-        $this->assertEquals($fileString, (string) $file);
+        self::assertEquals('php', $file->getExtension());
+        self::assertEquals('class.php', $file->getName());
+        self::assertEquals('phar://'.$pf.'does/not/matter/my.phar.gz/i/am/wrapped/', (string) $file->getDirectory());
+        self::assertEquals($fileString, (string) $file);
     }
 
     public function testReadableinPhar()
@@ -80,8 +80,8 @@ class FileTest extends TestCase
         $wrapped = 'phar://'.str_replace(DIRECTORY_SEPARATOR, '/', (string) $phar).'/Imagine/Exception/Exception.php';
 
         $file = new File($wrapped);
-        $this->assertTrue($file->isReadable());
-        $this->assertTrue($file->exists());
+        self::assertTrue($file->isReadable());
+        self::assertTrue($file->exists());
     }
 
     public function testAppendName()
@@ -91,22 +91,18 @@ class FileTest extends TestCase
         $file = new File($path.'The.Big.Bang.Theory.S05E07.en.IMMERSE.srt');
         $file->setName($file->getName(File::WITHOUT_EXTENSION).'-en.srt');
 
-        $this->assertEquals($path.'The.Big.Bang.Theory.S05E07.en.IMMERSE-en.srt', (string) $file);
+        self::assertEquals($path.'The.Big.Bang.Theory.S05E07.en.IMMERSE-en.srt', (string) $file);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testConstructorException1()
     {
+        $this->expectException(\BadMethodCallException::class);
         $file = new File('keindir', 'keinfilename');
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testConstructorException2()
     {
+        $this->expectException(\BadMethodCallException::class);
         $file = new File(new File('/tmp/src'));
     }
 
@@ -118,7 +114,7 @@ class FileTest extends TestCase
         $file = new File($fileString);
         $dir = isset($dirString) ? new Dir($dirString) : null;
 
-        $this->assertEquals($expectedURL, $file->getURL($dir));
+        self::assertEquals($expectedURL, $file->getURL($dir));
     }
 
     public static function provideGetURL()
@@ -153,18 +149,18 @@ class FileTest extends TestCase
         $dir = new Dir($path = self::absPath('www', 'ePaper42', 'Umsetzung', 'base', 'files', 'testdata', 'fixtures', 'ResourceManagerTest', 'xml'));
         $url = "/in2days/2011_newyork/main.xml";
 
-        $this->assertEquals(
+        self::assertEquals(
             $path.'in2days'.DIRECTORY_SEPARATOR.'2011_newyork'.DIRECTORY_SEPARATOR.'main.xml',
             (string) File::createFromURL($url, $dir)
         );
-        $this->assertEquals(self::path('.', 'in2days', '2011_newyork'). 'main.xml', (string) File::createFromURL($url));
+        self::assertEquals(self::path('.', 'in2days', '2011_newyork'). 'main.xml', (string) File::createFromURL($url));
     }
 
     public function testGetFromURL_relativeFile()
     {
         // wird als Datei interpretiert die in in2days/ liegt !
         $url = "/in2days/2011_newyork";
-        $this->assertEquals('.'.DIRECTORY_SEPARATOR.'in2days'.DIRECTORY_SEPARATOR.'2011_newyork', (string) File::createFromURL($url));
+        self::assertEquals('.'.DIRECTORY_SEPARATOR.'in2days'.DIRECTORY_SEPARATOR.'2011_newyork', (string) File::createFromURL($url));
     }
 
     public function testWriteContentsCanDoAnExclusiveTempMove()
@@ -172,7 +168,7 @@ class FileTest extends TestCase
         $file = File::createTemporary();
 
         $file->writeContents(123, File::EXCLUSIVE);
-        $this->assertEquals(123, file_get_contents((string) $file));
+        self::assertEquals(123, file_get_contents((string) $file));
         $file->delete();
     }
 
@@ -180,16 +176,16 @@ class FileTest extends TestCase
     {
         $file = File::createTemporary('jpg');
 
-        $this->assertEquals('jpg', $file->getExtension());
+        self::assertEquals('jpg', $file->getExtension());
 
         $file->delete();
     }
 
     public function testWritingIntoAFileWithoutAnExistingDirDoesFail()
     {
-        $this->assertFalse($this->dir->exists());
+        self::assertFalse($this->dir->exists());
 
-        $this->setExpectedException('Webforge\Common\System\Exception');
+        $this->expectException('Webforge\Common\System\Exception');
 
         $this->dir->getFile('new.txt')->writeContents('some-content');
     }
@@ -200,12 +196,12 @@ class FileTest extends TestCase
         $otherContent = 's00000000';
         $file = File::createTemporary();
         $file->writeContents($content);
-        $this->assertEquals(sha1($content), $file->getSha1());
+        self::assertEquals(sha1($content), $file->getSha1());
 
         // test caching
         $file->writeContents($otherContent);
-        //$this->assertNotEquals(sha1($content), $file->getSha1());
-        $this->assertEquals(sha1($otherContent), $file->getSha1());
+        //self::assertNotEquals(sha1($content), $file->getSha1());
+        self::assertEquals(sha1($otherContent), $file->getSha1());
         $file->delete();
     }
 
@@ -231,10 +227,10 @@ class FileTest extends TestCase
 
         $extensionFile = $noExtensionFile->findExtension($extensions);
 
-        $this->assertInstanceOf(__NAMESPACE__.'\\File', $extensionFile);
-        $this->assertNotSame($extensionFile, $noExtensionFile);
+        self::assertInstanceOf(__NAMESPACE__.'\\File', $extensionFile);
+        self::assertNotSame($extensionFile, $noExtensionFile);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedFile,
             $extensionFile->getName(File::WITH_EXTENSION)
         );
@@ -263,7 +259,7 @@ class FileTest extends TestCase
     {
         $noExtensionFile = $this->setupNoExtensionFile();
 
-        $this->setExpectedException('Webforge\Common\Exception\FileNotFoundException');
+        $this->expectException('Webforge\Common\Exception\FileNotFoundException');
 
         $noExtensionFile->findExtension(array('nil', 'nihil', 'none'));
     }
@@ -275,12 +271,12 @@ class FileTest extends TestCase
         $dir = new Dir(self::absPath('www', 'test', 'base', 'ka', 'auch'));
         $filename = 'test.php';
 
-        $this->assertEquals(
+        self::assertEquals(
             $dir->getOSPath(Dir::WINDOWS).'test.php',
             $file->getOSPath(File::WINDOWS)
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             $dir->getOSPath(Dir::UNIX).'test.php',
             $file->getOSPath(File::UNIX)
         );
@@ -288,7 +284,7 @@ class FileTest extends TestCase
 
     public function testCopySourceHasToBeExisting()
     {
-        $this->setExpectedException(__NAMESPACE__.'\Exception');
+        $this->expectException(__NAMESPACE__.'\Exception');
         $this->notExistingFile->copy($this->dir->getFile('new.txt'));
     }
 
@@ -299,13 +295,13 @@ class FileTest extends TestCase
         $file = new File(__FILE__);
         $file->copy($dir);
 
-        $this->assertFileExists((string) $dir->getFile(basename(__FILE__)));
+        self::assertFileExists((string) $dir->getFile(basename(__FILE__)));
         $dir->delete();
     }
 
     public function testTheDestinationDirHasToBeExisting()
     {
-        $this->setExpectedException(__NAMESPACE__.'\Exception');
+        $this->expectException(__NAMESPACE__.'\Exception');
 
         $file = new File(__FILE__);
         $file->copy($this->dir);
@@ -313,7 +309,7 @@ class FileTest extends TestCase
 
     public function testDestinationfromCopyCannotBeAstring()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
 
         $file = new File(__FILE__);
         $file->copy('to-wrong');
@@ -321,7 +317,7 @@ class FileTest extends TestCase
 
     public function testIsRelativeIsReflectedFromDirectory()
     {
-        $this->assertFalse($this->notExistingFile->isRelative());
+        self::assertFalse($this->notExistingFile->isRelative());
     }
 
     public function testResolvePathIsCalledFromDirectory()
@@ -329,7 +325,7 @@ class FileTest extends TestCase
         $file = new File(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'file.txt');
         $file->resolvePath();
 
-        $this->assertEquals(
+        self::assertEquals(
             realpath(__DIR__.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR.'file.txt',
             (string) $file
         );
@@ -339,31 +335,31 @@ class FileTest extends TestCase
     {
         $f = File::createTemporary()->writeContents(str_repeat('1', 16));
         clearstatcache();
-        $this->assertEquals(16, $f->getSize());
+        self::assertEquals(16, $f->getSize());
         $f->delete();
     }
 
     public function testFileGetContentsCannotReadNotExistingFile()
     {
-        $this->setExpectedException(__NAMESPACE__.'\Exception');
+        $this->expectException(__NAMESPACE__.'\Exception');
         $this->notExistingFile->getContents();
     }
 
     public function testFileGetContentsCannotReadNotExistingFileWithSize()
     {
-        $this->setExpectedException(__NAMESPACE__.'\Exception');
+        $this->expectException(__NAMESPACE__.'\Exception');
         $this->notExistingFile->getContents(2);
     }
 
     public function testGetContentsCanBeRestrictedToBytes()
     {
         $f = File::createTemporary()->writeContents(str_repeat('1', 16));
-        $this->assertEquals(2, mb_strlen($f->getContents(2)));
+        self::assertEquals(2, mb_strlen($f->getContents(2)));
     }
 
     public function testSafeNameIsNotCool()
     {
-        $this->assertEquals(
+        self::assertEquals(
             'yAElsdfjIO',
             File::safename('ýÂÊlsdfjÎÔ')
         );

@@ -14,16 +14,16 @@ class FileAttributesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetModifiedTimeReturnsATimestamp()
     {
-        $this->assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getModifiedTime());
+        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getModifiedTime());
     }
 
     public function testGetCreateTimeReturnsATimestamp()
     {
-        $this->assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getCreationTime());
+        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getCreationTime());
     }
 
     public function testgetAccessTimeReturnsATimestamp()
     {
-        $this->assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getAccessTime());
+        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getAccessTime());
     }
 }

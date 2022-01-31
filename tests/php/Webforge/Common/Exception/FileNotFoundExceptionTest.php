@@ -8,8 +8,8 @@ class FileNotFoundExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCanBeConstructedFromMissingFile()
     {
-        $this->assertInstanceOf('Webforge\\Common\Exception', $exception = FileNotFoundException::fromFile($file = new File('this/does/not/exist')));
+        self::assertInstanceOf('Webforge\\Common\Exception', $exception = FileNotFoundException::fromFile($file = new File('this/does/not/exist')));
 
-        $this->assertSame($file, $exception->getNotFoundFile());
+        self::assertSame($file, $exception->getNotFoundFile());
     }
 }

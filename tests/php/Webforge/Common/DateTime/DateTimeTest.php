@@ -2,6 +2,8 @@
 
 namespace Webforge\Common\DateTime;
 
+use http\Exception\InvalidArgumentException;
+
 /**
  * put test data into testdata repository
  */
@@ -12,7 +14,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
    */
     public function testI18nFormat($expectedFormat, $date, $formatString, $lang = 'en')
     {
-        $this->assertEquals($expectedFormat, $date->i18n_format($formatString, $lang));
+        self::assertEquals($expectedFormat, $date->i18n_format($formatString, $lang));
     }
 
     public function i18nFormats()
@@ -67,20 +69,20 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $yesterday = DateTime::factory($yesterday);
         $beforeYesterday = DateTime::factory($beforeYesterday);
 
-        $this->assertTrue($yesterday->isYesterday());
-        $this->assertTrue($yesterday->isYesterday($now));
+        self::assertTrue($yesterday->isYesterday());
+        self::assertTrue($yesterday->isYesterday($now));
 
-        $this->assertFalse($beforeYesterday->isYesterday());
-        $this->assertFalse($beforeYesterday->isYesterday($now));
+        self::assertFalse($beforeYesterday->isYesterday());
+        self::assertFalse($beforeYesterday->isYesterday($now));
 
         $now->add(DateInterval::createFromDateString('1 DAY'));
-        $this->assertFalse($yesterday->isYesterday($now));
+        self::assertFalse($yesterday->isYesterday($now));
     }
 
     public function testToday()
     {
         $now = DateTime::now();
-        $this->assertTrue($now->isToday());
+        self::assertTrue($now->isToday());
     }
 
     public function testisWeekDay()
@@ -91,14 +93,14 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $su = DateTime::parse('d.m.Y H:i', '8.1.2012 12:00');
 
 
-        $this->assertTrue($we->isWeekDay($now));
-        $this->assertTrue($mo->isWeekDay($now));
-        $this->assertTrue($su->isWeekDay($now));
+        self::assertTrue($we->isWeekDay($now));
+        self::assertTrue($mo->isWeekDay($now));
+        self::assertTrue($su->isWeekDay($now));
 
         $now = DateTime::parse('d.m.Y', '10.1.2012');
-        $this->assertFalse($we->isWeekDay($now));
-        $this->assertFalse($mo->isWeekDay($now));
-        $this->assertFalse($su->isWeekDay($now));
+        self::assertFalse($we->isWeekDay($now));
+        self::assertFalse($mo->isWeekDay($now));
+        self::assertFalse($su->isWeekDay($now));
     }
 
     /**
@@ -106,12 +108,12 @@ class DateTimeTest extends \Webforge\Common\TestCase
      */
     public function testGetWeekday($day, $date, $assertion)
     {
-        $this->assertEquals($assertion, $date->getWeekday($day)->format('d.m.Y'));
+        self::assertEquals($assertion, $date->getWeekday($day)->format('d.m.Y'));
     }
 
     public function testParseFromRFC1123()
     {
-        $this->assertInstanceof('Webforge\Common\DateTime\DateTime', DateTime::parse(DateTime::RFC1123, 'Thu, 10 Nov 2011 07:28:18 GMT'));
+        self::assertInstanceof('Webforge\Common\DateTime\DateTime', DateTime::parse(DateTime::RFC1123, 'Thu, 10 Nov 2011 07:28:18 GMT'));
     }
 
 
@@ -122,21 +124,19 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $year = 2012;
 
         $date = new DateTime('12.1.2012');
-        $this->assertSame($day, $date->getDay());
-        $this->assertSame($month, $date->getMonth());
-        $this->assertSame($year, $date->getYear());
+        self::assertSame($day, $date->getDay());
+        self::assertSame($month, $date->getMonth());
+        self::assertSame($year, $date->getYear());
 
         $date->setYear(1940);
-        $this->assertSame($day, $date->getDay());
-        $this->assertSame($month, $date->getMonth());
-        $this->assertSame(1940, $date->getYear());
+        self::assertSame($day, $date->getDay());
+        self::assertSame($month, $date->getMonth());
+        self::assertSame(1940, $date->getYear());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testSetYearBecomesInt()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $date = DateTime::now();
         $date->setYear('2011');
     }
@@ -145,12 +145,12 @@ class DateTimeTest extends \Webforge\Common\TestCase
     {
         $date = new DateTime('07.08.2014');
         $copy = $date->copy();
-        $this->assertEquals('07.08.2014', $copy->format('d.m.Y'));
+        self::assertEquals('07.08.2014', $copy->format('d.m.Y'));
 
         $otherDate = $date->copy('+1 day');
-        $this->assertEquals('08.08.2014', $otherDate->format('d.m.Y'));
+        self::assertEquals('08.08.2014', $otherDate->format('d.m.Y'));
 
-        $this->assertEquals('07.08.2014', $date->format('d.m.Y'));
+        self::assertEquals('07.08.2014', $date->format('d.m.Y'));
     }
 
     public function provideFormatSpan()
@@ -243,7 +243,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        $this->assertEquals($expected, $subject->isBefore($object), 'failed asserting that: '.$subjectDate.'->isBefore('.$objectDate.')');
+        self::assertEquals($expected, $subject->isBefore($object), 'failed asserting that: '.$subjectDate.'->isBefore('.$objectDate.')');
     }
 
     public static function provideBefore()
@@ -269,7 +269,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        $this->assertEquals($expected, $subject->isAfter($object), 'failed asserting that: '.$subjectDate.'->isAfter('.$objectDate.')');
+        self::assertEquals($expected, $subject->isAfter($object), 'failed asserting that: '.$subjectDate.'->isAfter('.$objectDate.')');
     }
 
     public static function provideAfter()
@@ -295,7 +295,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        $this->assertEquals($expected, $subject->isEqual($object), 'failed asserting that: '.$subjectDate.'->isEqual('.$objectDate.')');
+        self::assertEquals($expected, $subject->isEqual($object), 'failed asserting that: '.$subjectDate.'->isEqual('.$objectDate.')');
     }
 
     public static function provideEqual()

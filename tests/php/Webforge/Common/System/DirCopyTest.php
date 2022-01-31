@@ -30,7 +30,7 @@ class DirCopyTest extends TestCase
     {
         $target = $this->createTemporary();
 
-        $this->assertInstanceOf($this->fqn, $this->source->copy($target));
+        self::assertInstanceOf($this->fqn, $this->source->copy($target));
 
         $files = array(
       '/README.md',
@@ -41,8 +41,8 @@ class DirCopyTest extends TestCase
     );
 
         foreach ($files as $url) {
-            $this->assertFileExists((string) $target->getFile($url), $url.' was not copied to target.');
-            $this->assertFileExists((string) $this->source->getFile($url), $url.' was removed from source!!');
+            self::assertFileExists((string) $target->getFile($url), $url.' was not copied to target.');
+            self::assertFileExists((string) $this->source->getFile($url), $url.' was removed from source!!');
         }
     }
 
