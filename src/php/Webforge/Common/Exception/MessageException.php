@@ -2,21 +2,20 @@
 
 namespace Webforge\Common\Exception;
 
-interface MessageException {
+interface MessageException
+{
+  /**
+   * @chainable
+   */
+    public function setMessage($msg);
 
-  /**
-   * @chainable
-   */
-  public function setMessage($msg);
-  
-  /**
-   * @chainable
-   */
-  public function appendMessage($msg);
-  
-  /**
-   * @chainable
-   */
-  public function prependMessage($msg);
+    /**
+     * @chainable
+     */
+    public function appendMessage($msg);
 
+    /**
+     * @chainable
+     */
+    public function prependMessage($msg);
 }

@@ -2,6 +2,6 @@
 
 namespace Webforge\Common;
 
-class NoMatchException extends Exception {
-  
+class NoMatchException extends Exception
+{
 }

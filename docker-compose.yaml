@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: ./config/docker/php/Dockerfile
+        volumes:
+            - .:/app
+        user: "33:33"

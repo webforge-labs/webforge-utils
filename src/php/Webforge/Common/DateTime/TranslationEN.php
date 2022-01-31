@@ -2,11 +2,11 @@
 
 namespace Webforge\Common\DateTime;
 
-class TranslationEN extends Translation  {
+class TranslationEN extends Translation
+{
+    public $lang = 'en_GB';
 
-  public $lang = 'en_GB';
-  
-  public $months = array(
+    public $months = array(
     1=>'January',
     2=>'February',
     3=>'March',
@@ -20,8 +20,8 @@ class TranslationEN extends Translation  {
     11=>'November',
     12=>'December'
   );
-  
-  public $weekdays = array(
+
+    public $weekdays = array(
     1=>'Monday',
     2=>'Tuesday',
     3=>'Wednesday',
@@ -30,8 +30,8 @@ class TranslationEN extends Translation  {
     6=>'Saturday',
     0=>'Sunday',
   );
-  
-  public $weekdaysAbbrev = array(
+
+    public $weekdaysAbbrev = array(
     1=>'Mo',
     2=>'Tu',
     3=>'We',
@@ -41,7 +41,7 @@ class TranslationEN extends Translation  {
     0=>'Su',
   );
 
-  public $monthsAbbrev = array(
+    public $monthsAbbrev = array(
     1=>'Jan',
     2=>'Feb',
     3=>'Mar',
@@ -56,5 +56,3 @@ class TranslationEN extends Translation  {
     12=>'Dec'
   );
 }
-
-?>

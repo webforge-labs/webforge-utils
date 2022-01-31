@@ -5,11 +5,11 @@ namespace Webforge\Common\DateTime;
 /**
  * @todo check abbrevations
  */
-class TranslationFR extends Translation  {
+class TranslationFR extends Translation
+{
+    public $lang = 'fr_FR';
 
-  public $lang = 'fr_FR';
-  
-  public $months = array(
+    public $months = array(
     1=>'janvier',
     2=>'février',
     3=>'mars',
@@ -23,8 +23,8 @@ class TranslationFR extends Translation  {
     11=>'novembre',
     12=>'décembre'
   );
-  
-  public $weekdays = array(
+
+    public $weekdays = array(
     1=>'lundi',
     2=>'mardi',
     3=>'mercredi',
@@ -34,8 +34,8 @@ class TranslationFR extends Translation  {
     0=>'dimanche'
   );
 
-  
-  public $weekdaysAbbrev = array(
+
+    public $weekdaysAbbrev = array(
     1=>'lu',
     2=>'ma',
     3=>'me',
@@ -45,8 +45,8 @@ class TranslationFR extends Translation  {
     0=>'di',
   );
 
-  // @Fixme: TODO
-  public $monthsAbbrev = array(
+    // @Fixme: TODO
+    public $monthsAbbrev = array(
     1=>'Jan',
     2=>'Feb',
     3=>'Mar',
@@ -61,5 +61,3 @@ class TranslationFR extends Translation  {
     12=>'Dec'
   );
 }
-
-?>
