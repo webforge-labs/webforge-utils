@@ -35,7 +35,7 @@ class File {
   protected $extension;
 
   /**
-   * @var Webforge\Common\System\Dir
+   * @var Dir
    */
   protected $directory;
 
@@ -70,7 +70,7 @@ class File {
   /**
    * Creates a temporary File in the system temp directory
    * 
-   * @return Webforge\Common\System\File
+   * @return self
    */
   public static function createTemporary($extension = NULL) {
     $tmpfile = tempnam(sys_get_temp_dir(), mb_substr(uniqid(),0,3));
@@ -85,7 +85,7 @@ class File {
   /**
    * Creates the file from a relative URL in relation to $base
    * 
-   * @return Webforge\Common\System\File
+   * @return self
    */
   public static function createFromURL($url, Dir $base = NULL) {
     if (!isset($base)) $base = new Dir('.'.DIRECTORY_SEPARATOR);
@@ -130,7 +130,7 @@ class File {
   }
 
   /**
-   * @return Webforge\Common\System\File
+   * @return static
    */
   public static function factory($arg1, $arg2 = NULL) {
     return new static($arg1, $arg2);
