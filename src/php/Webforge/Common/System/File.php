@@ -71,7 +71,7 @@ class File
     /**
      * Creates a temporary File in the system temp directory
      *
-     * @return Webforge\Common\System\File
+     * @return self
      */
     public static function createTemporary($extension = null)
     {
@@ -87,7 +87,7 @@ class File
     /**
      * Creates the file from a relative URL in relation to $base
      *
-     * @return Webforge\Common\System\File
+     * @return self
      */
     public static function createFromURL($url, Dir $base = null)
     {
@@ -139,7 +139,7 @@ class File
     }
 
     /**
-     * @return Webforge\Common\System\File
+     * @return self
      */
     public static function factory($arg1, $arg2 = null)
     {
