@@ -40,9 +40,8 @@ class DateInterval extends \DateInterval
     /**
      *
      * Zusätzlich zum normalen Format gehen %u (microseconds) und %n (milliseconds) analag %U und %N
-     * @return string
      */
-    public function format($string)
+    public function format($string): string
     {
         $ret = parent::format($string);
 

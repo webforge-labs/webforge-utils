@@ -923,17 +923,17 @@ class Dir
     /**
      * Creates the Directory
      *
-     * @param bitmap $options self::PARENT to create the full path of the directory
+     * @param int|null|string $options self::PARENT to create the full path of the directory
      * @chainable
      */
-    public function make($options=null)
+    public function make(int|null|string $options = null)
     {
         if (is_int($options)) {
             $parent = ($options & self::PARENT) == self::PARENT;
             $assert = ($options & self::ASSERT_EXISTS) == self::ASSERT_EXISTS;
         } else {
             // legacy option
-            $parent = (mb_strpos($options, '-p') !== false);
+            $parent = (is_string($options) && mb_strpos($options, '-p') !== false);
             $assert = false;
         }
 
@@ -1182,6 +1182,10 @@ class Dir
      */
     protected function isWindowsDrivePrefix(&$letter = null)
     {
+        if ($this->prefix === null) {
+            return false;
+        }
+
         if (mb_strpos($this->prefix, ':') === 1) {
             $letter = mb_substr($this->prefix, 0, 1);
             return true;

@@ -22,7 +22,7 @@ class DateTime extends \DateTime
      *
      * die Funktion format() gibt dann NULL zurück
      */
-    protected $empty = false;
+    protected bool $empty = false;
 
     public function __construct($time = null, DateTimeZone $object = null)
     {
@@ -58,25 +58,22 @@ class DateTime extends \DateTime
         $this->setTimeZone(new DateTimeZone(date_default_timezone_get()));
     }
 
-    /**
-     * @return DateTime
-     */
-    public static function factory($time = null, DateTimeZone $object = null)
+    public static function factory($time = null, DateTimeZone $object = null): static
     {
         return new DateTime($time, $object);
     }
 
-    public static function create($time = null, DateTimeZone $object = null)
+    public static function create($time = null, DateTimeZone $object = null): static
     { // alias
         return new static($time, $object);
     }
 
-    public static function now(DateTimeZone $object = null)
+    public static function now(DateTimeZone $object = null): static
     {
         return new static(time(),$object);
     }
 
-    public static function createFromJSON($json)
+    public static function createFromJSON($json): static
     {
         if (is_numeric($json->date)) {
             return self::parse('U', (int) $json->date, new DateTimeZone($json->timezone));
@@ -149,12 +146,12 @@ class DateTime extends \DateTime
         return $now->format('Y.W') === $this->format('Y.W'); // vergleich nach jahr + kalenderwoche
     }
 
-    public function add($interval)
+    public function add(\DateInterval $interval): self
     {
         return parent::add($interval);
     }
 
-    public function diff($object, $absolute = null)
+    public function diff(\DateTimeInterface $object, bool $absolute = false): DateInterval
     {
         return DateInterval::createFromDateInterval(parent::diff($object, $absolute));
     }

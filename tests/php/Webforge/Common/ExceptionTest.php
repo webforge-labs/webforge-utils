@@ -4,10 +4,12 @@ namespace Webforge\Common;
 
 class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
+    private Exception $e;
+    private Exception $nested;
+
     protected function setUp(): void
     {
         $this->e = new Exception('this is the #1 exception', 0);
-
         $this->nested = new Exception('this is the #2 exception', 0, $this->e);
     }
 

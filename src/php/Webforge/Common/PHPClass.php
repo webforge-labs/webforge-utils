@@ -17,6 +17,7 @@ class PHPClass implements ClassInterface
      */
     protected $namespace;
 
+    private ?ReflectionClass $reflection = null;
 
     public function __construct($fqn)
     {

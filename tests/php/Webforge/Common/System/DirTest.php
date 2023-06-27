@@ -9,9 +9,9 @@ use SplFileInfo;
  */
 class DirTest extends \PHPUnit\Framework\TestCase
 {
-    protected $dir;
-    protected $absolutePath;
-    protected $relativePath;
+    protected Dir $dir;
+    protected string $absolutePath;
+    protected string $relativePath;
 
     protected function setUp(): void
     {
@@ -53,10 +53,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     public static function providePathsWithoutTrailingSlash()
     {
-        return array(
-      array('/var/local/missing/trail'),
-      array('D:\www\missing\trail')
-    );
+        return [
+          ['/var/local/missing/trail'],
+          ['D:\www\missing\trail']
+        ];
     }
 
     public function testConstructWithDirAsParamWillCloneDirectory()

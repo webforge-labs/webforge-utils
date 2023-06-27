@@ -48,7 +48,7 @@ class Time
             $negative = $timespan < 0;
             $timespan = (int) abs($timespan);
 
-            $now = new DateTime();
+            $now = new DateTime('now');
 
             $d2 = clone $now;
             $d2->add(new DateInterval('PT'.$timespan.'S'));

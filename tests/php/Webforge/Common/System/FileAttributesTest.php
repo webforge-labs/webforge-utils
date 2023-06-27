@@ -6,6 +6,8 @@ use org\bovigo\vfs\vfsStream;
 
 class FileAttributesTest extends \PHPUnit\Framework\TestCase
 {
+    private File $file;
+
     protected function setUp(): void
     {
         parent::setUp();

@@ -13,10 +13,11 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "mikey179/vfsstream": "^1.6.10",
+    "mikey179/vfsstream": "^1.6@stable",
     "mockery/mockery": "@stable",
     "webforge/collections": "^1.0@dev",
-    "phpunit/phpunit": "10.0.x-dev"
+    "phpunit/phpunit": "10.0.x-dev",
+    "symfony/phpunit-bridge": "^6.0@stable"
   },
   "autoload": {
     "psr-0": {"Webforge\\Common": ["src/php/", "tests/php/"]}

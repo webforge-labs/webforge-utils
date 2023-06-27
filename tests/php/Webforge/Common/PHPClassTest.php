@@ -4,6 +4,8 @@ namespace Webforge\Common;
 
 class PHPClassTest extends \PHPUnit\Framework\TestCase
 {
+    private PHPClass $phpClass;
+
     protected function setUp(): void
     {
         parent::setUp();

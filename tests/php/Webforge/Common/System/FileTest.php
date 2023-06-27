@@ -12,6 +12,8 @@ class FileTest extends TestCase
     protected $dir;
 
     protected $dirPath;
+    private string $chainClass;
+    private File $notExistingFile;
 
     public static function setUpBeforeClass(): void
     {

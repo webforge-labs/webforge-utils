@@ -272,7 +272,7 @@ class Url
      */
     public function getQueryString()
     {
-        return http_build_query($this->query, null, '&');
+        return http_build_query($this->query, '', '&');
     }
 
     /**

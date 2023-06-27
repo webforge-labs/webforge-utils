@@ -9,21 +9,20 @@ use Webforge\Common\TestCase;
  */
 class DirCopyTest extends TestCase
 {
-  /**
-   * @var Webforge\Common\System\Dir
-   */
-    protected $source;
+    protected Dir $source;
+    private string $fqn;
 
     /**
-     * @var Webforge\Common\System\Dir[]
+     * @var array<Dir>[]
      */
-    protected $temps = array();
+    protected array $temps = array();
+
 
 
     protected function setUp(): void
     {
         $this->source = $this->getTestDirectory('htdocs/');
-        $this->fqn = 'Webforge\Common\System\Dir';
+        $this->fqn = Dir::class;
     }
 
     public function testCopiesAllFilesINSourceToTarget()

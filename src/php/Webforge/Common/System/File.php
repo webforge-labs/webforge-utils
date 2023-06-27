@@ -196,11 +196,11 @@ class File
     {
         if (isset($maxLength)) {
             $ret = @file_get_contents(
-                (string) $this,
-                null, // flags
-        null, // context
-        null, // offset
-        $maxLength
+                (string)$this,
+                false,
+                null,
+                0,
+                $maxLength
             );
         } else {
             $ret = @file_get_contents((string) $this);
