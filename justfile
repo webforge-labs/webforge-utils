@@ -5,3 +5,6 @@ watch-phpunit *args='':
 
 phpunit *args='':
     docker-compose exec --user=www-data php vendor/bin/phpunit "$@"
+
+up:
+    docker-compose up -d

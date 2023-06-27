@@ -49,7 +49,7 @@ class DateTime extends \DateTime
 
         // exception für invalid Date
         $state = DateTime::getLastErrors();
-        if ($state['warning_count'] > 0) {
+        if ($state !== false && $state['warning_count'] > 0) {
             if (isset($state['warnings'][11])) {
                 throw new ParsingException($state['warnings'][11]);
             }
