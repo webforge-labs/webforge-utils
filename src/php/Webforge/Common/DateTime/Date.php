@@ -15,7 +15,7 @@ class Date extends DateTime
         return $date;
     }
 
-    public function __construct($time = null, \DateTimeZone $object = null)
+    public function __construct($time = null, ?\DateTimeZone $object = null)
     {
         parent::__construct($time, $object);
         $this->setTime(0, 0, 0);

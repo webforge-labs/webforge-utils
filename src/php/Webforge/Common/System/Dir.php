@@ -135,7 +135,7 @@ class Dir
     *
     * @return Psc\System\Dir
     */
-    public static function createFromURL($url, Dir $base = null)
+    public static function createFromURL($url, ?Dir $base = null)
     {
         if (!isset($base)) {
             $base = new Dir(getcwd() . DIRECTORY_SEPARATOR);
@@ -465,7 +465,7 @@ class Dir
      * das root Verzeichnis muss angegeben werden
      * URL hat keinen Trailingslash! aber einen slash davor
      */
-    public function getURL(Dir $relativeDir = null)
+    public function getURL(?Dir $relativeDir = null)
     {
         if (!isset($relativeDir)) {
             $relativeDir = new Dir('.' . DIRECTORY_SEPARATOR);
@@ -699,7 +699,7 @@ class Dir
      * @param bool $subdirs wenn TRUE wird auch in Subverzeichnissen gesucht
      * @see getContents()
      */
-    public function getFiles($extensions = null, array $ignores = null, $subdirs = true)
+    public function getFiles($extensions = null, ?array $ignores = null, $subdirs = true)
     {
         if (is_string($extensions) && mb_strpos($extensions, '.') === 0) {
             $extensions = mb_substr($extensions, 1);
@@ -743,7 +743,7 @@ class Dir
      * @param bool $subdirs wenn TRUE wird auch in Subverzeichnissen gesucht, sonst werden nur verzeichnisse der ebene 1 ausgegeben
      * @see getContents()
      */
-    public function getDirectories(array $ignores = null, $subdirs = true)
+    public function getDirectories(?array $ignores = null, $subdirs = true)
     {
         /* wir starten eine Breitensuche (BFS) auf dem Verzeichnis */
 

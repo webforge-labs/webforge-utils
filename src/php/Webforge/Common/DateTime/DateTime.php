@@ -24,7 +24,7 @@ class DateTime extends \DateTime
      */
     protected bool $empty = false;
 
-    public function __construct($time = null, DateTimeZone $object = null)
+    public function __construct($time = null, ?DateTimeZone $object = null)
     {
         if (isset($object)) {
             throw new Exception('Timezone im Constructor setzen geht nicht in PHP 5.3');
@@ -58,12 +58,12 @@ class DateTime extends \DateTime
         $this->setTimeZone(new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function factory($time = null, DateTimeZone $object = null): static
+    public static function factory($time = null, ?DateTimeZone $object = null): static
     {
         return new DateTime($time, $object);
     }
 
-    public static function create($time = null, DateTimeZone $object = null): static
+    public static function create($time = null, ?DateTimeZone $object = null): static
     { // alias
         return new static($time, $object);
     }
@@ -90,7 +90,7 @@ class DateTime extends \DateTime
     /**
      * @return bool
      */
-    public function isYesterday(DateTime $now = null)
+    public function isYesterday(?DateTime $now = null)
     {
         if (!isset($now)) {
             $now = self::now();
@@ -105,7 +105,7 @@ class DateTime extends \DateTime
     /**
      * @return bool
      */
-    public function isToday(DateTime $now = null)
+    public function isToday(?DateTime $now = null)
     {
         if (!isset($now)) {
             $now = self::now();
@@ -137,7 +137,7 @@ class DateTime extends \DateTime
      * Die Woche beginnt bei Montag.
      * @return bool
      */
-    public function isWeekDay(DateTime $now = null)
+    public function isWeekDay(?DateTime $now = null)
     {
         if (!isset($now)) {
             $now = self::now();
@@ -175,7 +175,7 @@ class DateTime extends \DateTime
      *
      * http://www.php.net/manual/de/datetime.createfromformat.php
      */
-    public static function parse($format, $time, DateTimeZone $timezone = null)
+    public static function parse($format, $time, ?DateTimeZone $timezone = null)
     {
         if (!isset($timezone) && date_default_timezone_get() != '') {
             $timezone = new DateTimeZone(date_default_timezone_get());

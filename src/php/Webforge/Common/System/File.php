@@ -88,7 +88,7 @@ class File
      *
      * @return self
      */
-    public static function createFromURL($url, Dir $base = null)
+    public static function createFromURL($url, ?Dir $base = null)
     {
         if (!isset($base)) {
             $base = new Dir('.' . DIRECTORY_SEPARATOR);
@@ -128,7 +128,7 @@ class File
      * @param string $filename der Name der Datei
      * @param Dir $directory das Verzeichnis in dem die Datei liegt
      */
-    protected function constructDefault($filename, Dir $directory = null): void
+    protected function constructDefault($filename, ?Dir $directory = null): void
     {
         $this->setName($filename);
 
@@ -626,13 +626,13 @@ class File
      *
      * @return string with forward slashes and the names rawurlencoded
      */
-    public function getURL(Dir $relativeDir = null)
+    public function getURL(?Dir $relativeDir = null)
     {
         // rtrim entfernt den TrailingSlash der URL (der eigentlich nie da sein sollte, außer falls directoryURL nur "/" ist)
         return rtrim($this->directory->getURL($relativeDir), '/') . '/' . rawurlencode($this->getName(self::WITH_EXTENSION));
     }
 
-    public function getHTMLEscapedUrl(Dir $relativeDir = null)
+    public function getHTMLEscapedUrl(?Dir $relativeDir = null)
     {
         return rtrim($this->directory->getURL($relativeDir), '/') . '/' . \Psc\HTML\HTML::esc(rawurlencode($this->getName(self::WITH_EXTENSION)));
     }

@@ -50,7 +50,7 @@ class ArrayUtil
      * @param string $glueFormat der String welcher die Elemente umgeben soll. Er muss %s enthalten. An dieser Stelle wird das Array Element ersetzt
      * @param Closure $stringConvert ist dies nicht gesetzt wird (string) $piece benutzt
      */
-    public static function joinc(array $pieces, $glueFormat, Closure $stringConvert = null)
+    public static function joinc(array $pieces, $glueFormat, ?Closure $stringConvert = null)
     {
         $s = null;
         if (!isset($stringConvert)) {
@@ -238,14 +238,14 @@ class ArrayUtil
     /**
      * Führt eine Callback Funktion auf allen Keys (allen Values) des Arrays aus
      *
-     * $keyClosure modifiziert die Schlüssel
-     * $valueClosre modifiziert (optional) die Werte
+     * @param Closure $keyClosure modifiziert die Schlüssel
+     * @param Closure $valueClosure modifiziert (optional) die Werte
      *
      * danach werden beide in gleichbleibender Reihenfolge zusammengefügt
      * d. h. der modifzierte Schlüssel an Position 1 erhält die (optional modifizierte) value von Position 1
      * @return array
      */
-    public static function mapKeys(array $array, Closure $keyClosure, Closure $valueClosure = null)
+    public static function mapKeys(array $array, Closure $keyClosure, ?Closure $valueClosure = null)
     {
         $keys = array_map($keyClosure, array_keys($array));
 
@@ -262,7 +262,7 @@ class ArrayUtil
      *
      * gibt auch assoc zurück wenn nur ein key ein string ist
      * in numeric Arrays muss die Reihenfolge nicht unbedingt von 0-x sein!
-     * @return assoc|numeric
+     * @return 'assoc'|'numeric'
      */
     public static function getType(array $array)
     {
