@@ -17,7 +17,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals($expectedFormat, $date->i18n_format($formatString, $lang));
     }
 
-    public function i18nFormats()
+    public static function i18nFormats()
     {
         $tests = array();
 
@@ -153,7 +153,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals('07.08.2014', $date->format('d.m.Y'));
     }
 
-    public function provideFormatSpan()
+    public static function provideFormatSpan()
     {
         return array(
 

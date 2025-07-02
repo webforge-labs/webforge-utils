@@ -10,19 +10,24 @@
   ],
   "require": {
     "php": ">=8.0.0",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "phpunit/phpunit": "^10.0"
   },
   "require-dev": {
     "mikey179/vfsstream": "^1.6@stable",
     "mockery/mockery": "@stable",
     "webforge/collections": "^1.0@dev",
-    "phpunit/phpunit": "10.0.x-dev",
     "symfony/phpunit-bridge": "^6.0@stable"
   },
   "autoload": {
     "psr-0": {"Webforge\\Common": ["src/php/", "tests/php/"]}
   },
   "minimum-stability": "dev",
+  "config": {
+    "platform": {
+      "php": "8.4"
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-master": "2.0.x-dev"

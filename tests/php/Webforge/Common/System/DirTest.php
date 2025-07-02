@@ -245,35 +245,6 @@ class DirTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider provideResolvePathNormalizesPathAndReplacesWithCWD
-     */
-    public function testResolvePathNormalizesPathAndReplacesWithCWD()
-    {
-    }
-
-    public static function provideResolvePathNormalizesPathAndReplacesWithCWD()
-    {
-        $tests = array();
-
-        $test = function () use (&$tests) {
-            $tests[] = func_get_args();
-        };
-
-        $ds = DIRECTORY_SEPARATOR;
-        $cwd = getcwd();
-        $lowerCwd = dirname($cwd); // composer trick
-
-        $test('something/relative', implode($ds, array($cwd,'something', 'relative')));
-        $test('./something/relative', implode($ds, array($cwd,'something', 'relative')));
-        $test('./removed/../something/relative', implode($ds, array($cwd,'something', 'relative')));
-        $test('../something/relative/lower', implode($ds, array($lowerCwd, 'something', 'relative', 'lower')));
-        $test('something/empty/../../../', implode($ds, array($lowerCwd)));
-        $test('something/empty/../../', implode($ds, array($cwd)));
-
-        return $tests;
-    }
-
     public function testisSubDirectoryOf()
     {
         $sub = new Dir(__DIR__.DIRECTORY_SEPARATOR);

@@ -12,7 +12,7 @@ class TimeTest extends \Webforge\Common\TestCase
         self::assertEquals($assertion, Time::formatSpan($seconds, '%H:%I:%S'));
     }
 
-    public function provideFormatSpan()
+    public static function provideFormatSpan()
     {
         return [
             [60, '00:01:00'],

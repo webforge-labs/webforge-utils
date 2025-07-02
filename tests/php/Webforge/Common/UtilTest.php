@@ -10,7 +10,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
 {
     public function testTraversablePreCondition()
     {
-        self::assertInstanceOf('Traversable', new ArrayIterator(array(1,2,3)));
+        $this->assertInstanceOf('Traversable', new ArrayIterator([1, 2, 3]));
     }
 
     /**
@@ -18,7 +18,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testTypeInfoAcceptance($typeSample)
     {
-        self::assertNotEmpty(Util::typeInfo($typeSample));
+        $this->assertNotEmpty(Util::typeInfo($typeSample));
     }
 
     /**
@@ -26,44 +26,28 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testVarInfoAcceptance($typeSample)
     {
-        self::assertNotEmpty(Util::varInfo($typeSample));
+        $this->assertNotEmpty(Util::varInfo($typeSample));
     }
 
-    public function provideAllTypes()
+    public static function provideAllTypes()
     {
-        $tests = array();
+        $tests = [];
 
-        $tests[] = array(
-      new stdClass()
-    );
+        $tests[] = [new stdClass()];
 
-        $tests[] = array(
-      array('someValue')
-    );
+        $tests[] = [['someValue']];
 
-        $tests[] = array(
-      'string'
-    );
+        $tests[] = ['string'];
 
-        $tests[] = array(
-      7
-    );
+        $tests[] = [7];
 
-        $tests[] = array(
-      true
-    );
+        $tests[] = [true];
 
-        $tests[] = array(
-      false
-    );
+        $tests[] = [false];
 
-        $tests[] = array(
-      0.17
-    );
+        $tests[] = [0.17];
 
-        $tests[] = array(
-      new TestValueObject('v1', 'v2')
-    );
+        $tests[] = [new TestValueObject('v1', 'v2')];
 
         // how can we create a resource type simple?
 
@@ -76,23 +60,22 @@ class UtilTest extends \PHPUnit\Framework\TestCase
      */
     public function testCastArray($item, $expected)
     {
-        self::assertEquals(
-            $expected,
-            Util::castArray($item)
+        $this->assertEquals(
+            $expected, Util::castArray($item),
         );
     }
 
     public static function provideCastArray()
     {
-        $tests = array();
+        $tests = [];
 
         $test = function () use (&$tests) {
             $tests[] = func_get_args();
         };
 
-        $test($iterator = new ArrayIterator(array(1, 2, 3)), array(1,2,3));
-        $test(array(1,2,3), array(1, 2, 3));
-        $test(new TraversableCollection(array('0'=>'nil', '1'=>'one')), array('0'=>'nil', '1'=>'one'));
+        $test($iterator = new ArrayIterator([1, 2, 3]), [1, 2, 3]);
+        $test([1, 2, 3], [1, 2, 3]);
+        $test(new TraversableCollection(['0' => 'nil', '1' => 'one']), ['0' => 'nil', '1' => 'one']);
 
         return $tests;
     }

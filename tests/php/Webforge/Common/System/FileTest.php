@@ -144,6 +144,9 @@ class FileTest extends TestCase
     {
         $fileString = self::absPath('www', 'test', 'base', 'ka', 'auch').'banane.php';
         $file = new File($fileString);
+
+        $this->expectExceptionMessage('falsch rum');
+        $file->getURL(new Dir(self::absPath('not-in-the-path')));
     }
 
     public function testStaticCreateFromURL()

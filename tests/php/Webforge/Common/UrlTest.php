@@ -49,7 +49,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($query, $url->getQuery(), $verbose);
     }
 
-    public function provideTestApi()
+    public static function provideTestApi()
     {
         $urls = array();
         $urls[0] = array(
