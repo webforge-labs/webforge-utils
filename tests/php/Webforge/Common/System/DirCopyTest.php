@@ -15,9 +15,7 @@ class DirCopyTest extends TestCase
     /**
      * @var array<Dir>[]
      */
-    protected array $temps = array();
-
-
+    protected array $temps = [];
 
     protected function setUp(): void
     {
@@ -25,23 +23,23 @@ class DirCopyTest extends TestCase
         $this->fqn = Dir::class;
     }
 
-    public function testCopiesAllFilesINSourceToTarget()
+    public function testCopiesAllFilesINSourceToTarget(): void
     {
         $target = $this->createTemporary();
 
         self::assertInstanceOf($this->fqn, $this->source->copy($target));
 
-        $files = array(
+        $files = [
       '/README.md',
       '/main.html',
       '/img/0.gif',
       '/css/sample.css',
       '/js/vendor/pack.js'
-    );
+    ];
 
         foreach ($files as $url) {
-            self::assertFileExists((string) $target->getFile($url), $url.' was not copied to target.');
-            self::assertFileExists((string) $this->source->getFile($url), $url.' was removed from source!!');
+            self::assertFileExists((string) $target->getFile($url), $url . ' was not copied to target.');
+            self::assertFileExists((string) $this->source->getFile($url), $url . ' was removed from source!!');
         }
     }
 

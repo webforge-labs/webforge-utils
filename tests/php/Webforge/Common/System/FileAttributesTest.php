@@ -2,8 +2,6 @@
 
 namespace Webforge\Common\System;
 
-use org\bovigo\vfs\vfsStream;
-
 class FileAttributesTest extends \PHPUnit\Framework\TestCase
 {
     private File $file;
@@ -14,17 +12,17 @@ class FileAttributesTest extends \PHPUnit\Framework\TestCase
         $this->file = new File(__FILE__);
     }
 
-    public function testGetModifiedTimeReturnsATimestamp()
+    public function testGetModifiedTimeReturnsATimestamp(): void
     {
         self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getModifiedTime());
     }
 
-    public function testGetCreateTimeReturnsATimestamp()
+    public function testGetCreateTimeReturnsATimestamp(): void
     {
         self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getCreationTime());
     }
 
-    public function testgetAccessTimeReturnsATimestamp()
+    public function testgetAccessTimeReturnsATimestamp(): void
     {
         self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getAccessTime());
     }

@@ -4,7 +4,7 @@ namespace Webforge\Common\DateTime;
 
 class DateTest extends \Webforge\Common\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // createm from datetime
         $dateTime = new DateTime('21.11.84 21:12');
@@ -13,7 +13,7 @@ class DateTest extends \Webforge\Common\TestCase
         self::assertEquals('21.11.1984 00:00:00', $date->format('d.m.Y H:i:s'));
     }
 
-    public function testInvalidDate()
+    public function testInvalidDate(): void
     {
         $this->expectException(\Webforge\Common\DateTime\ParsingException::class);
 

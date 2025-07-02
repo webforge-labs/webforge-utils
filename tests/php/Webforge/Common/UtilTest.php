@@ -2,13 +2,13 @@
 
 namespace Webforge\Common;
 
-use stdClass;
 use ArrayIterator;
+use stdClass;
 use Webforge\Collections\TraversableCollection;
 
 class UtilTest extends \PHPUnit\Framework\TestCase
 {
-    public function testTraversablePreCondition()
+    public function testTraversablePreCondition(): void
     {
         $this->assertInstanceOf('Traversable', new ArrayIterator([1, 2, 3]));
     }
@@ -16,7 +16,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAllTypes
      */
-    public function testTypeInfoAcceptance($typeSample)
+    public function testTypeInfoAcceptance($typeSample): void
     {
         $this->assertNotEmpty(Util::typeInfo($typeSample));
     }
@@ -24,7 +24,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAllTypes
      */
-    public function testVarInfoAcceptance($typeSample)
+    public function testVarInfoAcceptance($typeSample): void
     {
         $this->assertNotEmpty(Util::varInfo($typeSample));
     }
@@ -54,11 +54,10 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-
     /**
      * @dataProvider provideCastArray
      */
-    public function testCastArray($item, $expected)
+    public function testCastArray($item, $expected): void
     {
         $this->assertEquals(
             $expected, Util::castArray($item),
@@ -69,7 +68,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     {
         $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 

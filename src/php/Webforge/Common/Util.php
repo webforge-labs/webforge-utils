@@ -2,11 +2,10 @@
 
 namespace Webforge\Common;
 
-use Webforge\Common\ArrayUtil as A;
+use Closure;
 use Doctrine\Common\Collections\Collection;
 use Traversable;
-use IteratorAggregate;
-use Closure;
+use Webforge\Common\ArrayUtil as A;
 
 class Util
 {
@@ -45,7 +44,7 @@ class Util
         } elseif ($var instanceof Info) {
             return $var->getVarInfo();
         } elseif ($var instanceof \stdClass) {
-            return '(object) '.json_encode($var);
+            return '(object) ' . json_encode($var);
         } elseif (is_object($var)) {
             return sprintf('%s(%s)', method_exists($var, '__toString') ? $var->__toString() : 'not converted to string', self::typeInfo($var));
         } elseif (is_bool($var)) {
@@ -56,7 +55,6 @@ class Util
     }
 
     /**
-     *
      * return-Values sind:
      *
      * - unknown type
@@ -73,7 +71,7 @@ class Util
         $type = gettype($var);
 
         if ($type == 'object') {
-            return 'object:'.get_class($var);
+            return 'object:' . get_class($var);
         }
         if ($type == 'boolean') {
             return 'bool';
@@ -85,7 +83,7 @@ class Util
             return 'int';
         }
         if ($type == 'resource') {
-            return 'resource:'.get_resource_type($var);
+            return 'resource:' . get_resource_type($var);
         }
 
         return $type;
@@ -105,15 +103,15 @@ class Util
         $string = gettype($var);
 
         if ($string == 'object') {
-            $string .= ' ('.get_class($var).')';
+            $string .= ' (' . get_class($var) . ')';
         }
 
         if ($string == 'array') {
-            $string .= ' ('.count($var).')';
+            $string .= ' (' . count($var) . ')';
         }
 
         if ($string == 'resource') {
-            $string .= ' ('.get_resource_type($var).')';
+            $string .= ' (' . get_resource_type($var) . ')';
         }
 
         return $string;
@@ -132,7 +130,7 @@ class Util
                         return $o->$prop;
                     };
                 } else {
-                    $get = 'get'.ucfirst($getter);
+                    $get = 'get' . ucfirst($getter);
                     $getter = function ($o) use ($get) {
                         return $o->$get();
                     };

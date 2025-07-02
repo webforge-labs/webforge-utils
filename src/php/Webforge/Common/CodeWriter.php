@@ -2,12 +2,10 @@
 
 namespace Webforge\Common;
 
+use RuntimeException;
 use stdClass;
 use Webforge\Common\ArrayUtil as A;
 use Webforge\Common\StringUtil as S;
-use Webforge\Common\ClassInterface;
-use Webforge\Common\PHPClass;
-use RuntimeException;
 
 /**
  * @deprecated dont use this class yet
@@ -104,7 +102,7 @@ class CodeWriter
 
     public function exportStdClass(stdClass $var, $type = 'keyList')
     {
-        return '(object) '.$this->exportKeyList($this->castStdClassToArray($var), $type);
+        return '(object) ' . $this->exportKeyList($this->castStdClassToArray($var), $type);
     }
 
     /**
@@ -142,7 +140,7 @@ class CodeWriter
     public function exportBaseTypeValue($value)
     {
         if (!$this->isBaseType($value)) {
-            throw new RuntimeException('export kann keine Komplexen Datentypen wie: '.gettype($value).' exportieren');
+            throw new RuntimeException('export kann keine Komplexen Datentypen wie: ' . gettype($value) . ' exportieren');
         }
 
         return var_export($value, true);
@@ -153,7 +151,7 @@ class CodeWriter
         // qnd: leere ArrayCollection geht
         if ($value instanceof \Psc\Data\ArrayCollection || $value instanceof \Webforge\Collections\ArrayCollection) {
             return $this->writeConstructor(new PHPClass(get_class($value)), $value->toArray());
-        } elseif ($value === array()) {
+        } elseif ($value === []) {
             return 'array()';
         } else {
             return $this->exportBaseTypeValue($value);

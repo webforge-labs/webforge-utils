@@ -29,7 +29,7 @@ class Exception extends \Exception implements Exception\MessageException
      */
     public function prependMessage($msg)
     {
-        $this->message = $msg.$this->message;
+        $this->message = $msg . $this->message;
         return $this;
     }
 
@@ -51,13 +51,13 @@ class Exception extends \Exception implements Exception\MessageException
         if (isset($relativeDir)) {
             // versuche die Pfade übersichtlich zu machen
             $trace = str_replace(
-                array((string) $relativeDir,"\n"),
-                array('{'.$relativeDirLabel.'}'.DIRECTORY_SEPARATOR, $cr),
+                [(string) $relativeDir,"\n"],
+                ['{' . $relativeDirLabel . '}' . DIRECTORY_SEPARATOR, $cr],
                 $e->getTraceAsString()
             );
             $file = str_replace(
-                array((string) $relativeDir),
-                array('{'.$relativeDirLabel.'}'.DIRECTORY_SEPARATOR),
+                [(string) $relativeDir],
+                ['{' . $relativeDirLabel . '}' . DIRECTORY_SEPARATOR],
                 $e->getFile()
             );
         } else {
@@ -67,29 +67,29 @@ class Exception extends \Exception implements Exception\MessageException
 
         $text = null;
         if ($format == 'html') {
-            $text = '<pre class="php-error">'."\n";
-            $text .= $cr.'<b>Fatal Error:</b> ';
+            $text = '<pre class="php-error">' . "\n";
+            $text .= $cr . '<b>Fatal Error:</b> ';
         }
 
-        $text .= 'Uncaught exception \''.get_class($e).'\' with message:'.$cr;
+        $text .= 'Uncaught exception \'' . get_class($e) . '\' with message:' . $cr;
         if ($e instanceof InExceptionExportable) {
-            $text .= str_replace("\n", $cr, wordwrap($e->exportExceptionText(), 140, "\n")).$cr;
+            $text .= str_replace("\n", $cr, wordwrap($e->exportExceptionText(), 140, "\n")) . $cr;
         } else {
-            $text .= "'".str_replace("\n", $cr, wordwrap($e->getMessage(), 140, "\n"))."'".$cr;
+            $text .= "'" . str_replace("\n", $cr, wordwrap($e->getMessage(), 140, "\n")) . "'" . $cr;
         }
 
-        $text .= 'in '.$file.':'.$e->getLine().$cr;
-        $text .= 'StackTrace: '.$cr.$trace.$cr;
+        $text .= 'in ' . $file . ':' . $e->getLine() . $cr;
+        $text .= 'StackTrace: ' . $cr . $trace . $cr;
 
         if ($format == 'html') {
-            $text .= 'in <b>'.$file.':'.$e->getLine().'</b>'.'</pre>';
+            $text .= 'in <b>' . $file . ':' . $e->getLine() . '</b>' . '</pre>';
         } else {
-            $text .= 'in '.$file.':'.$e->getLine();
+            $text .= 'in ' . $file . ':' . $e->getLine();
         }
 
         if ($e->getPrevious() instanceof \Exception) {
-            $text .= $cr.'Previous Exception:'.$cr;
-            $text .= self::getExceptionText($e->getPrevious(), $format).$cr;
+            $text .= $cr . 'Previous Exception:' . $cr;
+            $text .= self::getExceptionText($e->getPrevious(), $format) . $cr;
         }
 
         return $text;

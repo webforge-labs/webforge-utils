@@ -9,7 +9,7 @@ class DateInterval extends \DateInterval
   /**
    * @var int microseconds of the interval
    */
-    protected static $usData = array();
+    protected static $usData = [];
 
     public function __construct($interval_spec)
     {
@@ -38,7 +38,6 @@ class DateInterval extends \DateInterval
     }
 
     /**
-     *
      * Zusätzlich zum normalen Format gehen %u (microseconds) und %n (milliseconds) analag %U und %N
      */
     public function format($string): string
@@ -51,8 +50,8 @@ class DateInterval extends \DateInterval
         }
 
         if (mb_stripos($string, '%n')) {
-            $ret = preg_replace('/(?<!%)%n/u', sprintf('%d', $this->getUS()/1000), $ret);
-            $ret = preg_replace('/(?<!%)%N/u', sprintf('%02d', $this->getUS()/1000), $ret);
+            $ret = preg_replace('/(?<!%)%n/u', sprintf('%d', $this->getUS() / 1000), $ret);
+            $ret = preg_replace('/(?<!%)%N/u', sprintf('%02d', $this->getUS() / 1000), $ret);
         }
 
         return $ret;

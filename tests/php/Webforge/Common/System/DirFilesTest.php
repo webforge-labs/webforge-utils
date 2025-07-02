@@ -2,8 +2,6 @@
 
 namespace Webforge\Common\System;
 
-use SplFileInfo;
-
 /**
  * @covers Webforge\Common\System\Dir
  */
@@ -15,7 +13,7 @@ class DirFilesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+        $this->dir = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
 
         if (DIRECTORY_SEPARATOR === '\\') {
             $absolutePath = 'D:\\path\\for\\absolute\\';
@@ -23,12 +21,12 @@ class DirFilesTest extends \PHPUnit\Framework\TestCase
             $this->absolutePath = '/path/for/absolute/';
         }
 
-        $this->relativePath = 'path'.DIRECTORY_SEPARATOR.'for'.DIRECTORY_SEPARATOR.'relative'.DIRECTORY_SEPARATOR;
+        $this->relativePath = 'path' . DIRECTORY_SEPARATOR . 'for' . DIRECTORY_SEPARATOR . 'relative' . DIRECTORY_SEPARATOR;
     }
 
-    public function testDirGetFile()
+    public function testDirGetFile(): void
     {
-        $dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+        $dir = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
         $file = __FILE__;
         $fname = basename($file);
 
@@ -37,7 +35,7 @@ class DirFilesTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals($file, (string) $dir->getFile($fname));
         self::assertEquals($file, (string) $dir->getFile(new File($fname)));
-        self::assertEquals($file, (string) $dir->getFile(new File(new Dir('.'.DIRECTORY_SEPARATOR), $fname)));
+        self::assertEquals($file, (string) $dir->getFile(new File(new Dir('.' . DIRECTORY_SEPARATOR), $fname)));
 
         /*
           das ist unexpected! ich will aber keinen test auf sowas machen..
@@ -47,31 +45,30 @@ class DirFilesTest extends \PHPUnit\Framework\TestCase
 
         if (DIRECTORY_SEPARATOR === '\\') {
             self::assertEquals(
-                __DIR__.'\lib\docu\readme.txt',
+                __DIR__ . '\lib\docu\readme.txt',
                 (string) $dir->getFile(new File('.\lib\docu\readme.txt'))
             );
             self::assertEquals(
-                __DIR__.'\lib\docu\readme.txt',
+                __DIR__ . '\lib\docu\readme.txt',
                 (string) $dir->getFile(new File(new Dir('.\lib\docu\\'), 'readme.txt'))
             );
         } else {
             self::assertEquals(
-                __DIR__.'/lib/docu/readme.txt',
+                __DIR__ . '/lib/docu/readme.txt',
                 (string) $dir->getFile(new File('./lib/docu/readme.txt'))
             );
             self::assertEquals(
-                __DIR__.'/lib/docu/readme.txt',
+                __DIR__ . '/lib/docu/readme.txt',
                 (string) $dir->getFile(new File(new Dir('./lib/docu/'), 'readme.txt'))
             );
         }
 
-
-        $absoluteDir = __DIR__.DIRECTORY_SEPARATOR;
+        $absoluteDir = __DIR__ . DIRECTORY_SEPARATOR;
         $this->expectException(\InvalidArgumentException::class);
         $dir->getFile(new File(new Dir($absoluteDir), 'readme.txt'));
     }
 
-    public function testDirgetFiles()
+    public function testDirgetFiles(): void
     {
         $dir = Dir::factoryTS(__DIR__);
 
@@ -97,7 +94,7 @@ class DirFilesTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $nonEx = Dir::factoryTS(__DIR__)->sub('blablabla/non/existent/');
         self::assertTrue($nonEx->isEmpty());

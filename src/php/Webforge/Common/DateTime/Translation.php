@@ -12,8 +12,6 @@ abstract class Translation
     public $weekdays;
     public $weekdaysAbbrev;
 
-
-
     public function getMonth($num)
     {
         return $this->months[$num];

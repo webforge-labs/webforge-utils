@@ -2,8 +2,8 @@
 
 namespace Webforge\Common;
 
-use ReflectionClass;
 use InvalidArgumentException;
+use ReflectionClass;
 
 class ClassUtil
 {
@@ -18,7 +18,7 @@ class ClassUtil
             return ltrim($className, '\\');
         }
 
-        return trim($namespace, '\\').'\\'.trim($className, '\\');
+        return trim($namespace, '\\') . '\\' . trim($className, '\\');
     }
 
     /**
@@ -28,7 +28,7 @@ class ClassUtil
      */
     public static function setNamespace($className, $namespace)
     {
-        return trim($namespace, '\\').'\\'.trim($className, '\\');
+        return trim($namespace, '\\') . '\\' . trim($className, '\\');
     }
 
     public static function getNamespace($className)
@@ -45,14 +45,13 @@ class ClassUtil
     {
         $fqn = ltrim($fqn, '\\');
         if (($pos = mb_strrpos($fqn, '\\')) !== false) {
-            return mb_substr($fqn, $pos+1);
+            return mb_substr($fqn, $pos + 1);
         }
 
         return $fqn;
     }
 
     /**
-     *
      * @param string $class the full qualified class name
      * @return instanceOf $class
      */

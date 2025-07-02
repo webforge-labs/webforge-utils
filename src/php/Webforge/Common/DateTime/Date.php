@@ -4,7 +4,6 @@ namespace Webforge\Common\DateTime;
 
 /**
  * A Date is a DateTime with time set to 00:00:00
- *
  */
 class Date extends DateTime
 {
@@ -24,6 +23,6 @@ class Date extends DateTime
 
     public function getVarInfo()
     {
-        return '[Date: '.$this->format('d.m.Y').' '.$this->getTimezone()->getName().']';
+        return '[Date: ' . $this->format('d.m.Y') . ' ' . $this->getTimezone()->getName() . ']';
     }
 }

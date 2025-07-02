@@ -24,7 +24,7 @@ class Preg
      * @see PHP::preg_match
      * @see PHP::preg_match_all
      */
-    public static function match($subject, $pattern, &$matches=null, $flags=null, $offset=0)
+    public static function match($subject, $pattern, &$matches = null, $flags = null, $offset = 0)
     {
         $pattern = self::set_u_modifier($pattern, true);
 
@@ -48,7 +48,7 @@ class Preg
         }
 
         if ($ret === false) {
-            throw new Exception('Pattern Syntax Error: '.$pattern.' '.self::getError(preg_last_error()));
+            throw new Exception('Pattern Syntax Error: ' . $pattern . ' ' . self::getError(preg_last_error()));
         }
 
         return $ret;
@@ -98,7 +98,6 @@ class Preg
         return (preg_replace($pattern, $replace, $subject, $limit, $count));
     }
 
-
     /**
      * So wie replace allerdings mit einer Callback Funktion mit einem Parameter
      *
@@ -119,7 +118,6 @@ class Preg
         return preg_replace_callback(self::set_u_modifier($pattern, true), $callback, $subject, $limit);
     }
 
-
     /**
      * Fügt einem Regex-Pattern den u-Modifier hinzu oder entfernt ihn
      *
@@ -137,7 +135,7 @@ class Preg
     {
         /* aufsplitten */
         $delimiter = mb_substr($pattern, 0, 1);
-        $modifiers = mb_substr($pattern, mb_strrpos($pattern, $delimiter)+1);
+        $modifiers = mb_substr($pattern, mb_strrpos($pattern, $delimiter) + 1);
 
         if ($add) {
             if (mb_strpos($modifiers, $modifier) === false) {
@@ -146,7 +144,7 @@ class Preg
         } else {
             if (mb_strpos($modifiers, $modifier) !== false) {
                 $modifiers = str_replace($modifier, '', $modifiers);
-                $pattern = mb_substr($pattern, 0, mb_strrpos($pattern, $delimiter)+1) . $modifiers;
+                $pattern = mb_substr($pattern, 0, mb_strrpos($pattern, $delimiter) + 1) . $modifiers;
             }
         }
 
@@ -157,11 +155,11 @@ class Preg
      * Überprüft ob der Ausdruck $rx auf $string passt und gibt dann vom Ergebnis das Set mit dem Offset $set zurück
      *
      * @param int|int[] $set ist dies ein array von ints werden die offset aus dem matching zurückgegeben (nicht gecheckt)
-     * @return string|NULL|array  gibt immer dann NULL ($default) zurück wenn nichts gematched hat
+     * @return string|null|array  gibt immer dann NULL ($default) zurück wenn nichts gematched hat
      */
     public static function qmatch($string, $rx, $set = 1, $default = null)
     {
-        $m = array();
+        $m = [];
         if (self::match($string, $rx, $m) > 0) {
             if (is_array($set)) {
                 return array_merge(array_intersect_key($m, array_flip($set))); // merge: renumbered
@@ -171,8 +169,6 @@ class Preg
         }
         return $default;
     }
-
-
 
     /**
      * Überprüft einen Wert anhand eines Regexp-Array
@@ -191,7 +187,7 @@ class Preg
         }
 
         if ($do === self::THROW_EXCEPTION) {
-            throw new NoMatchException('Konnte kein Matching für '.Util::varInfo($value).' in '.Util::varInfo($rxArray, Util::INFO_PLAIN_ARRAY).' finden.');
+            throw new NoMatchException('Konnte kein Matching für ' . Util::varInfo($value) . ' in ' . Util::varInfo($rxArray, Util::INFO_PLAIN_ARRAY) . ' finden.');
         }
 
         return $do;
@@ -205,7 +201,7 @@ class Preg
      */
     public static function matchFullArray($rxArray, $value, $do = self::THROW_EXCEPTION)
     {
-        $targets = array();
+        $targets = [];
         foreach ($rxArray as $rx => $target) {
             if (self::match($value, $rx) > 0) {
                 $targets[] = $target;
@@ -214,7 +210,7 @@ class Preg
 
         if (count($targets) === 0) {
             if ($do === self::THROW_EXCEPTION) {
-                throw new NoMatchException('Keins der Matchings für '.Util::varInfo($value).' konnte in '.Util::varInfo($rxArray).' gefunden werden.');
+                throw new NoMatchException('Keins der Matchings für ' . Util::varInfo($value) . ' konnte in ' . Util::varInfo($rxArray) . ' gefunden werden.');
             }
 
             return $do;

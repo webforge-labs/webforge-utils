@@ -2,8 +2,8 @@
 
 namespace Webforge\Common;
 
-use Webforge\Common\StringUtil as S;
 use RuntimeException;
+use Webforge\Common\StringUtil as S;
 
 class Url
 {
@@ -26,7 +26,7 @@ class Url
     /**
      * @var array
      */
-    protected $hostParts = array();
+    protected $hostParts = [];
 
     protected $port;
     protected $user;
@@ -35,14 +35,14 @@ class Url
     /**
      * @var array
      */
-    protected $path = array();
+    protected $path = [];
 
     protected $pathTrailingSlash = false;
 
     /**
      * @var array
      */
-    protected $query = array();
+    protected $query = [];
 
     /**
      * @var string ohne # davor
@@ -68,7 +68,7 @@ class Url
         $info = (object) parse_url($url);
 
         /* einfache Eigenschaften kopieren */
-        foreach (array('port','user','pass','fragment','scheme') as $simple) {
+        foreach (['port','user','pass','fragment','scheme'] as $simple) {
             if (isset($info->$simple)) {
                 $prop = $simple === 'pass' ? 'password' : $simple;
                 $value = $info->$simple !== '' ? $info->$simple : null;
@@ -97,13 +97,13 @@ class Url
 
     public function toString()
     {
-        $url  = $this->getScheme().'://';
+        $url = $this->getScheme() . '://';
 
         // user:password@ | user@
         if (isset($this->user)) {
             $url .= $this->user;
             if (isset($this->password)) {
-                $url .= $this->password.':';
+                $url .= $this->password . ':';
             }
             $url .= '@';
         }
@@ -111,7 +111,7 @@ class Url
         $url .= $this->getHost();
 
         if (isset($this->port)) {
-            $url .= ':'.$this->port;
+            $url .= ':' . $this->port;
         }
 
         $url .= '/'; // schließt immer mit slash nach dem host ab
@@ -121,11 +121,11 @@ class Url
         }
 
         if (count($this->query) > 0) {
-            $url .= '?'.$this->getQueryString();
+            $url .= '?' . $this->getQueryString();
         }
 
         if ($this->fragment) {
-            $url .= '#'.$this->fragment;
+            $url .= '#' . $this->fragment;
         }
 
         return $url;
@@ -190,7 +190,7 @@ class Url
     /**
      * Adds an host part onto the beginning
      */
-    public function addSubDomain($domain)
+    public function addSubDomain($domain): void
     {
         array_unshift($this->hostParts, $domain);
     }
@@ -218,8 +218,6 @@ class Url
 
     /**
      * Modifies the current URL with adding an relative Url to the pathParts
-     *
-     * @param string $url only / slashes, first / is optional no query string, no fragment
      */
     public function addRelativeUrl($relativeUrl)
     {
@@ -236,7 +234,7 @@ class Url
      *
      * Gibt NULL zurück wenn der Part nicht gesetzt ist
      * @param int $num 1-basierend
-     * @return string|NULL
+     * @return string|null
      */
     public function getPathPart($num)
     {
@@ -247,7 +245,7 @@ class Url
             return null;
         }
 
-        return $this->path[$num-1];
+        return $this->path[$num - 1];
     }
 
     /**
@@ -282,7 +280,6 @@ class Url
     {
         return $this->query;
     }
-
 
     public function setQuery(array $query)
     {
@@ -394,7 +391,7 @@ class Url
         try {
             return (string) $this->toString();
         } catch (\Exception $e) {
-            return '[Class cannot converted to string because of ERROR: '.$e->getMessage().']';
+            return '[Class cannot converted to string because of ERROR: ' . $e->getMessage() . ']';
         }
     }
 }

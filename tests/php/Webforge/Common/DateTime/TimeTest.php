@@ -7,7 +7,7 @@ class TimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideFormatSpan
      */
-    public function testFormatSpan($seconds, $assertion)
+    public function testFormatSpan($seconds, $assertion): void
     {
         self::assertEquals($assertion, Time::formatSpan($seconds, '%H:%I:%S'));
     }

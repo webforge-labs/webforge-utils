@@ -6,6 +6,3 @@ services:
         volumes:
             - .:/app
         user: "33:33"
-
-        environment:
-            SYMFONY_DEPRECATIONS_HELPER:

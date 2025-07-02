@@ -13,5 +13,8 @@ show-deprecations *args='':
 composer *args='':
     docker-compose exec --user=www-data php composer "${@}"
 
+fix:
+    docker-compose exec --user=www-data php vendor/bin/php-cs-fixer fix -v
+
 up:
     docker-compose up -d

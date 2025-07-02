@@ -23,7 +23,7 @@ class ArrayUtil
     public static function join(array $pieces, $glue)
     {
         $s = null;
-        foreach ($pieces as $key =>$piece) {
+        foreach ($pieces as $key => $piece) {
             if (is_array($piece)) {
                 $piece = 'Array';
             }
@@ -32,7 +32,6 @@ class ArrayUtil
         }
         return $s;
     }
-
 
     /**
      * Fügt einen Array zu einem String zusammen (Closure Version)
@@ -60,7 +59,7 @@ class ArrayUtil
             };
         }
 
-        foreach ($pieces as $key =>$piece) {
+        foreach ($pieces as $key => $piece) {
             $piece = $stringConvert($piece, $key);
             $s .= sprintf(
                 $glueFormat,
@@ -78,7 +77,6 @@ class ArrayUtil
     }
 
     /**
-     *
      * gibt NULL zurück wenn der Array leer ist
      */
     public static function first(array $stack)
@@ -96,7 +94,6 @@ class ArrayUtil
         array_push($array, $value);
         return $array;
     }
-
 
     /**
      * Fügt in einen numerischen Array innerhalb an einer bestimmten Stelle ein
@@ -118,7 +115,7 @@ class ArrayUtil
      */
     public static function insert(array &$array, $item, $offset)
     {
-        return self::insertArray($array, array($item), $offset);
+        return self::insertArray($array, [$item], $offset);
     }
 
     /**
@@ -138,17 +135,17 @@ class ArrayUtil
 
         $offsetArg = $offset;
         if ($offset < 0) {
-            $offset = $length+$offset;
+            $offset = $length + $offset;
         } elseif ($offset === self::END) {
             $offset = $length;
         }
 
         if ($offset < 0 || $offset > $length) {
-            throw new OutOfBoundsException('offset: '.$offsetArg.' ist nicht erlaubt. Array-Laenge: '.$length.' berechnetes offset: '.$offset);
+            throw new OutOfBoundsException('offset: ' . $offsetArg . ' ist nicht erlaubt. Array-Laenge: ' . $length . ' berechnetes offset: ' . $offset);
         }
 
-        $left = ($offset > 0) ? array_slice($subject, 0, $offset) : array();
-        $right = ($offset < $length) ? array_slice($subject, $offset) : array();
+        $left = ($offset > 0) ? array_slice($subject, 0, $offset) : [];
+        $right = ($offset < $length) ? array_slice($subject, $offset) : [];
 
         $subject = array_merge($left, $array, $right);
         return $subject;
@@ -172,7 +169,6 @@ class ArrayUtil
         return $array;
     }
 
-
     /**
      * Greift auf einen Index im Array zu
      *
@@ -193,7 +189,6 @@ class ArrayUtil
         $array[$key] = $value;
         return $array;
     }
-
 
     /**
      * Ähnlich wie joinc allerdings fügt implode ZWISCHEN den Elementen $glue ein
@@ -227,9 +222,9 @@ class ArrayUtil
      */
     public static function keys($array)
     {
-        $ret = array();
+        $ret = [];
 
-        foreach ($array as $key=>$value) {
+        foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $ret[$key] = self::keys($value);
             } else {
@@ -298,7 +293,7 @@ class ArrayUtil
      */
     public static function isOnlyType(array $array, $type)
     {
-        return (count(array_filter(array_values($array), 'is_'.$type)) === count($array));
+        return (count(array_filter(array_values($array), 'is_' . $type)) === count($array));
     }
 
     /**
@@ -311,7 +306,7 @@ class ArrayUtil
      */
     public static function fillUp(array $array, $value, $absLength)
     {
-        $fillNum = $absLength-count($array);
+        $fillNum = $absLength - count($array);
 
         /* nichts zu tun, da array schon voll (oder zu voll) */
         if ($fillNum <= 0) {
@@ -328,12 +323,12 @@ class ArrayUtil
      */
     public static function pluck(array $items, $property)
     {
-        $props = array();
+        $props = [];
 
         if (count($items) > 0) {
             $get = Util::castGetterFromSample($property, current($items));
 
-            foreach ($items as $key=>$item) {
+            foreach ($items as $key => $item) {
                 $props[$key] = $get($item);
             }
         }
@@ -370,7 +365,7 @@ class ArrayUtil
      */
     public static function filterKeys(array $array, Closure $filter)
     {
-        $filtered = array();
+        $filtered = [];
         //@TODO maybe something with array_filter as callback is faster here? benchmark?
 
         foreach ($array as $key => $value) {
@@ -390,7 +385,7 @@ class ArrayUtil
      */
     public static function indexBy(array $array, $property)
     {
-        $ret = array();
+        $ret = [];
 
         if (count($array) > 0) {
             $index = Util::castGetterFromSample($property, current($array));

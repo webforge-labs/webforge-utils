@@ -2,21 +2,18 @@
 
 namespace Webforge\Common;
 
-use http\Exception\RuntimeException;
-
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideTestAPI
      */
-    public function testAPI($sURL, $expectedURL, $scheme, $hostParts, $path, $query)
+    public function testAPI($sURL, $expectedURL, $scheme, $hostParts, $path, $query): void
     {
         $verbose = '';
 
         if ($expectedURL === null) {
             $expectedURL = $sURL;
         }
-
 
         $url = new Url($sURL);
 
@@ -51,97 +48,97 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public static function provideTestApi()
     {
-        $urls = array();
-        $urls[0] = array(
+        $urls = [];
+        $urls[0] = [
             'http://stechuhr.ps-webforge.com/index.php',
             null,
             'http',
-            array('stechuhr', 'ps-webforge', 'com'),
-            array('index.php'),
-            array()
-        );
+            ['stechuhr', 'ps-webforge', 'com'],
+            ['index.php'],
+            []
+        ];
 
-        $urls[1] = array(
+        $urls[1] = [
             'http://sebastian-bergmann.de/archives/797-Global-Variables-and-PHPUnit.html',
             null,
             'http',
-            array('sebastian-bergmann', 'de'),
-            array('archives', '797-Global-Variables-and-PHPUnit.html'),
-            array()
-        );
+            ['sebastian-bergmann', 'de'],
+            ['archives', '797-Global-Variables-and-PHPUnit.html'],
+            []
+        ];
 
-        $urls[2] = array(
+        $urls[2] = [
             'http://tiptoi.philipp.zpintern/test',
             null,
             'http',
-            array('tiptoi', 'philipp', 'zpintern'),
-            array('test'),
-            array()
-        );
+            ['tiptoi', 'philipp', 'zpintern'],
+            ['test'],
+            []
+        ];
 
-        $urls[3] = array(
+        $urls[3] = [
             'http://www.google.com/',
             null,
             'http',
-            array('www', 'google', 'com'),
-            array(),
-            array()
-        );
+            ['www', 'google', 'com'],
+            [],
+            []
+        ];
 
-        $urls[4] = array(
+        $urls[4] = [
             'https://www.google.com/analytics',
             null,
             'https',
-            array('www', 'google', 'com'),
-            array('analytics'),
-            array(),
-        );
+            ['www', 'google', 'com'],
+            ['analytics'],
+            [],
+        ];
 
         // %20 oder + in der url als whitespace?
-        $urls[5] = array(
+        $urls[5] = [
             'http://www.google.de/search?q=symfony+request+handler&ie=utf-8',
             null,
             'http',
-            array('www', 'google', 'de'),
-            array('search'),
-            array('q' => 'symfony request handler', 'ie' => 'utf-8')
-        );
+            ['www', 'google', 'de'],
+            ['search'],
+            ['q' => 'symfony request handler', 'ie' => 'utf-8']
+        ];
 
-        $urls[6] = array(
+        $urls[6] = [
             'http://127.0.0.1:8888/',
             null,
             'http',
-            array('127', '0', '0', '1'),
-            array(),
-            array()
-        );
+            ['127', '0', '0', '1'],
+            [],
+            []
+        ];
 
-        $urls[7] = array(
+        $urls[7] = [
             'http://ongaku.de/?lang=en',
             null,
             'http',
-            array('ongaku', 'de'),
-            array(),
-            array('lang' => 'en'),
-        );
+            ['ongaku', 'de'],
+            [],
+            ['lang' => 'en'],
+        ];
 
-        $urls[8] = array(
+        $urls[8] = [
             'http://stechuhr.ps-webforge.com/index.php/path/to/heaven?lang=nix',
             null,
             'http',
-            array('stechuhr', 'ps-webforge', 'com'),
-            array('index.php', 'path', 'to', 'heaven'),
-            array('lang' => 'nix')
-        );
+            ['stechuhr', 'ps-webforge', 'com'],
+            ['index.php', 'path', 'to', 'heaven'],
+            ['lang' => 'nix']
+        ];
 
-        $urls[9] = array(
+        $urls[9] = [
             'http://stechuhr.ps-webforge.com/index.php/path/to/heaven/?lang=nix',
             null,
             'http',
-            array('stechuhr', 'ps-webforge', 'com'),
-            array('index.php', 'path', 'to', 'heaven'),
-            array('lang' => 'nix')
-        );
+            ['stechuhr', 'ps-webforge', 'com'],
+            ['index.php', 'path', 'to', 'heaven'],
+            ['lang' => 'nix']
+        ];
 
         return $urls;
     }
@@ -149,7 +146,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAbsRelativeUrls
      */
-    public function testAddingRelativeUrlsToAbsoluteOnesWithDirectory($absUrl, $relativeUrl, $resultUrl)
+    public function testAddingRelativeUrlsToAbsoluteOnesWithDirectory($absUrl, $relativeUrl, $resultUrl): void
     {
         $url = new Url($absUrl);
 
@@ -164,25 +161,25 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     public static function provideAbsRelativeUrls()
     {
-        $tests = array();
+        $tests = [];
 
-        $tests[] = array(
+        $tests[] = [
             'http://www.example.com',
             '/relative/url/file.html',
             'http://www.example.com/relative/url/file.html'
-        );
+        ];
 
-        $tests[] = array(
+        $tests[] = [
             'http://www.example.com/',
             '/relative/url/file.html',
             'http://www.example.com/relative/url/file.html'
-        );
+        ];
 
-        $tests[] = array(
+        $tests[] = [
             'http://www.example.com/sub/dir',
             '/relative/url/file.html',
             'http://www.example.com/sub/dir/relative/url/file.html'
-        );
+        ];
 
         /* YAGNI? */
         /*
@@ -196,13 +193,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    public function testNoPartsException()
+    public function testNoPartsException(): void
     {
         $this->expectException(\RuntimeException::class);
         new Url('myproject.dev1.domain');
     }
 
-    public function testAddSubdomain()
+    public function testAddSubdomain(): void
     {
         $url = new Url('http://tvstt.laptop.ps-webforge.net/');
         $url->addSubDomain('test');
@@ -213,7 +210,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPathTrailingSlashCanBeSet()
+    public function testPathTrailingSlashCanBeSet(): void
     {
         $url = new Url($s = 'https://www.google.com/analytics');
         $url->setPathTrailingSlash(true);

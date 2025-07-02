@@ -2,8 +2,6 @@
 
 namespace Webforge\Common\DateTime;
 
-use http\Exception\InvalidArgumentException;
-
 /**
  * put test data into testdata repository
  */
@@ -12,58 +10,57 @@ class DateTimeTest extends \Webforge\Common\TestCase
   /**
    * @dataProvider i18nFormats
    */
-    public function testI18nFormat($expectedFormat, $date, $formatString, $lang = 'en')
+    public function testI18nFormat($expectedFormat, $date, $formatString, $lang = 'en'): void
     {
         self::assertEquals($expectedFormat, $date->i18n_format($formatString, $lang));
     }
 
     public static function i18nFormats()
     {
-        $tests = array();
+        $tests = [];
 
         // in php this is the three chars abbrev!
         // there is no abbrev for 2 digits
-        $tests[] = array('Mo', new DateTime('21.03.2011'), 'D');
-        $tests[] = array('Tu', new DateTime('22.03.2011'), 'D');
-        $tests[] = array('We', new DateTime('23.03.2011'), 'D');
-        $tests[] = array('Th', new DateTime('24.03.2011'), 'D');
-        $tests[] = array('Fr', new DateTime('25.03.2011'), 'D');
-        $tests[] = array('Sa', new DateTime('26.03.2011'), 'D');
-        $tests[] = array('Su', new DateTime('27.03.2011'), 'D');
+        $tests[] = ['Mo', new DateTime('21.03.2011'), 'D'];
+        $tests[] = ['Tu', new DateTime('22.03.2011'), 'D'];
+        $tests[] = ['We', new DateTime('23.03.2011'), 'D'];
+        $tests[] = ['Th', new DateTime('24.03.2011'), 'D'];
+        $tests[] = ['Fr', new DateTime('25.03.2011'), 'D'];
+        $tests[] = ['Sa', new DateTime('26.03.2011'), 'D'];
+        $tests[] = ['Su', new DateTime('27.03.2011'), 'D'];
 
-        $tests[] = array('Monday',    new DateTime('21.03.2011'), 'l');
-        $tests[] = array('Tuesday',   new DateTime('22.03.2011'), 'l');
-        $tests[] = array('Wednesday', new DateTime('23.03.2011'), 'l');
-        $tests[] = array('Thursday',  new DateTime('24.03.2011'), 'l');
-        $tests[] = array('Friday',    new DateTime('25.03.2011'), 'l');
-        $tests[] = array('Saturday',  new DateTime('26.03.2011'), 'l');
-        $tests[] = array('Sunday',    new DateTime('27.03.2011'), 'l');
+        $tests[] = ['Monday',    new DateTime('21.03.2011'), 'l'];
+        $tests[] = ['Tuesday',   new DateTime('22.03.2011'), 'l'];
+        $tests[] = ['Wednesday', new DateTime('23.03.2011'), 'l'];
+        $tests[] = ['Thursday',  new DateTime('24.03.2011'), 'l'];
+        $tests[] = ['Friday',    new DateTime('25.03.2011'), 'l'];
+        $tests[] = ['Saturday',  new DateTime('26.03.2011'), 'l'];
+        $tests[] = ['Sunday',    new DateTime('27.03.2011'), 'l'];
 
-        $tests[] = array('Mo', new DateTime('21.03.2011'), 'D', 'de');
-        $tests[] = array('Di', new DateTime('22.03.2011'), 'D', 'de');
-        $tests[] = array('Mi', new DateTime('23.03.2011'), 'D', 'de');
-        $tests[] = array('Do', new DateTime('24.03.2011'), 'D', 'de');
-        $tests[] = array('Fr', new DateTime('25.03.2011'), 'D', 'de');
-        $tests[] = array('Sa', new DateTime('26.03.2011'), 'D', 'de');
-        $tests[] = array('So', new DateTime('27.03.2011'), 'D', 'de');
+        $tests[] = ['Mo', new DateTime('21.03.2011'), 'D', 'de'];
+        $tests[] = ['Di', new DateTime('22.03.2011'), 'D', 'de'];
+        $tests[] = ['Mi', new DateTime('23.03.2011'), 'D', 'de'];
+        $tests[] = ['Do', new DateTime('24.03.2011'), 'D', 'de'];
+        $tests[] = ['Fr', new DateTime('25.03.2011'), 'D', 'de'];
+        $tests[] = ['Sa', new DateTime('26.03.2011'), 'D', 'de'];
+        $tests[] = ['So', new DateTime('27.03.2011'), 'D', 'de'];
 
-        $tests[] = array('Montag',    new DateTime('21.03.2011'), 'l', 'de');
-        $tests[] = array('Dienstag',  new DateTime('22.03.2011'), 'l', 'de');
-        $tests[] = array('Mittwoch',  new DateTime('23.03.2011'), 'l', 'de');
-        $tests[] = array('Donnerstag',new DateTime('24.03.2011'), 'l', 'de');
-        $tests[] = array('Freitag',   new DateTime('25.03.2011'), 'l', 'de');
-        $tests[] = array('Samstag',   new DateTime('26.03.2011'), 'l', 'de');
-        $tests[] = array('Sonntag',   new DateTime('27.03.2011'), 'l', 'de');
+        $tests[] = ['Montag',    new DateTime('21.03.2011'), 'l', 'de'];
+        $tests[] = ['Dienstag',  new DateTime('22.03.2011'), 'l', 'de'];
+        $tests[] = ['Mittwoch',  new DateTime('23.03.2011'), 'l', 'de'];
+        $tests[] = ['Donnerstag',new DateTime('24.03.2011'), 'l', 'de'];
+        $tests[] = ['Freitag',   new DateTime('25.03.2011'), 'l', 'de'];
+        $tests[] = ['Samstag',   new DateTime('26.03.2011'), 'l', 'de'];
+        $tests[] = ['Sonntag',   new DateTime('27.03.2011'), 'l', 'de'];
 
         return $tests;
     }
 
-
-    public function testYesterday()
+    public function testYesterday(): void
     {
         $now = time();
-        $yesterday = $now-24*60*60;
-        $beforeYesterday = $now-48*60*60;
+        $yesterday = $now - 24 * 60 * 60;
+        $beforeYesterday = $now - 48 * 60 * 60;
 
         $now = DateTime::factory($now);
         $yesterday = DateTime::factory($yesterday);
@@ -79,19 +76,18 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertFalse($yesterday->isYesterday($now));
     }
 
-    public function testToday()
+    public function testToday(): void
     {
         $now = DateTime::now();
         self::assertTrue($now->isToday());
     }
 
-    public function testisWeekDay()
+    public function testisWeekDay(): void
     {
         $now = DateTime::parse('d.m.Y H:i', '5.1.2012 12:00');
         $we = DateTime::parse('d.m.Y H:i', '4.1.2012 12:00');
         $mo = DateTime::parse('d.m.Y H:i', '2.1.2012 12:00');
         $su = DateTime::parse('d.m.Y H:i', '8.1.2012 12:00');
-
 
         self::assertTrue($we->isWeekDay($now));
         self::assertTrue($mo->isWeekDay($now));
@@ -106,18 +102,17 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideFormatSpan
      */
-    public function testGetWeekday($day, $date, $assertion)
+    public function testGetWeekday($day, $date, $assertion): void
     {
         self::assertEquals($assertion, $date->getWeekday($day)->format('d.m.Y'));
     }
 
-    public function testParseFromRFC1123()
+    public function testParseFromRFC1123(): void
     {
         self::assertInstanceof('Webforge\Common\DateTime\DateTime', DateTime::parse(DateTime::RFC1123, 'Thu, 10 Nov 2011 07:28:18 GMT'));
     }
 
-
-    public function testCoolSettersAndGetters()
+    public function testCoolSettersAndGetters(): void
     {
         $day = 12;
         $month = 1;
@@ -134,14 +129,14 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertSame(1940, $date->getYear());
     }
 
-    public function testSetYearBecomesInt()
+    public function testSetYearBecomesInt(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $date = DateTime::now();
         $date->setYear('2011');
     }
 
-    public function testCopyReturnsAClonedAndRelativelyModifiedDate()
+    public function testCopyReturnsAClonedAndRelativelyModifiedDate(): void
     {
         $date = new DateTime('07.08.2014');
         $copy = $date->copy();
@@ -155,102 +150,98 @@ class DateTimeTest extends \Webforge\Common\TestCase
 
     public static function provideFormatSpan()
     {
-        return array(
+        return [
 
       // 14.03. ist der Montag der Woche
-      array(DateTime::MON, new DateTime('14.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('14.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('14.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('14.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('14.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('14.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('14.03.2011'), '20.03.2011'),
+      [DateTime::MON, new DateTime('14.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('14.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('14.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('14.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('14.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('14.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('14.03.2011'), '20.03.2011'],
 
       // 15.03. ist der Dienstag der Woche
-      array(DateTime::MON, new DateTime('15.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('15.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('15.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('15.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('15.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('15.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('15.03.2011'), '20.03.2011'),
+      [DateTime::MON, new DateTime('15.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('15.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('15.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('15.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('15.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('15.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('15.03.2011'), '20.03.2011'],
 
       // 16.03. ist der Mittwoch der Woche
-      array(DateTime::MON, new DateTime('16.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('16.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('16.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('16.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('16.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('16.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('16.03.2011'), '20.03.2011'),
+      [DateTime::MON, new DateTime('16.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('16.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('16.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('16.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('16.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('16.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('16.03.2011'), '20.03.2011'],
 
       // 17.03. ist der Donnerstag der Woche
-      array(DateTime::MON, new DateTime('17.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('17.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('17.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('17.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('17.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('17.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('17.03.2011'), '20.03.2011'),
-
+      [DateTime::MON, new DateTime('17.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('17.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('17.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('17.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('17.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('17.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('17.03.2011'), '20.03.2011'],
 
       // 18.03. ist der Freitag der Woche
-      array(DateTime::MON, new DateTime('18.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('18.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('18.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('18.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('18.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('18.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('18.03.2011'), '20.03.2011'),
-
+      [DateTime::MON, new DateTime('18.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('18.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('18.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('18.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('18.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('18.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('18.03.2011'), '20.03.2011'],
 
       // 19.03. ist der Samstag der Woche
-      array(DateTime::MON, new DateTime('19.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('19.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('19.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('19.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('19.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('19.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('19.03.2011'), '20.03.2011'),
-
+      [DateTime::MON, new DateTime('19.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('19.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('19.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('19.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('19.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('19.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('19.03.2011'), '20.03.2011'],
 
       // 20.03. ist der Sonntag der Woche
-      array(DateTime::MON, new DateTime('20.03.2011'), '14.03.2011'),
-      array(DateTime::TUE, new DateTime('20.03.2011'), '15.03.2011'),
-      array(DateTime::WED, new DateTime('20.03.2011'), '16.03.2011'),
-      array(DateTime::THU, new DateTime('20.03.2011'), '17.03.2011'),
-      array(DateTime::FRI, new DateTime('20.03.2011'), '18.03.2011'),
-      array(DateTime::SAT, new DateTime('20.03.2011'), '19.03.2011'),
-      array(DateTime::SUN, new DateTime('20.03.2011'), '20.03.2011'),
-
+      [DateTime::MON, new DateTime('20.03.2011'), '14.03.2011'],
+      [DateTime::TUE, new DateTime('20.03.2011'), '15.03.2011'],
+      [DateTime::WED, new DateTime('20.03.2011'), '16.03.2011'],
+      [DateTime::THU, new DateTime('20.03.2011'), '17.03.2011'],
+      [DateTime::FRI, new DateTime('20.03.2011'), '18.03.2011'],
+      [DateTime::SAT, new DateTime('20.03.2011'), '19.03.2011'],
+      [DateTime::SUN, new DateTime('20.03.2011'), '20.03.2011'],
 
       // 17.03. ist der Montag der folgenden Woche
-      array(DateTime::MON, new DateTime('21.03.2011'), '21.03.2011'),
-      array(DateTime::TUE, new DateTime('21.03.2011'), '22.03.2011'),
-      array(DateTime::WED, new DateTime('21.03.2011'), '23.03.2011'),
-      array(DateTime::THU, new DateTime('21.03.2011'), '24.03.2011'),
-      array(DateTime::FRI, new DateTime('21.03.2011'), '25.03.2011'),
-      array(DateTime::SAT, new DateTime('21.03.2011'), '26.03.2011'),
-      array(DateTime::SUN, new DateTime('21.03.2011'), '27.03.2011'),
-    );
+      [DateTime::MON, new DateTime('21.03.2011'), '21.03.2011'],
+      [DateTime::TUE, new DateTime('21.03.2011'), '22.03.2011'],
+      [DateTime::WED, new DateTime('21.03.2011'), '23.03.2011'],
+      [DateTime::THU, new DateTime('21.03.2011'), '24.03.2011'],
+      [DateTime::FRI, new DateTime('21.03.2011'), '25.03.2011'],
+      [DateTime::SAT, new DateTime('21.03.2011'), '26.03.2011'],
+      [DateTime::SUN, new DateTime('21.03.2011'), '27.03.2011'],
+    ];
     }
 
     /**
      * @dataProvider provideBefore
      */
-    public function testBefore($expected, $subjectDate, $objectDate)
+    public function testBefore($expected, $subjectDate, $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        self::assertEquals($expected, $subject->isBefore($object), 'failed asserting that: '.$subjectDate.'->isBefore('.$objectDate.')');
+        self::assertEquals($expected, $subject->isBefore($object), 'failed asserting that: ' . $subjectDate . '->isBefore(' . $objectDate . ')');
     }
 
     public static function provideBefore()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -264,19 +255,19 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideAfter
      */
-    public function testAfter($expected, $subjectDate, $objectDate)
+    public function testAfter($expected, $subjectDate, $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        self::assertEquals($expected, $subject->isAfter($object), 'failed asserting that: '.$subjectDate.'->isAfter('.$objectDate.')');
+        self::assertEquals($expected, $subject->isAfter($object), 'failed asserting that: ' . $subjectDate . '->isAfter(' . $objectDate . ')');
     }
 
     public static function provideAfter()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -290,19 +281,19 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideEqual
      */
-    public function testEqual($expected, $subjectDate, $objectDate)
+    public function testEqual($expected, $subjectDate, $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
 
-        self::assertEquals($expected, $subject->isEqual($object), 'failed asserting that: '.$subjectDate.'->isEqual('.$objectDate.')');
+        self::assertEquals($expected, $subject->isEqual($object), 'failed asserting that: ' . $subjectDate . '->isEqual(' . $objectDate . ')');
     }
 
     public static function provideEqual()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 

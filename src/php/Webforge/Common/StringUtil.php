@@ -41,14 +41,14 @@ class StringUtil
      * @param string $br    the EOL in $code, its unexpected if its not right
      * @return string
      */
-    public static function indent($code, $indent=2, $br = "\n")
+    public static function indent($code, $indent = 2, $br = "\n")
     {
         // for performance reasons prefixLines is not used
         if ($indent == 0 || $code == '') {
             return $code;
         }
         $cutEnd = self::endsWith($code, $br);
-        $code = str_repeat(' ', $indent).str_replace($br, $br.str_repeat(' ', $indent), $code);
+        $code = str_repeat(' ', $indent) . str_replace($br, $br . str_repeat(' ', $indent), $code);
         if ($cutEnd) {
             $code = mb_substr($code, 0, -$indent);
         } // letzte weißzeichen vom str_replace entfernen
@@ -65,9 +65,9 @@ class StringUtil
     public static function prefixLines($msg, $prefix, $eol = "\n")
     {
         if (static::endsWith($msg, $eol)) {
-            return $prefix.str_replace($eol, $eol.$prefix, mb_substr($msg, 0, -1)).$eol;
+            return $prefix . str_replace($eol, $eol . $prefix, mb_substr($msg, 0, -1)) . $eol;
         } else {
-            return $prefix.str_replace($eol, $eol.$prefix, $msg);
+            return $prefix . str_replace($eol, $eol . $prefix, $msg);
         }
     }
 
@@ -91,7 +91,7 @@ class StringUtil
         $cnt = $begin;
         $linedCode = Preg::replace_callback(
             $code,
-            '/(.*?)'.$eol.'/',
+            '/(.*?)' . $eol . '/',
             function ($match) use (&$cnt, $padWhite) {
           return sprintf('%s %s', StringUtil::padRight((string) $cnt++, $padWhite, ' '), $match[0]);
       }
@@ -114,7 +114,7 @@ class StringUtil
     {
         $length = (int) $length;
         if (mb_strlen($string) > $length) {
-            $string = mb_substr($string, 0, $length).$ender;
+            $string = mb_substr($string, 0, $length) . $ender;
         }
         return $string;
     }
@@ -132,8 +132,20 @@ class StringUtil
     public static function cutAtLast($string, $length, $atChar, $ender = '…')
     {
         $length = (int) $length;
-        if (($slength = mb_strlen($string)) > $length) {
-            $string = mb_substr($string, 0, mb_strrpos($string, $atChar, $length-$slength)).$ender; // -x means: search backwards from x of end of string
+
+        if ($length <= 0) {
+            return '';
+        }
+
+        $stringLength = mb_strlen($string);
+        if ($stringLength > $length) {
+            $cutPosition = mb_strrpos($string, $atChar, $length - $stringLength);
+
+            if ($cutPosition === false) {
+                return '' . $ender;
+            }
+
+            $string = mb_substr($string, 0, $cutPosition) . $ender; // -x means: search backwards from x of end of string
         }
         return $string;
     }
@@ -153,7 +165,7 @@ class StringUtil
         for ($i = 0; $i < $length; $i++) {
             $rand = rand(0, 35);
             if ($rand >= 10) {
-                $str .= chr(ord('a') + $rand-10);
+                $str .= chr(ord('a') + $rand - 10);
             } // a - z
             else {
                 $str .= chr(ord('0') + $rand);
@@ -170,7 +182,7 @@ class StringUtil
      */
     public static function ucfirst($string)
     {
-        return mb_strtoupper(mb_substr($string, 0, 1)).mb_substr($string, 1);
+        return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
 
     /**
@@ -180,7 +192,7 @@ class StringUtil
      */
     public static function lcfirst($string)
     {
-        return mb_strtolower(mb_substr($string, 0, 1)).mb_substr($string, 1);
+        return mb_strtolower(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
 
     /**
@@ -191,8 +203,8 @@ class StringUtil
     public static function eolVisible($string)
     {
         return str_replace(
-            array("\r", "\n", "-r-\r-n-\n"),
-            array("-r-\r", "-n-\n", "-rn-\r\n"),
+            ["\r", "\n", "-r-\r-n-\n"],
+            ["-r-\r", "-n-\n", "-rn-\r\n"],
             $string
         );
     }
@@ -204,7 +216,7 @@ class StringUtil
      */
     public static function fixEOL($string)
     {
-        return str_replace(array("\r\n", "\r"), "\n", $string);
+        return str_replace(["\r\n", "\r"], "\n", $string);
     }
 
     /**
@@ -248,7 +260,7 @@ class StringUtil
      */
     public static function substring($string, $from, $to)
     {
-        return mb_substr($string, $from, abs($from-$to));
+        return mb_substr($string, $from, abs($from - $to));
     }
 
     /**
@@ -272,7 +284,7 @@ class StringUtil
             }
         } elseif ($type === self::START) {
             if (!self::startsWith($string, $withString)) {
-                $string = $withString.$string;
+                $string = $withString . $string;
             }
         }
         return $string;
@@ -283,7 +295,7 @@ class StringUtil
      */
     public static function wrap($string, $wrap)
     {
-        return $wrap.$string.$wrap;
+        return $wrap . $string . $wrap;
     }
 
     /**
@@ -299,11 +311,11 @@ class StringUtil
     public static function swrap($string, $symmetricWrapper)
     {
         if ($symmetricWrapper === '[') {
-            return '['.$string.']';
+            return '[' . $string . ']';
         } elseif ($symmetricWrapper === '(') {
-            return '('.$string.')';
+            return '(' . $string . ')';
         } else {
-            return $symmetricWrapper.$string.$symmetricWrapper;
+            return $symmetricWrapper . $string . $symmetricWrapper;
         }
     }
 
@@ -346,7 +358,7 @@ class StringUtil
             return mb_strtolower($camelName);
         }
 
-        $specials = preg_quote(implode("", array('.','@','\\',' ','[',']','(',')')), '/');
+        $specials = preg_quote(implode("", ['.','@','\\',' ','[',']','(',')']), '/');
 
         $dashed = Preg::replace(
       // in

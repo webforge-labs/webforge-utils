@@ -51,7 +51,7 @@ class Time
             $now = new DateTime('now');
 
             $d2 = clone $now;
-            $d2->add(new DateInterval('PT'.$timespan.'S'));
+            $d2->add(new DateInterval('PT' . $timespan . 'S'));
 
             $dateInterval = $d2->diff($now);
             $dateInterval->setUS($frac);

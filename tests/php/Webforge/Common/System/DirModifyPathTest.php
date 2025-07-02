@@ -2,8 +2,6 @@
 
 namespace Webforge\Common\System;
 
-use SplFileInfo;
-
 /**
  * @covers Webforge\Common\System\Dir
  */
@@ -15,7 +13,7 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+        $this->dir = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
 
         if (DIRECTORY_SEPARATOR === '\\') {
             $absolutePath = 'D:\\path\\for\\absolute\\';
@@ -23,10 +21,10 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
             $this->absolutePath = '/path/for/absolute/';
         }
 
-        $this->relativePath = 'path'.DIRECTORY_SEPARATOR.'for'.DIRECTORY_SEPARATOR.'relative'.DIRECTORY_SEPARATOR;
+        $this->relativePath = 'path' . DIRECTORY_SEPARATOR . 'for' . DIRECTORY_SEPARATOR . 'relative' . DIRECTORY_SEPARATOR;
     }
 
-    public function testMakeRelativeTo()
+    public function testMakeRelativeTo(): void
     {
         $base = Dir::factoryTS(__DIR__);
 
@@ -35,27 +33,27 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
 
         $rel = clone $graph;
         self::assertEquals(
-            '.'.DIRECTORY_SEPARATOR.'Psc'.DIRECTORY_SEPARATOR.'Graph'.DIRECTORY_SEPARATOR,
+            '.' . DIRECTORY_SEPARATOR . 'Psc' . DIRECTORY_SEPARATOR . 'Graph' . DIRECTORY_SEPARATOR,
             (string) $rel->makeRelativeTo($lib),
             sprintf("making '%s' relative to '%s' failed", $graph, $lib)
         );
 
         $eq = clone $graph;
 
-        self::assertEquals('.'.DIRECTORY_SEPARATOR, (string) $eq->makeRelativeTo($graph));
+        self::assertEquals('.' . DIRECTORY_SEPARATOR, (string) $eq->makeRelativeTo($graph));
     }
 
-    public function testMakeRelativeToException()
+    public function testMakeRelativeToException(): void
     {
-        $sub = new Dir(__DIR__.DIRECTORY_SEPARATOR);
-        $parent = new Dir(realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR);
+        $sub = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
+        $parent = new Dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
 
         $norel = clone $parent;
         $this->expectException(\Webforge\Common\System\Exception::class);
         $norel->makeRelativeTo($sub);
     }
 
-    public function testMakeRelativeToMakesDirRelative()
+    public function testMakeRelativeToMakesDirRelative(): void
     {
         $base = Dir::factoryTS(__DIR__);
         $graph = $base->sub('psc/class/Graph/');
@@ -66,14 +64,14 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($graph->isRelative());
     }
 
-    public function testWrappedPathsReflectIsWrappedAndSetWrapperAndGetWrapper()
+    public function testWrappedPathsReflectIsWrappedAndSetWrapperAndGetWrapper(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $abs = '/D:/path/does/not';
         } else {
             $abs = '/path/does/not';
         }
-        $wrappedPath = 'phar://'.$abs.'/matter/my.phar.gz/i/am/wrapped/';
+        $wrappedPath = 'phar://' . $abs . '/matter/my.phar.gz/i/am/wrapped/';
 
         $dir = new Dir($wrappedPath);
         self::assertEquals($wrappedPath, (string) $dir, 'path is not parsed correctly');
@@ -85,7 +83,7 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('rar', $dir->getWrapper());
     }
 
-    public function testWronglyWrappedFilePathIsCorrected()
+    public function testWronglyWrappedFilePathIsCorrected(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $path = 'file://D:\wrong\path\\';
@@ -97,32 +95,31 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('file://D:/wrong/path/', (string) $dir);
     }
 
-
-    public function testWrapWithSetsWrapperN()
+    public function testWrapWithSetsWrapperN(): void
     {
         $relativeDir = new Dir($this->relativePath);
         $relativeDir->wrapWith('file');
 
         self::assertEquals(
-            'file://'.str_replace('\\', '/', $this->relativePath),
+            'file://' . str_replace('\\', '/', $this->relativePath),
             (string) $relativeDir
         );
     }
 
-    public function testDirExtractFromWrappedPath()
+    public function testDirExtractFromWrappedPath(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $abs = '/D:/path/does/not';
         } else {
             $abs = '/path/does/not';
         }
-        $fileString = 'phar://'.$abs.'/matter/my.phar.gz/i/am/wrapped/class.php';
+        $fileString = 'phar://' . $abs . '/matter/my.phar.gz/i/am/wrapped/class.php';
 
         $dir = Dir::extract($fileString);
-        self::assertEquals('phar://'.$abs.'/matter/my.phar.gz/i/am/wrapped/', (string) $dir);
+        self::assertEquals('phar://' . $abs . '/matter/my.phar.gz/i/am/wrapped/', (string) $dir);
     }
 
-    public function testWrapWith_ChangesThePathToUnixStyle()
+    public function testWrapWith_ChangesThePathToUnixStyle(): void
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $abs = 'D:\path\does\point\\'; // this is windows style for windows path
@@ -132,15 +129,15 @@ class DirModifyPathTest extends \PHPUnit\Framework\TestCase
 
         $absUnix = Dir::factory($abs)->getOSPath(Dir::UNIX, Dir::WINDOWS_DRIVE_WINDOWS_STYLE); // so we have to provide it here
 
-        $abs .= 'to'.DIRECTORY_SEPARATOR.'target'.DIRECTORY_SEPARATOR;
+        $abs .= 'to' . DIRECTORY_SEPARATOR . 'target' . DIRECTORY_SEPARATOR;
 
         $dir = new Dir($abs);
         $dir->wrapWith('vfs');
 
-        self::assertEquals('vfs://'.$absUnix.'to/target/', (string) $dir);
+        self::assertEquals('vfs://' . $absUnix . 'to/target/', (string) $dir);
     }
 
-    public function testGetDirWithoutTrailingSlash()
+    public function testGetDirWithoutTrailingSlash(): void
     {
         self::assertEquals(
             rtrim(__DIR__, DIRECTORY_SEPARATOR),

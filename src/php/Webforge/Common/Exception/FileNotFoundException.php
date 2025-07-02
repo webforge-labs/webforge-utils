@@ -18,7 +18,7 @@ class FileNotFoundException extends \Webforge\Common\Exception
 
     public static function fromFileAndExtensions(File $file, $extensions)
     {
-        return self::fromFile($file, 'The file %s cannot be found with any of these extensions: '.implode(',', $extensions));
+        return self::fromFile($file, 'The file %s cannot be found with any of these extensions: ' . implode(',', $extensions));
     }
 
     /**

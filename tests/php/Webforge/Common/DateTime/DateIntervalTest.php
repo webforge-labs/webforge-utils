@@ -13,7 +13,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
         parent::setUp();
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         self::assertInstanceOf('Webforge\Common\DateTime\DateInterval', $this->interval);
     }
@@ -21,7 +21,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideSimpleSpec
      */
-    public function testConstructConvertSimpleSpec(\DateInterval $expectedInterval, $testSpec)
+    public function testConstructConvertSimpleSpec(\DateInterval $expectedInterval, $testSpec): void
     {
         $format = '%R %Y %M %D %H %I %S';
         $actualInterval = new DateInterval($testSpec);
@@ -30,9 +30,9 @@ class DateIntervalTest extends \Webforge\Common\TestCase
 
     public static function provideSimpleSpec()
     {
-        $tests = array();
-        $test = function ($intervalSpec, $testSpec) use (&$tests) {
-            $tests[] = array(new \DateInterval($intervalSpec), $testSpec);
+        $tests = [];
+        $test = function ($intervalSpec, $testSpec) use (&$tests): void {
+            $tests[] = [new \DateInterval($intervalSpec), $testSpec];
         };
 
         $test('P1Y', '1 YEAR');
@@ -46,7 +46,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
         return $tests;
     }
 
-    public function testAddTo()
+    public function testAddTo(): void
     {
         $start = DateTime::create('21.11.1984 13:00');
         $iv = DateInterval::create('1 DAY');

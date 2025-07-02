@@ -8,14 +8,14 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->matchers = array(
+        $this->matchers = [
       '/web-dl/i' => 'one',
       '/^mother/' => 'two',
-      '/German/'  => 'three'
-    );
+      '/German/' => 'three'
+    ];
     }
 
-    public function testPregReplaceIsMultiByteSafe()
+    public function testPregReplaceIsMultiByteSafe(): void
     {
         // internal test: preg_replace is not overloaded or something
         self::assertNotEquals(
@@ -30,7 +30,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPregMatchisMultiByteSafe()
+    public function testPregMatchisMultiByteSafe(): void
     {
         // internal test: preg_replace is not overloaded or something
         $pattern = '/^\x{201E}Nerd“$/';
@@ -49,7 +49,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
     //);
     }
 
-    public function testPregMatchHasGModifierWhichMatchesAll()
+    public function testPregMatchHasGModifierWhichMatchesAll(): void
     {
         // internal test: preg_replace is not overloaded or something
         $pattern = '/([0-9]{1})/';
@@ -57,7 +57,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             3,
-            Preg::match($subject, $pattern.'g')
+            Preg::match($subject, $pattern . 'g')
         );
 
         self::assertEquals(
@@ -66,7 +66,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testPregMatchThrowsExceptionIfInternalErrorAccurs()
+    public function testPregMatchThrowsExceptionIfInternalErrorAccurs(): void
     {
         $this->expectException(\Webforge\Common\Exception::class);
 
@@ -76,7 +76,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMatchArrayMatchesOnElementFromRegexArray()
+    public function testMatchArrayMatchesOnElementFromRegexArray(): void
     {
         self::assertNotEquals(
             'two',
@@ -86,7 +86,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
       )
         );
     }
-    public function testMatchArrayMatchesTHEFIRSTRegexFromArray()
+    public function testMatchArrayMatchesTHEFIRSTRegexFromArray(): void
     {
         self::assertEquals(
             'one',
@@ -97,10 +97,10 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFullMatchArrayMatchesAllFromArray()
+    public function testFullMatchArrayMatchesAllFromArray(): void
     {
         self::assertEquals(
-            array('one','three'),
+            ['one','three'],
             Preg::matchFullArray(
           $this->matchers,
           'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD'
@@ -108,7 +108,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMatchFullArrayCanReturnNoMatchDefaultValue()
+    public function testMatchFullArrayCanReturnNoMatchDefaultValue(): void
     {
         self::assertEquals(
             'noMatchDefaultValue',
@@ -120,7 +120,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMatchArrayCanReturnNoMatchDefaultValue()
+    public function testMatchArrayCanReturnNoMatchDefaultValue(): void
     {
         self::assertEquals(
             'noMatchDefaultValue',
@@ -132,7 +132,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMatchFullArrayCanAssertAMatch()
+    public function testMatchFullArrayCanAssertAMatch(): void
     {
         $this->expectException(\Webforge\Common\NoMatchException::class);
 
@@ -142,30 +142,30 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMatchArrayThrowsExceptionWhenAnyRegexDoesNotMatch()
+    public function testMatchArrayThrowsExceptionWhenAnyRegexDoesNotMatch(): void
     {
         $this->expectException(\Webforge\Common\NoMatchException::class);
 
         Preg::matchArray($this->matchers, 'nix');
     }
 
-    public function testMatchArrayRegressionSerienLoader()
+    public function testMatchArrayRegressionSerienLoader(): void
     {
         $value = 'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD';
 
         self::assertEquals(
             'WEB-DL',
             Preg::matchArray(
-          array(
+          [
           '/dvdrip/i' => 'DVDRip',
           '/WEB-DL/i' => 'WEB-DL'
-        ),
+        ],
           $value
       )
         );
     }
 
-    public function testSetModifierCanRemoveUModifierFromPattern()
+    public function testSetModifierCanRemoveUModifierFromPattern(): void
     {
         self::assertEquals(
             '/something/i',
@@ -173,7 +173,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testSetModifierCanAddUModifierToPattern()
+    public function testSetModifierCanAddUModifierToPattern(): void
     {
         self::assertEquals(
             '/something/iu',
@@ -184,16 +184,16 @@ class PregTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideTestqmatch
      */
-    public function testqmatch($string, $rx, $set, $expectedReturn)
+    public function testqmatch($string, $rx, $set, $expectedReturn): void
     {
         self::assertEquals($expectedReturn, Preg::qmatch($string, $rx, $set));
     }
 
     public static function provideTestqmatch()
     {
-        $tests = array();
-        $equals = function ($expectedReturn, $string, $rx, $set) use (&$tests) {
-            $tests[] = array($string, $rx, $set, $expectedReturn);
+        $tests = [];
+        $equals = function ($expectedReturn, $string, $rx, $set) use (&$tests): void {
+            $tests[] = [$string, $rx, $set, $expectedReturn];
         };
 
         $s1 = 'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD';
@@ -230,26 +230,26 @@ class PregTest extends \PHPUnit\Framework\TestCase
 
         // set-array
         $equals(
-            array('06','13'),
+            ['06','13'],
             $s1,
             $episodeRX,
-            array(1,2)
+            [1,2]
         );
 
         // set-array
         $equals(
-            array('13'),
+            ['13'],
             $s1,
             $episodeRX,
-            array(2)
+            [2]
         );
 
         // set-array empty
         $equals(
-            array(),
+            [],
             $s1,
             $episodeRX,
-            array()
+            []
         );
 
         // no match
@@ -263,22 +263,22 @@ class PregTest extends \PHPUnit\Framework\TestCase
             null,
             $s1,
             '/(wolf|katze)/i',
-            array(0,1)
+            [0,1]
         );
 
         // set-array oversized (schmeisst keine notice)
         $equals(
-            array('06','13'),
+            ['06','13'],
             $s1,
             $episodeRX,
-            array(1,2,3)
+            [1,2,3]
         );
 
         $equals(
-            array('06','13'),
+            ['06','13'],
             $s1,
             $episodeRX,
-            array(1,2,3,4,5,6,7,13)
+            [1,2,3,4,5,6,7,13]
         );
 
         return $tests;

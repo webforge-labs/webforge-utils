@@ -2,15 +2,14 @@
 
 namespace Webforge\Common\System;
 
-use Webforge\Common\StringUtil as S;
-use Webforge\Common\Preg;
-use Webforge\Common\ArrayUtil as A;
-use Webforge\Common\DateTime\DateTime;
 use InvalidArgumentException;
 use LogicException;
+use Webforge\Common\ArrayUtil as A;
+use Webforge\Common\DateTime\DateTime;
+use Webforge\Common\Preg;
+use Webforge\Common\StringUtil as S;
 
 /**
- *
  * translate API
  * Convention: every path has a trailing slash
  */
@@ -50,8 +49,8 @@ class Dir
 
     public const RELATIVE = 'relative';
 
-    public const ASSERT_EXISTS       = 0x000010;
-    public const PARENT              = 0x000020;
+    public const ASSERT_EXISTS = 0x000010;
+    public const PARENT = 0x000020;
 
     /**
      * The default chmod for new directories
@@ -65,8 +64,7 @@ class Dir
      *
      * @var array all names of the subdirectories and the name itself
      */
-    private $path = array();
-
+    private $path = [];
 
     protected $prefix;
 
@@ -88,7 +86,7 @@ class Dir
      * @param array
      * @see getContents()
      */
-    public $ignores = array();
+    public $ignores = [];
 
     /**
      * Create a new Instance of a directory
@@ -106,7 +104,6 @@ class Dir
             $this->setPath($path);
         }
     }
-
 
     /**
      * Returns a new directory with $path
@@ -129,7 +126,7 @@ class Dir
         if (!isset($path)) {
             return new static(null);
         } else {
-            return new static(rtrim($path, '\\/').DIRECTORY_SEPARATOR);
+            return new static(rtrim($path, '\\/') . DIRECTORY_SEPARATOR);
         }
     }
 
@@ -141,7 +138,7 @@ class Dir
     public static function createFromURL($url, Dir $base = null)
     {
         if (!isset($base)) {
-            $base = new Dir(getcwd().DIRECTORY_SEPARATOR);
+            $base = new Dir(getcwd() . DIRECTORY_SEPARATOR);
         }
 
         return $base->sub($url);
@@ -156,13 +153,12 @@ class Dir
         $tempname = $file->getName();
         $file->delete();
 
-        $dir = $file->getDirectory()->sub($tempname.'/');
+        $dir = $file->getDirectory()->sub($tempname . '/');
         $dir->make();
         return $dir;
     }
 
     /**
-     *
      * @param string $path mit trailin DIRECTORY_SEPERATOR
      */
     public function setPath($path)
@@ -171,12 +167,12 @@ class Dir
 
         $lastChar = mb_substr($path, -1);
         if ($lastChar !== '\\' && $lastChar !== '/') {
-            throw new Exception($path.' should end with (back)slash.');
+            throw new Exception($path . ' should end with (back)slash.');
         }
 
         if ($this->cygwin = self::isCygwinPath($path)) {
             $parts = explode('/', $this->fixToUnixPath($path));
-            $this->prefix = '/cygdrive/'.$parts[2].'/';
+            $this->prefix = '/cygdrive/' . $parts[2] . '/';
             $this->path = array_slice($parts, 3, -1);
         } elseif (self::isWrappedPath($path)) {
             $wrapper = null;
@@ -185,12 +181,12 @@ class Dir
 
             // windows drive as unix path /C:/
             if (mb_strpos($parts[1], ':') === 1) {
-                $this->prefix = mb_substr($parts[1], 0, 1).':\\';
+                $this->prefix = mb_substr($parts[1], 0, 1) . ':\\';
                 $this->path = array_slice($parts, 2, -1);
                 $driveStyle = self::WINDOWS_DRIVE_UNIX_STYLE;
             // windows drive as windows path C:/
             } elseif (mb_strpos($parts[0], ':') === 1) {
-                $this->prefix = mb_substr($parts[0], 0, 1).':\\';
+                $this->prefix = mb_substr($parts[0], 0, 1) . ':\\';
                 $this->path = array_slice($parts, 1, -1);
                 $driveStyle = self::WINDOWS_DRIVE_WINDOWS_STYLE;
             } else {
@@ -205,19 +201,19 @@ class Dir
         } elseif (self::isAbsolutePath($path)) {
             if (mb_strpos($path, '\\\\') === 0) {
                 $parts = explode('\\', $this->fixToWindowsPath($path));
-                $this->prefix = '\\\\'.$parts[1];
+                $this->prefix = '\\\\' . $parts[1];
                 $this->path = array_slice($parts, 1, -1);
             } elseif (DIRECTORY_SEPARATOR === '\\') {
                 // windows drive as windows path D:\
                 $parts = explode('\\', $this->fixToWindowsPath($path));
 
                 if (mb_strpos($parts[0], ':') === 1) {
-                    $this->prefix = $parts[0].'\\';
+                    $this->prefix = $parts[0] . '\\';
                     $this->path = array_slice($parts, 1, -1);
 
                 // windows drive as unix path on windows
                 } elseif (mb_strpos($parts[1], ':') === 1) {
-                    $this->prefix = $parts[1].'\\';
+                    $this->prefix = $parts[1] . '\\';
                     $this->path = array_slice($parts, 2, -1);
                 } else {
                     // unix path on windows
@@ -229,10 +225,10 @@ class Dir
 
                 // windows drive as windows path /C:/
                 if (mb_strpos($parts[1], ':') === 1) {
-                    $this->prefix = '/'.mb_substr($parts[1], 0, 1).':/';
+                    $this->prefix = '/' . mb_substr($parts[1], 0, 1) . ':/';
                     $this->path = array_slice($parts, 2, -1);
                 } elseif (mb_strpos($parts[0], ':') === 1) {
-                    $this->prefix = '/'.mb_substr($parts[0], 0, 1).':/';
+                    $this->prefix = '/' . mb_substr($parts[0], 0, 1) . ':/';
                     $this->path = array_slice($parts, 1, -1);
                 } else {
                     $this->prefix = '/';
@@ -269,7 +265,7 @@ class Dir
     public static function fixToUnixPath($mixedPath)
     {
         $bs = preg_quote('\\');
-        return Preg::replace($mixedPath, '~'.$bs.'(?!(\s|'.$bs.'))~', '/');
+        return Preg::replace($mixedPath, '~' . $bs . '(?!(\s|' . $bs . '))~', '/');
     }
 
     protected static function fixToWindowsPath($mixedPath)
@@ -283,10 +279,10 @@ class Dir
      */
     protected function extractWrapper($path, &$wrapper)
     {
-        $m = array();
+        $m = [];
         if (Preg::match($path, '|^([a-z\.0-9]+)://(.*)$|', $m) > 0) {
             $wrapper = $m[1];
-            $path = rtrim($m[2], '\\/').'/'; // cleanup trailing-backslash
+            $path = rtrim($m[2], '\\/') . '/'; // cleanup trailing-backslash
         }
 
         return $path;
@@ -335,7 +331,7 @@ class Dir
     {
         $this->wrapper = $wrapperName;
 
-        $this->prefix = $this->wrapper.'://'.$this->getOSPrefix(self::UNIX, $driveStyle ?: self::WINDOWS_DRIVE_WINDOWS_STYLE);
+        $this->prefix = $this->wrapper . '://' . $this->getOSPrefix(self::UNIX, $driveStyle ?: self::WINDOWS_DRIVE_WINDOWS_STYLE);
 
         return $this;
     }
@@ -368,7 +364,7 @@ class Dir
             /* wir ermitteln das aktuelle working directory und fügen dieses vor unserem bisherigen Pfad hinzu
              * den . am anfang brauchen wir nicht wegmachen, das wird nachher normalisiert
              */
-            $cwd = self::factory(getcwd().DIRECTORY_SEPARATOR);
+            $cwd = self::factory(getcwd() . DIRECTORY_SEPARATOR);
             $this->prefix = $cwd->getPrefix($this);
 
             $this->path = array_merge(
@@ -378,7 +374,7 @@ class Dir
         }
 
         /* pfad normalisieren */
-        $newPath = array();
+        $newPath = [];
         foreach ($this->path as $dir) {
             if ($dir !== '.') { // dir2/dir1/./dir4/dir3 den . ignorieren
         if ($dir == '..') {  // ../ auflösen dadurch, dass wir ein verzeichnis zurückgehen
@@ -427,11 +423,11 @@ class Dir
         $thisPath = (string) $this->resolvePath();
 
         if (!S::startsWith($thisPath, $removePath) || mb_strlen($thisPath) < mb_strlen($removePath)) {
-            throw new Exception('Das Verzeichnis ('.$thisPath.')[1] muss in ('.$removePath.')[2] sein. Kann [1] nicht relatv zu [2] machen, da [2] zu lang ist. Vielleicht Argumente falsch rum?');
+            throw new Exception('Das Verzeichnis (' . $thisPath . ')[1] muss in (' . $removePath . ')[2] sein. Kann [1] nicht relatv zu [2] machen, da [2] zu lang ist. Vielleicht Argumente falsch rum?');
         }
 
         if ($removePath == $thisPath) {
-            $this->setPath('.'.DIRECTORY_SEPARATOR); // das Verzeichnis ist relativ gesehen zu sich selbst das aktuelle Verzeichnis
+            $this->setPath('.' . DIRECTORY_SEPARATOR); // das Verzeichnis ist relativ gesehen zu sich selbst das aktuelle Verzeichnis
             return $this;
         }
 
@@ -472,7 +468,7 @@ class Dir
     public function getURL(Dir $relativeDir = null)
     {
         if (!isset($relativeDir)) {
-            $relativeDir = new Dir('.'.DIRECTORY_SEPARATOR);
+            $relativeDir = new Dir('.' . DIRECTORY_SEPARATOR);
         }
 
         $rel = clone $this;
@@ -480,7 +476,7 @@ class Dir
         $pa = $rel->getPathArray();
         unset($pa[0]);
 
-        return '/'.implode('/', array_map('rawurlencode', $pa));
+        return '/' . implode('/', array_map('rawurlencode', $pa));
     }
 
     /**
@@ -609,12 +605,12 @@ class Dir
      * @param array|string $extensions ein Array von Dateiendungen oder eine einzelne Dateiendung
      * @param array $ignores ein Array von Regulären Ausdrücken, die auf den Dateinamen/Verzeichnisnamen (ohne den kompletten Pfad) angewandt werden
      * @param int $sort eine Konstante die bestimmt, wie die Dateien in Verzeichnissen sortiert ausgegeben werden sollen
-     * @return Array mit Dir und File
+     * @return array mit Dir und File
      */
-    public function getContents($extensions = null, array $ignores=null, $sort = null, $subDirs = null)
+    public function getContents($extensions = null, array $ignores = null, $sort = null, $subDirs = null)
     {
         if (!$this->exists()) {
-            throw new Exception('Verzeichnis existiert nicht: '.$this);
+            throw new Exception('Verzeichnis existiert nicht: ' . $this);
         }
 
         if (!is_bool($subDirs)) {
@@ -624,29 +620,29 @@ class Dir
         $handle = opendir((string) $this);
 
         if ($handle === false) {
-            throw new Exception('Fehler beim öffnen des Verzeichnisses mit opendir(). '.$this);
+            throw new Exception('Fehler beim öffnen des Verzeichnisses mit opendir(). ' . $this);
         }
 
         /* ignore Dirs schreiben */
         if (isset($this->ignores) || $ignores != null) {
             $ignores = array_merge($this->ignores, (array) $ignores);
 
-            foreach ($ignores as $key=>$ignore) {
+            foreach ($ignores as $key => $ignore) {
                 if (!S::startsWith($ignore, '/') || !S::endsWith($ignore, '/')) {
-                    $ignore = '/^'.$ignore.'$/';
+                    $ignore = '/^' . $ignore . '$/';
                 }
 
                 $ignores[$key] = $ignore;
             }
 
-            $callBack = array('Webforge\Common\Preg','match');
+            $callBack = ['Webforge\Common\Preg','match'];
         }
 
-        $content = array();
+        $content = [];
         while (false !== ($filename = readdir($handle))) {
             if ($filename != '.' && $filename != '..' && ! (isset($callBack) && count($ignores) > 0 && array_sum(array_map($callBack, array_fill(0, count($ignores), $filename), $ignores)) > 0)) {  // wenn keine ignore regel matched
 
-                if (is_file($this->getPath().$filename)) {
+                if (is_file($this->getPath() . $filename)) {
                     $file = new File(clone $this, $filename);
 
                     if (isset($extensions) && (is_string($extensions) && $file->getExtension() != ltrim($extensions, '.') || is_array($extensions) && !in_array($file->getExtension(), $extensions))) {
@@ -656,8 +652,8 @@ class Dir
                     $content[] = $file;
                 }
 
-                if (is_dir($this->getPath().$filename) && $subDirs) { // wenn extensions gesetzt ist, keine verzeichnisse, per default
-                    $directory = new Dir($this->getPath().$filename.$this->getDS());
+                if (is_dir($this->getPath() . $filename) && $subDirs) { // wenn extensions gesetzt ist, keine verzeichnisse, per default
+                    $directory = new Dir($this->getPath() . $filename . $this->getDS());
                     $directory->ignores = array_merge($directory->ignores, $ignores); // wir vererben unsere ignores
 
                     $content[] = $directory;
@@ -696,7 +692,6 @@ class Dir
         return $content;
     }
 
-
     /**
      * Gibt alle Dateien (auch in Unterverzeichnissen) zurück
      *
@@ -711,9 +706,9 @@ class Dir
         }
         /* wir starten eine Breitensuche (BFS) auf dem Verzeichnis */
 
-        $files = array();
-        $dirs = array(); // Verzeichnisse die schon besucht wurden
-        $queue = array($this);
+        $files = [];
+        $dirs = []; // Verzeichnisse die schon besucht wurden
+        $queue = [$this];
 
         while (count($queue) > 0) {
             $elem = array_pop($queue);
@@ -752,8 +747,8 @@ class Dir
     {
         /* wir starten eine Breitensuche (BFS) auf dem Verzeichnis */
 
-        $dirs = array(); // Verzeichnisse die schon besucht wurden
-        $queue = array($this);
+        $dirs = []; // Verzeichnisse die schon besucht wurden
+        $queue = [$this];
 
         while (count($queue) > 0) {
             $elem = array_pop($queue);
@@ -788,9 +783,8 @@ class Dir
         $ret = chmod((string) $this, $mode);
 
         if ($ret === false) {
-            throw new Exception('chmod für '.$this.' auf '.$mode.' nicht möglich');
+            throw new Exception('chmod für ' . $this . ' auf ' . $mode . ' nicht möglich');
         }
-
 
         if ($flags & self::RECURSIVE) {
             foreach ($this->getContents() as $item) {
@@ -823,7 +817,6 @@ class Dir
         return $this;
     }
 
-
     /**
      * Löscht die Inhalt des Verzeichnis rekursiv
      *
@@ -845,7 +838,6 @@ class Dir
     /**
      * Copies all Files *in* $this to $destination
      *
-     * @param Dir $destination
      * @chainable
      */
     public function copy(Dir $destination, $extensions = null, $ignores = null, $subDirs = null)
@@ -877,32 +869,28 @@ class Dir
         return $this;
     }
 
-
-
     /**
      * Moves the directory and changes its internal state
      *
-     * @param Dir $destination
      * @chainable
      */
     public function move(Dir $destination)
     {
         $ret = @rename((string) $this, (string) $destination);
 
-        $errInfo = 'Kann Verzeichnis '.$this.' nicht nach '.$destination.' verschieben / umbenennen.';
+        $errInfo = 'Kann Verzeichnis ' . $this . ' nicht nach ' . $destination . ' verschieben / umbenennen.';
 
         if (!$ret) {
             if ($destination->exists()) {
-                throw new Exception($errInfo.' Das Zielverzeichnis existiert.');
+                throw new Exception($errInfo . ' Das Zielverzeichnis existiert.');
             }
 
             if (!$this->exists()) {
-                throw new Exception($errInfo.' Das Quellverzeichnis existiert nicht.');
+                throw new Exception($errInfo . ' Das Quellverzeichnis existiert nicht.');
             } else {
                 throw new Exception($errInfo);
             }
         }
-
 
         /* wir übernehmen die Pfade von $destination */
         $this->path = $destination->getPathArray();
@@ -940,11 +928,11 @@ class Dir
         if (!$this->exists()) {
             $ret = @mkdir((string) $this, $this->getDefaultMod(), $parent);
             if ($ret == false) {
-                throw new Exception('Fehler beim erstellen des Verzeichnisses: '.$this);
+                throw new Exception('Fehler beim erstellen des Verzeichnisses: ' . $this);
             }
         } else {
             if (!$assert) {
-                throw new Exception('Verzeichnis '.$this.' kann nicht erstellt werden, da es schon existiert');
+                throw new Exception('Verzeichnis ' . $this . ' kann nicht erstellt werden, da es schon existiert');
             }
         }
 
@@ -988,7 +976,6 @@ class Dir
      * ist die Datei absolut wird eine InvalidArgumentException geworfen
      *
      * @param string|File $file
-     * @param const $relative
      * @return File
      */
     public function getFile($file)
@@ -1015,7 +1002,6 @@ class Dir
     }
 
     /**
-     *
      * @return bool
      */
     public function exists()
@@ -1081,7 +1067,7 @@ class Dir
      */
     public static function isAbsolutePath($path)
     {
-        return   mb_strpos($path, '/') === 0 // unix
+        return mb_strpos($path, '/') === 0 // unix
           || mb_strpos($path, ':') === 1 // windows C:\ etc
           || self::isCygwinPath($path)   // /cygdrive/c
           || self::isWrappedPath($path) // phar:// ...
@@ -1100,7 +1086,7 @@ class Dir
 
         $trail = $flags & self::WITHOUT_TRAILINGSLASH ? '' : $ds;
 
-        return $this->prefix.(empty($this->path) ? '' : implode($ds, $this->path).$trail);
+        return $this->prefix . (empty($this->path) ? '' : implode($ds, $this->path) . $trail);
     }
 
     /**
@@ -1126,7 +1112,7 @@ class Dir
     {
         $osDS = $this->getOSDS($os, $flags);
 
-        return $this->getOSPrefix($os, $flags).(empty($this->path) ? '' : implode($osDS, $this->path).$osDS);
+        return $this->getOSPrefix($os, $flags) . (empty($this->path) ? '' : implode($osDS, $this->path) . $osDS);
     }
 
     /**
@@ -1142,13 +1128,13 @@ class Dir
             $osPrefix = '';
 
             if (($flags & self::WINDOWS_WITH_CYGWIN) && $os === self::WINDOWS) {
-                $osPrefix .= '/cygdrive/'.mb_strtolower($letter).'/';
+                $osPrefix .= '/cygdrive/' . mb_strtolower($letter) . '/';
             } else {
                 if (!($flags & self::WINDOWS_DRIVE_WINDOWS_STYLE) && $os === self::UNIX) {
-                    $osPrefix  .= '/';
+                    $osPrefix .= '/';
                 }
 
-                $osPrefix .= $letter.':'.$this->getOSDS($os);
+                $osPrefix .= $letter . ':' . $this->getOSDS($os);
             }
         } else {
             $osPrefix = $this->prefix;
@@ -1232,7 +1218,7 @@ class Dir
     public function getName()
     {
         if (count($this->path) > 0) {
-            return $this->path[count($this->path)-1];
+            return $this->path[count($this->path) - 1];
         }
     }
 
@@ -1261,7 +1247,6 @@ class Dir
     }
 
     /**
-     *
      * @return const WINDOWS|UNIX
      */
     public function getOS()
@@ -1306,18 +1291,17 @@ class Dir
             throw new Exception('String ist leer, kann kein Verzeichnis extrahieren');
         }
 
-        $path = dirname($string).DIRECTORY_SEPARATOR;
+        $path = dirname($string) . DIRECTORY_SEPARATOR;
         try {
             $dir = new Dir($path);
         } catch (Exception $e) {
-            throw new Exception('kann kein Verzeichnis aus dem extrahierten Verzeichnis "'.$path.'" erstellen: '.$e->getMessage());
+            throw new Exception('kann kein Verzeichnis aus dem extrahierten Verzeichnis "' . $path . '" erstellen: ' . $e->getMessage());
         }
 
         return $dir;
     }
 
     /**
-     *
      * function used from resolvePath()
      * @namespace-only
      */

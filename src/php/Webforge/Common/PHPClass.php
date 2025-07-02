@@ -29,11 +29,11 @@ class PHPClass implements ClassInterface
      *
      * @param string $fqn no \ before
      */
-    public function setFQN($fqn)
+    public function setFQN($fqn): void
     {
         $this->reflection = null;
         if (false !== ($pos = mb_strrpos($fqn, '\\'))) {
-            $this->namespace = ltrim(mb_substr($fqn, 0, $pos+1), '\\'); // +1 to add the trailing slash, see setNamespace
+            $this->namespace = ltrim(mb_substr($fqn, 0, $pos + 1), '\\'); // +1 to add the trailing slash, see setNamespace
             $this->setName(mb_substr($fqn, $pos));
         } else {
             $this->namespace = null;
@@ -49,7 +49,7 @@ class PHPClass implements ClassInterface
      */
     public function getFQN()
     {
-        return $this->namespace.$this->name;
+        return $this->namespace . $this->name;
     }
 
     /**
@@ -86,7 +86,6 @@ class PHPClass implements ClassInterface
         // i think its faster to compute the FQN with concatenation add the trailingslash in the setter and remove the trailslash here
         return isset($this->namespace) ? rtrim($this->namespace, '\\') : null;
     }
-
 
     /**
      * @chainable

@@ -2,8 +2,6 @@
 
 namespace Webforge\Common\System;
 
-use SplFileInfo;
-
 /**
  * @covers Webforge\Common\System\Dir
  */
@@ -15,7 +13,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+        $this->dir = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
 
         if (DIRECTORY_SEPARATOR === '\\') {
             $absolutePath = 'D:\\path\\for\\absolute\\';
@@ -23,20 +21,20 @@ class DirTest extends \PHPUnit\Framework\TestCase
             $this->absolutePath = '/path/for/absolute/';
         }
 
-        $this->relativePath = 'path'.DIRECTORY_SEPARATOR.'for'.DIRECTORY_SEPARATOR.'relative'.DIRECTORY_SEPARATOR;
+        $this->relativePath = 'path' . DIRECTORY_SEPARATOR . 'for' . DIRECTORY_SEPARATOR . 'relative' . DIRECTORY_SEPARATOR;
     }
 
-    public function testThatTheFactoryReturnsADir()
+    public function testThatTheFactoryReturnsADir(): void
     {
-        self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factory(__DIR__.DIRECTORY_SEPARATOR));
+        self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factory(__DIR__ . DIRECTORY_SEPARATOR));
     }
 
-    public function testThatTheTSFactoryReturnsADir_andWorksWithoutTrailingSlash()
+    public function testThatTheTSFactoryReturnsADir_andWorksWithoutTrailingSlash(): void
     {
         self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factoryTS(__DIR__));
     }
 
-    public function testFactoryTSCanHaveAnEmptyPath()
+    public function testFactoryTSCanHaveAnEmptyPath(): void
     {
         self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factoryTS());
     }
@@ -44,7 +42,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider providePathsWithoutTrailingSlash
      */
-    public function testFactoryDoesNotLikeDirectoriesWithoutSlash($erroneous)
+    public function testFactoryDoesNotLikeDirectoriesWithoutSlash($erroneous): void
     {
         $this->expectException(\Webforge\Common\System\Exception::class);
 
@@ -59,7 +57,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testConstructWithDirAsParamWillCloneDirectory()
+    public function testConstructWithDirAsParamWillCloneDirectory(): void
     {
         $dir = new Dir($this->dir);
 
@@ -70,7 +68,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideDifferentPaths
      */
-    public function testgetOSPathReturnsPathForGivenOS($path, $expectedPath, $os, $flags = 0)
+    public function testgetOSPathReturnsPathForGivenOS($path, $expectedPath, $os, $flags = 0): void
     {
         $dir = new Dir($path);
 
@@ -82,9 +80,9 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     public static function provideDifferentPaths()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -131,7 +129,6 @@ class DirTest extends \PHPUnit\Framework\TestCase
         $test('phar:///root/path/x.phar/src/', 'phar:///root/path/x.phar/src/', Dir::WINDOWS);
         $test('phar:///root/path/x.phar/src/', 'phar:///root/path/x.phar/src/', Dir::UNIX);
 
-
         $test('\\\\psc-host\shared\www\webforge\\', '\\\\psc-host\shared\www\webforge\\', Dir::WINDOWS);
         $test('\\\\psc-host\\', '\\\\psc-host\\', Dir::WINDOWS);
 
@@ -163,32 +160,31 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAbsoluteOrRelative
      */
-    public function testAbsoluteOrRelative($path, $isAbsolute)
+    public function testAbsoluteOrRelative($path, $isAbsolute): void
     {
         $dir = new Dir($path);
         if ($isAbsolute) {
-            self::assertTrue($dir->isAbsolute(), $path.' ->isAbsolute');
-            self::assertFalse($dir->isRelative(), $path.' ->isNotRelative');
+            self::assertTrue($dir->isAbsolute(), $path . ' ->isAbsolute');
+            self::assertFalse($dir->isRelative(), $path . ' ->isNotRelative');
         } else {
-            self::assertFalse($dir->isAbsolute(), $path.' ->isNotAbsolute');
-            self::assertTrue($dir->isRelative(), $path.' ->isRelative');
+            self::assertFalse($dir->isAbsolute(), $path . ' ->isNotAbsolute');
+            self::assertTrue($dir->isRelative(), $path . ' ->isRelative');
         }
     }
-
 
     /**
      * @dataProvider provideAbsoluteOrRelative
      */
-    public function testIsAbsolutePath($path, $isAbsolute)
+    public function testIsAbsolutePath($path, $isAbsolute): void
     {
-        self::assertEquals($isAbsolute, Dir::isAbsolutePath($path), '::isAbsolutePath('.$path.')');
+        self::assertEquals($isAbsolute, Dir::isAbsolutePath($path), '::isAbsolutePath(' . $path . ')');
     }
 
     public static function provideAbsoluteOrRelative()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -210,7 +206,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    public function testUnixRegressionForAbsolutePath_factoryTSDoesLtrimInsteadofRtrim()
+    public function testUnixRegressionForAbsolutePath_factoryTSDoesLtrimInsteadofRtrim(): void
     {
         if (DIRECTORY_SEPARATOR === '/') {
             $dir = Dir::factoryTS('/var/local/www/tiptoi.pegasus.ps-webforge.net/base/src/');
@@ -221,54 +217,54 @@ class DirTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testDotMakesAnRelativeEmptyPathedDir()
+    public function testDotMakesAnRelativeEmptyPathedDir(): void
     {
         $dir = Dir::factoryTS('.');
 
         self::assertEquals(
-            '.'.DIRECTORY_SEPARATOR,
+            '.' . DIRECTORY_SEPARATOR,
             (string) $dir
         );
 
         self::assertTrue($dir->isRelative());
     }
 
-    public function testDotMakesAnDirThatExpandsToCWDOnResolve()
+    public function testDotMakesAnDirThatExpandsToCWDOnResolve(): void
     {
         $dir = Dir::factoryTS('.');
 
         $dir->resolvePath();
 
         self::assertEquals(
-            getcwd().DIRECTORY_SEPARATOR,
+            getcwd() . DIRECTORY_SEPARATOR,
             (string) $dir
         );
     }
 
-    public function testisSubDirectoryOf()
+    public function testisSubDirectoryOf(): void
     {
-        $sub = new Dir(__DIR__.DIRECTORY_SEPARATOR);
-        $parent = new Dir(realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR);
+        $sub = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
+        $parent = new Dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
 
         self::assertTrue($sub->isSubdirectoryOf($parent));
     }
 
-    public function testDirectoryIsNotSubdirectoryOfSelf()
+    public function testDirectoryIsNotSubdirectoryOfSelf(): void
     {
-        $dir = new Dir(__DIR__.DIRECTORY_SEPARATOR);
-        $self = new Dir(__DIR__.DIRECTORY_SEPARATOR);
+        $dir = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
+        $self = new Dir(__DIR__ . DIRECTORY_SEPARATOR);
 
         self::assertFalse($dir->isSubdirectoryOf($self));
     }
 
-    public function testGetMACTime_Acceptance()
+    public function testGetMACTime_Acceptance(): void
     {
         self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getModifiedTime());
         self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getCreateTime());
         self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getAccessTime());
     }
 
-    public function testCygwinPathsAreTreatedCorrectly()
+    public function testCygwinPathsAreTreatedCorrectly(): void
     {
         $path = '/cygdrive/D/www/psc-cms-js/git/';
 
@@ -283,16 +279,16 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideFixToUnixPath
      */
-    public function testFixToUnixPath($actualPath, $expectedPath)
+    public function testFixToUnixPath($actualPath, $expectedPath): void
     {
         self::assertEquals($expectedPath, Dir::fixToUnixPath($actualPath));
     }
 
     public static function provideFixToUnixPath()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -306,11 +302,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-
     /**
      * @dataProvider provideCreateFromURL
      */
-    public function testCreateFromURL($url, $expectedPath, $root = null)
+    public function testCreateFromURL($url, $expectedPath, $root = null): void
     {
         $root = $root ?: new Dir('D:\www\\');
 
@@ -322,17 +317,17 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     public static function provideCreateFromURL()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
         $root = 'D:\www\\';
 
-        $test('something/relative', $root.'something\relative\\');
-        $test('something/relative/which/./resolves', $root.'something\relative\\which\\resolves\\');
-        $test('something/relative/which/../resolved', $root.'something\relative\resolved\\');
+        $test('something/relative', $root . 'something\relative\\');
+        $test('something/relative/which/./resolves', $root . 'something\relative\\which\\resolves\\');
+        $test('something/relative/which/../resolved', $root . 'something\relative\resolved\\');
 
         $test('/', $root);
         $test('./', $root);
@@ -340,20 +335,20 @@ class DirTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    public function testCreateFromURLUsesCWDAsDefault()
+    public function testCreateFromURLUsesCWDAsDefault(): void
     {
         self::assertEquals(
-            getcwd().DIRECTORY_SEPARATOR.'in'.DIRECTORY_SEPARATOR.'cwd'.DIRECTORY_SEPARATOR,
+            getcwd() . DIRECTORY_SEPARATOR . 'in' . DIRECTORY_SEPARATOR . 'cwd' . DIRECTORY_SEPARATOR,
             (string) Dir::createFromURL('in/cwd/')
         );
     }
 
-    public function testWtsPath()
+    public function testWtsPath(): void
     {
         self::assertEquals(__DIR__, $this->dir->wtsPath());
     }
 
-    public function testCreateDirRespectsEnvVariableWhenUmaskIsSet()
+    public function testCreateDirRespectsEnvVariableWhenUmaskIsSet(): void
     {
         $old = getenv('WEBFORGE_UMASK_SET');
         if ($old != 1) {
@@ -367,7 +362,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
         );
 
         try {
-            $newDir = new Dir(__DIR__.DIRECTORY_SEPARATOR.'create-test'.DIRECTORY_SEPARATOR);
+            $newDir = new Dir(__DIR__ . DIRECTORY_SEPARATOR . 'create-test' . DIRECTORY_SEPARATOR);
 
             if ($newDir->exists()) {
                 $newDir->delete();
@@ -375,7 +370,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
             $newDir->create();
 
-            $perms = fileperms($newDir) & 0777;
+            $perms = fileperms((string) $newDir) & 0777;
             $umask = umask();
 
             self::assertEquals(
@@ -384,10 +379,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
                 'Permission for dir should be umasked. (it should have used 0777 for creating)'
             );
         } catch (\Exception $e) {
-            putenv('WEBFORGE_UMASK_SET='.$old);
+            putenv('WEBFORGE_UMASK_SET=' . $old);
             throw $e;
         }
 
-        putenv('WEBFORGE_UMASK_SET='.$old);
+        putenv('WEBFORGE_UMASK_SET=' . $old);
     }
 }

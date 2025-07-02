@@ -17,10 +17,10 @@ class Numbers
         }
 
         if (mb_substr_count($floatString, ',') > 1) {
-            throw new Exception('Could not parse '.$floatString.' as float. Found more than one colon (,)');
+            throw new Exception('Could not parse ' . $floatString . ' as float. Found more than one colon (,)');
         }
 
-        $floatString = str_replace(array($thousandsSep, $decimalPoint), array('', '.'), $floatString);
+        $floatString = str_replace([$thousandsSep, $decimalPoint], ['', '.'], $floatString);
         return floatval($floatString);
     }
 }

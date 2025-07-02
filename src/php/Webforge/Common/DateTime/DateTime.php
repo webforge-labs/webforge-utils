@@ -3,9 +3,9 @@
 namespace Webforge\Common\DateTime;
 
 use DateTimeZone;
-use Webforge\Common\Util as Code;
-use Webforge\Common\Exception;
 use InvalidArgumentException;
+use Webforge\Common\Exception;
+use Webforge\Common\Util as Code;
 
 class DateTime extends \DateTime
 {
@@ -36,7 +36,7 @@ class DateTime extends \DateTime
         }
 
         if (is_numeric($time) || is_int($time)) {
-            $time = '@'.$time;
+            $time = '@' . $time;
         }
 
         /* NULL object */
@@ -175,7 +175,7 @@ class DateTime extends \DateTime
      *
      * http://www.php.net/manual/de/datetime.createfromformat.php
      */
-    public static function parse($format, $time, DateTimeZone $timezone =  null)
+    public static function parse($format, $time, DateTimeZone $timezone = null)
     {
         if (!isset($timezone) && date_default_timezone_get() != '') {
             $timezone = new DateTimeZone(date_default_timezone_get());
@@ -184,7 +184,7 @@ class DateTime extends \DateTime
         $ret = parent::createFromFormat($format, $time, $timezone);
 
         if ($ret === false) {
-            throw new ParsingException('Aus '.Code::varInfo($time).' konnte keinen Zeitinformationen des Formates: '.Code::varInfo($format).' geparst werden. lastErrors: '.print_r(DateTime::getLastErrors(), true));
+            throw new ParsingException('Aus ' . Code::varInfo($time) . ' konnte keinen Zeitinformationen des Formates: ' . Code::varInfo($format) . ' geparst werden. lastErrors: ' . print_r(DateTime::getLastErrors(), true));
         }
 
         return new static($ret);
@@ -214,9 +214,9 @@ class DateTime extends \DateTime
           der zweite teil +($day-7) ist dann die relative Verschiebung vom Montag weg zum richtigen Wochentag
         */
 
-        $diff = (($weekday-7)*-1) % 7 + ($day-7);
+        $diff = (($weekday - 7) * -1) % 7 + ($day - 7);
 
-        $target = $this->add(DateInterval::createFromDateString($diff.' days'));
+        $target = $this->add(DateInterval::createFromDateString($diff . ' days'));
         return $target;
     }
 
@@ -227,15 +227,15 @@ class DateTime extends \DateTime
             return null;
         }
 
-        $constants = array('l'=>'\!\l',
-                       'D'=>'\!\D',
+        $constants = ['l' => '\!\l',
+                       'D' => '\!\D',
 
-                       'F'=>'\!\F',
-                       'M'=>'\!\M');
+                       'F' => '\!\F',
+                       'M' => '\!\M'];
 
         $format = $this->format(str_replace(array_keys($constants), array_values($constants), $format));
 
-        $search = $replace = array();
+        $search = $replace = [];
         switch ($lang) {
       case 'de':
       case 'de_DE':
@@ -255,9 +255,8 @@ class DateTime extends \DateTime
         break;
     }
 
-
         foreach ($constants as $constant => $NULL) {
-            $search[] = '!'.$constant;
+            $search[] = '!' . $constant;
 
             switch ($constant) {
         case 'l':
@@ -281,20 +280,19 @@ class DateTime extends \DateTime
         return str_replace($search, $replace, $format);
     }
 
-
     public function getWalkableFields()
     {
-        return array('date'=>$this->format('U'),
-                 'timezone'=>$this->getTimezone()->getName()
-                );
+        return ['date' => $this->format('U'),
+                 'timezone' => $this->getTimezone()->getName()
+                ];
     }
 
     public function export()
     {
-        return (object) array(
-      'date'=>$this->format('U'),
-      'timezone'=>$this->getTimezone()->getName()
-    );
+        return (object) [
+      'date' => $this->format('U'),
+      'timezone' => $this->getTimezone()->getName()
+    ];
     }
 
     public static function import(\stdClass $o)
@@ -337,6 +335,6 @@ class DateTime extends \DateTime
 
     public function getVarInfo()
     {
-        return '[DateTime: '.$this->format('d.m.Y H:i:s').' '.$this->getTimezone()->getName().']';
+        return '[DateTime: ' . $this->format('d.m.Y H:i:s') . ' ' . $this->getTimezone()->getName() . ']';
     }
 }

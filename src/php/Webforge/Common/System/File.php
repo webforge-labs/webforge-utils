@@ -2,12 +2,12 @@
 
 namespace Webforge\Common\System;
 
-use Webforge\Common\Util as Code;
 use BadMethodCallException;
 use InvalidArgumentException;
 use Webforge\Common\DateTime\DateTime;
-use Webforge\Common\Preg;
 use Webforge\Common\Exception\FileNotFoundException;
+use Webforge\Common\Preg;
+use Webforge\Common\Util as Code;
 
 /**
  * @todo refactor exceptions to be multi-lingual (english / german)
@@ -49,7 +49,6 @@ class File
      */
     protected $sha1;
 
-
     public function __construct($arg1, $arg2 = null)
     {
         if ($arg1 instanceof Dir) {
@@ -59,12 +58,12 @@ class File
         } elseif (is_string($arg1) && $arg2 === null) {
             $this->constructString($arg1);
         } else {
-            $signatur = array();
+            $signatur = [];
             foreach (func_get_args() as $arg) {
                 $signatur[] = Code::getType($arg);
             }
 
-            throw new BadMethodCallException('No Constructor defined for '.get_class($this).' with: '.implode(', ', $signatur));
+            throw new BadMethodCallException('No Constructor defined for ' . get_class($this) . ' with: ' . implode(', ', $signatur));
         }
     }
 
@@ -78,7 +77,7 @@ class File
         $tmpfile = tempnam(sys_get_temp_dir(), mb_substr(uniqid(), 0, 3));
 
         if ($extension) {
-            rename($tmpfile, $tmpfile = $tmpfile.'.'.ltrim($extension, '.'));
+            rename($tmpfile, $tmpfile = $tmpfile . '.' . ltrim($extension, '.'));
         }
 
         return new static($tmpfile);
@@ -92,12 +91,12 @@ class File
     public static function createFromURL($url, Dir $base = null)
     {
         if (!isset($base)) {
-            $base = new Dir('.'.DIRECTORY_SEPARATOR);
+            $base = new Dir('.' . DIRECTORY_SEPARATOR);
         }
 
         // lets do it dirty
         $url = str_replace('/', DIRECTORY_SEPARATOR, ltrim($url, '/'));
-        return $base->getFile(new File('.'.DIRECTORY_SEPARATOR.$url));
+        return $base->getFile(new File('.' . DIRECTORY_SEPARATOR . $url));
     }
 
     /**
@@ -105,7 +104,7 @@ class File
      *
      * @param string $file
      */
-    protected function constructString($file)
+    protected function constructString($file): void
     {
         if (mb_strlen($file) == 0) {
             throw new Exception('keine Datei angegeben');
@@ -129,7 +128,7 @@ class File
      * @param string $filename der Name der Datei
      * @param Dir $directory das Verzeichnis in dem die Datei liegt
      */
-    protected function constructDefault($filename, Dir $directory=null)
+    protected function constructDefault($filename, Dir $directory = null): void
     {
         $this->setName($filename);
 
@@ -158,7 +157,7 @@ class File
     public function writeContents($contents, $flags = null)
     {
         if ($this->exists() && !$this->isWriteable()) {
-            throw new Exception('Dateiinhalt kann nicht geschrieben werden. (exists/writeable) '.$this);
+            throw new Exception('Dateiinhalt kann nicht geschrieben werden. (exists/writeable) ' . $this);
         }
 
         if ($flags & self::EXCLUSIVE) {
@@ -168,7 +167,7 @@ class File
             $ret = $tmpFile->move($this, true); // 2ter Parameter ist overwrite
 
             if ($ret === false) {
-                throw new Exception('Dateiinhalt konnte nicht geschrieben werden move() gab FALSE zurück. '.$this);
+                throw new Exception('Dateiinhalt konnte nicht geschrieben werden move() gab FALSE zurück. ' . $this);
             }
         } else {
             $ret = @file_put_contents((string) $this, $contents);
@@ -176,9 +175,9 @@ class File
             if ($ret === false) {
                 $info = '';
                 if (!$this->getDirectory()->exists()) {
-                    $info = "\n".'Das Verzeichnis: '.$this->getDirectory().' existiert nicht und muss zuerst erstellt werden.';
+                    $info = "\n" . 'Das Verzeichnis: ' . $this->getDirectory() . ' existiert nicht und muss zuerst erstellt werden.';
                 }
-                throw new Exception("Dateiinhalt konnte nicht geschrieben werden PHP::file_put_contents gab FALSE zurück.".$this.$info);
+                throw new Exception("Dateiinhalt konnte nicht geschrieben werden PHP::file_put_contents gab FALSE zurück." . $this . $info);
             }
         }
         $this->sha1 = null;
@@ -189,7 +188,6 @@ class File
     /**
      * Returns the contents of the file
      *
-     * @param int $maxlength to read in bytes
      * @return string
      */
     public function getContents($maxLength = null)
@@ -229,21 +227,20 @@ class File
      * (string) $fileDestination-> === (string) $this
      * is true
      *
-     * @param File $fileDestination
      * @return bool
      */
     public function move(File $fileDestination, $overwrite = false)
     {
         if (!$this->exists()) {
-            throw new Exception('Quelle von move existiert nicht. '.$this);
+            throw new Exception('Quelle von move existiert nicht. ' . $this);
         }
 
         if ($fileDestination->exists() && !$overwrite) {
-            throw new Exception('Das Ziel von move existiert bereits'.$fileDestination);
+            throw new Exception('Das Ziel von move existiert bereits' . $fileDestination);
         }
 
         if (!$fileDestination->getDirectory()->exists()) {
-            throw new Exception('Das ZielVerzeichnis von move existiert nicht: '.$fileDestination->getDirectory());
+            throw new Exception('Das ZielVerzeichnis von move existiert nicht: ' . $fileDestination->getDirectory());
         }
 
         if ($fileDestination->exists() && $overwrite && substr(PHP_OS, 0, 3) == 'WIN') {
@@ -263,13 +260,12 @@ class File
     /**
      * Copys the file to another file or into an directory
      *
-     * @param File|Dir $fileDestination
      * @chainable
      */
     public function copy($destination)
     {
         if (!$this->exists()) {
-            throw new Exception('Source from copy does not exist: '.$this);
+            throw new Exception('Source from copy does not exist: ' . $this);
         }
 
         if ($destination instanceof Dir) {
@@ -279,13 +275,13 @@ class File
         }
 
         if (!$destination->getDirectory()->exists()) {
-            throw new Exception('The directory from the destination file does not exist: '.$destination);
+            throw new Exception('The directory from the destination file does not exist: ' . $destination);
         }
 
         $ret = @copy((string) $this, (string) $destination);
 
         if (!$ret) {
-            throw new Exception('PHP Error while copying '.$this.' onto '.$destination);
+            throw new Exception('PHP Error while copying ' . $this . ' onto ' . $destination);
         }
 
         return $this;
@@ -320,7 +316,7 @@ class File
         $ret = chmod((string) $this, $mode);
 
         if ($ret === false) {
-            throw new Exception('chmod für '.$this.' auf '.$mode.' nicht möglich');
+            throw new Exception('chmod für ' . $this . ' auf ' . $mode . ' nicht möglich');
         }
 
         return $this;
@@ -372,7 +368,7 @@ class File
     {
         if (($pos = mb_strrpos($name, '.')) !== false) {
             $this->name = mb_substr($name, 0, $pos);
-            $this->extension = mb_substr($name, $pos+1);
+            $this->extension = mb_substr($name, $pos + 1);
         } else {
             $this->name = $name;
         }
@@ -388,17 +384,14 @@ class File
     public function getName($extension = self::WITH_EXTENSION)
     {
         if (isset($this->extension) && $extension == self::WITH_EXTENSION) {
-            return $this->name.'.'.$this->extension;
+            return $this->name . '.' . $this->extension;
         } else {
             return $this->name;
         }
     }
 
-
-
     /**
      * Sets the directory of the file
-     * @param Dir $directory
      * @chainable
      */
     public function setDirectory(Dir $directory)
@@ -445,7 +438,7 @@ class File
     {
         $dir = $this->getDirectory()->getOSPath($os, $flags);
 
-        return $dir.$this->getName();
+        return $dir . $this->getName();
     }
 
     /**
@@ -455,7 +448,7 @@ class File
     {
         $dir = (string) $this->getDirectory();
 
-        return $dir.$this->getName();
+        return $dir . $this->getName();
     }
 
     /**
@@ -464,7 +457,7 @@ class File
     public function getModifiedTime()
     {
         if (!$this->exists()) {
-            throw new Exception('Kann keine mtime für eine Datei zurückgeben die nicht existiert. '.$this);
+            throw new Exception('Kann keine mtime für eine Datei zurückgeben die nicht existiert. ' . $this);
         }
 
         return new Datetime(filemtime((string) $this));
@@ -476,7 +469,7 @@ class File
     public function getAccessTime()
     {
         if (!$this->exists()) {
-            throw new Exception('Kann keine atime für eine Datei zurückgeben die nicht existiert. '.$this);
+            throw new Exception('Kann keine atime für eine Datei zurückgeben die nicht existiert. ' . $this);
         }
         return new Datetime(fileatime((string) $this));
     }
@@ -496,7 +489,7 @@ class File
     public function getCreationTime()
     {
         if (!$this->exists()) {
-            throw new Exception('Kann keine ctime für eine Datei zurückgeben die nicht existiert. '.$this);
+            throw new Exception('Kann keine ctime für eine Datei zurückgeben die nicht existiert. ' . $this);
         }
         return new Datetime(filectime((string) $this));
     }
@@ -510,7 +503,7 @@ class File
      * @param string $extension die Erweiterung (der . davor ist optional)
      * @chainable
      */
-    public function setExtension($extension=null)
+    public function setExtension($extension = null)
     {
         if ($extension != null && mb_strpos($extension, '.') === 0) {
             $this->extension = mb_substr($extension, 1);
@@ -524,12 +517,12 @@ class File
     /**
      * Returns the extension (if any) of a filename without the .
      *
-     * @return string|NULL
+     * @return string|null
      */
     public static function extractExtension($name)
     {
         if (($pos = mb_strrpos($name, '.')) !== false) {
-            return mb_substr($name, $pos+1);
+            return mb_substr($name, $pos + 1);
         }
     }
 
@@ -586,12 +579,11 @@ class File
         $file = basename($string);
 
         if (mb_strlen($file) == 0) {
-            throw new Exception('PHP could not extract the basename of the file: '.$file);
+            throw new Exception('PHP could not extract the basename of the file: ' . $file);
         }
 
         return $file;
     }
-
 
     public function __clone()
     {
@@ -637,12 +629,12 @@ class File
     public function getURL(Dir $relativeDir = null)
     {
         // rtrim entfernt den TrailingSlash der URL (der eigentlich nie da sein sollte, außer falls directoryURL nur "/" ist)
-        return rtrim($this->directory->getURL($relativeDir), '/').'/'.rawurlencode($this->getName(self::WITH_EXTENSION));
+        return rtrim($this->directory->getURL($relativeDir), '/') . '/' . rawurlencode($this->getName(self::WITH_EXTENSION));
     }
 
     public function getHTMLEscapedUrl(Dir $relativeDir = null)
     {
-        return rtrim($this->directory->getURL($relativeDir), '/').'/'.\Psc\HTML\HTML::esc(rawurlencode($this->getName(self::WITH_EXTENSION)));
+        return rtrim($this->directory->getURL($relativeDir), '/') . '/' . \Psc\HTML\HTML::esc(rawurlencode($this->getName(self::WITH_EXTENSION)));
     }
 
     /**
@@ -680,7 +672,6 @@ class File
         return $this->extension;
     }
 
-
     /**
      * Returns a safeName for a file
      *
@@ -692,10 +683,10 @@ class File
      * @param int $maxlen default is 250, cuts the filename at maxlen
      * @return string
      */
-    public static function safeName($name, $lower=false, $maxlen=250)
+    public static function safeName($name, $lower = false, $maxlen = 250)
     {
-        $noalpha = array('Á','É','Í','Ó','Ú','Ý','á','é','í','ó','ú','ý','Â','Ê','Î','Ô','Û','â','ê','î','ô','û','À','È','Ì','Ò','Ù','à','è','ì','ò','ù','Ä','Ë','Ï','Ö','Ü','ä','ë','ï','ö','ü','ÿ','Ã','ã','Õ','õ','Å','å','Ñ','ñ','Ç','ç','@','°','º','ª', 'ß');
-        $alpha   = array('A','E','I','O','U','Y','a','e','i','o','u','y','A','E','I','O','U','a','e','i','o','u','A','E','I','O','U','a','e','i','o','u','Ae','E','I','Oe','Ue','ae','e','i','oe','ue','y','A','a','O','o','A','a','N','n','C','c','a','o','o','a', 'ss');
+        $noalpha = ['Á','É','Í','Ó','Ú','Ý','á','é','í','ó','ú','ý','Â','Ê','Î','Ô','Û','â','ê','î','ô','û','À','È','Ì','Ò','Ù','à','è','ì','ò','ù','Ä','Ë','Ï','Ö','Ü','ä','ë','ï','ö','ü','ÿ','Ã','ã','Õ','õ','Å','å','Ñ','ñ','Ç','ç','@','°','º','ª', 'ß'];
+        $alpha = ['A','E','I','O','U','Y','a','e','i','o','u','y','A','E','I','O','U','a','e','i','o','u','A','E','I','O','U','a','e','i','o','u','Ae','E','I','Oe','Ue','ae','e','i','oe','ue','y','A','a','O','o','A','a','N','n','C','c','a','o','o','a', 'ss'];
 
         $name = mb_substr($name, 0, $maxlen);
         $name = str_replace($noalpha, $alpha, $name);

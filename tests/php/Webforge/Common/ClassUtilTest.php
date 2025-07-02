@@ -7,7 +7,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
   /**
    * @dataProvider provideGetNamespace
    */
-    public function testGetNamespaceTestsAreConciseWithPHP($className, $namespace)
+    public function testGetNamespaceTestsAreConciseWithPHP($className, $namespace): void
     {
         $refl = new \ReflectionClass($className);
 
@@ -17,7 +17,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideGetClassName
      */
-    public function testGetClassNameTestsAreConciseWithPHP($fqn, $expectedClassName)
+    public function testGetClassNameTestsAreConciseWithPHP($fqn, $expectedClassName): void
     {
         $refl = new \ReflectionClass($fqn);
 
@@ -27,7 +27,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideGetClassName
      */
-    public function testGetClassName($fqn, $expectedClassName)
+    public function testGetClassName($fqn, $expectedClassName): void
     {
         self::assertEquals(
             $expectedClassName,
@@ -38,7 +38,7 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideGetNamespace
      */
-    public function testGetNamespace($className, $expectedNamespace)
+    public function testGetNamespace($className, $expectedNamespace): void
     {
         self::assertEquals(
             $expectedNamespace,
@@ -46,11 +46,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     /**
      * @dataProvider provideExpandNamespace
      */
-    public function testExpandNamespace($className, $namespace, $expectedFQN)
+    public function testExpandNamespace($className, $namespace, $expectedFQN): void
     {
         self::assertEquals(
             $expectedFQN,
@@ -60,9 +59,9 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
 
     public static function provideExpandNamespace()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -84,16 +83,16 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideSetNamespace
      */
-    public function testSetNamespace($className, $namespace, $expectedFQN)
+    public function testSetNamespace($className, $namespace, $expectedFQN): void
     {
         self::assertEquals($expectedFQN, ClassUtil::setNamespace($className, $namespace));
     }
 
     public static function provideSetNamespace()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -110,9 +109,9 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
 
     public static function provideGetNamespace()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -128,15 +127,14 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         // undefined! (phpReflection throws error)
         //$test('\Webforge\Common\ClassUtil\\', 'Webforge\Common\ClassUtil');
 
-
         return $tests;
     }
 
     public static function provideGetClassName()
     {
-        $tests = array();
+        $tests = [];
 
-        $test = function () use (&$tests) {
+        $test = function () use (&$tests): void {
             $tests[] = func_get_args();
         };
 
@@ -151,23 +149,21 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         // undefined! (phpReflection throws error)
         //$test('\Webforge\Common\ClassUtil\\', 'Webforge\Common\ClassUtil');
 
-
         return $tests;
     }
 
-    public function testCreatesNewInstancesOfObjectsWithNewClassInstance()
+    public function testCreatesNewInstancesOfObjectsWithNewClassInstance(): void
     {
-        $refl = ClassUtil::newClassInstance('ReflectionClass', array(__CLASS__));
+        $refl = ClassUtil::newClassInstance('ReflectionClass', [__CLASS__]);
         self::assertEquals(__CLASS__, $refl->getName());
 
-
-        $refl = ClassUtil::newClassInstance(new \ReflectionClass('ReflectionClass'), array(__CLASS__));
+        $refl = ClassUtil::newClassInstance(new \ReflectionClass('ReflectionClass'), [__CLASS__]);
         self::assertEquals(__CLASS__, $refl->getName());
     }
 
-    public function testNewClassInstanceCanOnlyDoStringOrReflectionClass()
+    public function testNewClassInstanceCanOnlyDoStringOrReflectionClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        ClassUtil::newClassInstance(7, array());
+        ClassUtil::newClassInstance(7, []);
     }
 }
