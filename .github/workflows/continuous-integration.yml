@@ -1,0 +1,20 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: docker build -t webforge-utils-ci -f config/docker/php/Dockerfile --target ci .
+    
+    - name: Run PHPUnit tests
+      run: docker run --rm webforge-utils-ci ./vendor/bin/phpunit
