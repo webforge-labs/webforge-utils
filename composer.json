@@ -15,9 +15,9 @@
   "require-dev": {
     "mikey179/vfsstream": "^1.6@stable",
     "mockery/mockery": "@stable",
-    "webforge/collections": "^1.0@dev",
     "friendsofphp/php-cs-fixer": "^3",
-    "phpunit/phpunit": "^10.5"
+    "phpunit/phpunit": "^10.5",
+    "doctrine/collections": "^2.3"
   },
   "autoload": {
     "psr-0": {"Webforge\\Common": ["src/php/", "tests/php/"]}
@@ -30,7 +30,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.0.x-dev"
+      "dev-master": "3.0.x-dev"
     }
   }
 }

@@ -3,8 +3,8 @@
 namespace Webforge\Common;
 
 use ArrayIterator;
+use Doctrine\Common\Collections\ArrayCollection;
 use stdClass;
-use Webforge\Collections\TraversableCollection;
 
 class UtilTest extends \PHPUnit\Framework\TestCase
 {
@@ -64,17 +64,12 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function provideCastArray()
+    public static function provideCastArray(): array
     {
         $tests = [];
-
-        $test = function () use (&$tests): void {
-            $tests[] = func_get_args();
-        };
-
-        $test($iterator = new ArrayIterator([1, 2, 3]), [1, 2, 3]);
-        $test([1, 2, 3], [1, 2, 3]);
-        $test(new TraversableCollection(['0' => 'nil', '1' => 'one']), ['0' => 'nil', '1' => 'one']);
+        $tests[] = [$iterator = new ArrayIterator([1, 2, 3]), [1, 2, 3]];
+        $tests[] = [[1, 2, 3], [1, 2, 3]];
+        $tests[] = [new ArrayCollection(['0' => 'nil', '1' => 'one']), ['0' => 'nil', '1' => 'one']];
 
         return $tests;
     }

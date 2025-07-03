@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6128986b1f8015fce424c5f2beb906f3",
+    "content-hash": "b565cef4415daa929d997d46de400df6",
     "packages": [],
     "packages-dev": [
         {
@@ -299,33 +299,34 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "v1.3.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a"
+                "reference": "2eb07e5953eed811ce1b309a7478a3b236f2273d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/2eb07e5953eed811ce1b309a7478a3b236f2273d",
+                "reference": "2eb07e5953eed811ce1b309a7478a3b236f2273d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "doctrine/deprecations": "^1",
+                "php": "^8.1",
+                "symfony/polyfill-php84": "^1.30"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "doctrine/coding-standard": "^12",
+                "ext-json": "*",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^10.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.x-dev"
-                }
-            },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Collections\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Collections\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -334,16 +335,16 @@
             ],
             "authors": [
                 {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
                 },
                 {
                     "name": "Jonathan Wage",
@@ -354,17 +355,81 @@
                     "email": "schmittjoh@gmail.com"
                 }
             ],
-            "description": "Collections Abstraction library",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.",
+            "homepage": "https://www.doctrine-project.org/projects/collections.html",
             "keywords": [
                 "array",
                 "collections",
-                "iterator"
+                "iterators",
+                "php"
             ],
             "support": {
-                "source": "https://github.com/doctrine/collections/tree/v1.3.0"
+                "issues": "https://github.com/doctrine/collections/issues",
+                "source": "https://github.com/doctrine/collections/tree/2.3.0"
             },
-            "time": "2015-04-14T22:21:58+00:00"
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcollections",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-03-22T10:17:19+00:00"
+        },
+        {
+            "name": "doctrine/deprecations",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/deprecations.git",
+                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
+                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<=7.5 || >=13"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^9 || ^12 || ^13",
+                "phpstan/phpstan": "1.4.10 || 2.1.11",
+                "phpstan/phpstan-phpunit": "^1.0 || ^2",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6 || ^10.5 || ^11.5 || ^12",
+                "psr/log": "^1 || ^2 || ^3"
+            },
+            "suggest": {
+                "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Deprecations\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
+            "homepage": "https://www.doctrine-project.org/",
+            "support": {
+                "issues": "https://github.com/doctrine/deprecations/issues",
+                "source": "https://github.com/doctrine/deprecations/tree/1.1.5"
+            },
+            "time": "2025-04-07T20:06:18+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -4003,6 +4068,82 @@
             "time": "2024-09-09T11:45:10+00:00"
         },
         {
+            "name": "symfony/polyfill-php84",
+            "version": "v1.32.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php84.git",
+                "reference": "000df7860439609837bbe28670b0be15783b7fbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php84/zipball/000df7860439609837bbe28670b0be15783b7fbf",
+                "reference": "000df7860439609837bbe28670b0be15783b7fbf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php84\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php84/tree/v1.32.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-02-20T12:04:08+00:00"
+        },
+        {
             "name": "symfony/process",
             "version": "v7.3.0",
             "source": {
@@ -4344,68 +4485,13 @@
                 }
             ],
             "time": "2024-03-03T12:36:25+00:00"
-        },
-        {
-            "name": "webforge/collections",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webforge-labs/webforge-collections.git",
-                "reference": "46f1182105ad42edbc25ba747d16d7dea499015b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webforge-labs/webforge-collections/zipball/46f1182105ad42edbc25ba747d16d7dea499015b",
-                "reference": "46f1182105ad42edbc25ba747d16d7dea499015b",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/collections": ">=1.2.0,<1.4.0"
-            },
-            "require-dev": {
-                "liip/rmt": "0.9.*",
-                "satooshi/php-coveralls": "dev-master",
-                "webforge/testplate": ">=1.2"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Webforge\\Collections": [
-                        "lib/",
-                        "tests/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philipp Scheit",
-                    "email": "p.scheit@ps-webforge.com"
-                }
-            ],
-            "description": "Collection extensions based on Doctrine\\Common\\Collections",
-            "support": {
-                "issues": "https://github.com/webforge-labs/webforge-collections/issues",
-                "source": "https://github.com/webforge-labs/webforge-collections/tree/1.0.5"
-            },
-            "time": "2015-10-11T15:59:54+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "mikey179/vfsstream": 0,
-        "mockery/mockery": 0,
-        "webforge/collections": 20
+        "mockery/mockery": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
