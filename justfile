@@ -6,6 +6,9 @@ watch-phpunit *args='':
 phpunit *args='':
     docker-compose exec --user=www-data php vendor/bin/phpunit "${@}"
 
+phpstan *args='':
+    docker-compose exec --user=www-data php vendor/bin/phpstan "${@}"
+
 regex := '/.*/'
 show-deprecations *args='':
     docker-compose exec -e SYMFONY_DEPRECATIONS_HELPER='{{regex}}' --user=www-data php vendor/bin/phpunit "${@}"

@@ -1,0 +1,17 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+#    - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+
+    #excludePaths:
+    #    analyse:
+    #        - tests/
+
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%&project=webforge-utils'
+
+    reportUnmatchedIgnoredErrors: false
