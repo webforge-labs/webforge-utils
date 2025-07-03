@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -189,7 +189,10 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedReturn, Preg::qmatch($string, $rx, $set));
     }
 
-    public static function provideTestqmatch()
+    /**
+     * @return list<array{mixed, mixed, mixed, mixed}>
+     */
+    public static function provideTestqmatch(): array
     {
         $tests = [];
         $equals = function ($expectedReturn, $string, $rx, $set) use (&$tests): void {

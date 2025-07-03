@@ -17,11 +17,10 @@ class ArrayUtil
      * // $GLOBALS['conf']['default']['db']
      * das erste %s ist der Wert aus dem Array das zweite %s ist der Schlüssel aus dem Array.
      * Diese können mit %1$s (wert) %2$s (schlüssel) addressiert werden
-     * @param array $pieces die Elemente die zusammengefügt werden sollen
+     * @param array<mixed> $pieces die Elemente die zusammengefügt werden sollen
      * @param string $glue der String welcher die Elemente umgeben soll. Er muss %s enthalten. An dieser Stelle wird das Array Element ersetzt
      */
-    public static function join(array $pieces, $glue)
-    {
+    public static function join(array $pieces, string $glue): ?string {
         $s = null;
         foreach ($pieces as $key => $piece) {
             if (is_array($piece)) {
@@ -46,12 +45,11 @@ class ArrayUtil
      * das erste %sin $glueFormat ist der Wert aus dem Array das zweite %s ist der Schlüssel aus dem Array.
      * Diese können mit %1$s (wert) %2$s (schlüssel) addressiert werden
      *
-     * @param array $pieces die Elemente die zusammengefügt werden sollen
+     * @param array<mixed> $pieces die Elemente die zusammengefügt werden sollen
      * @param string $glueFormat der String welcher die Elemente umgeben soll. Er muss %s enthalten. An dieser Stelle wird das Array Element ersetzt
      * @param Closure $stringConvert ist dies nicht gesetzt wird (string) $piece benutzt
      */
-    public static function joinc(array $pieces, $glueFormat, ?Closure $stringConvert = null)
-    {
+    public static function joinc(array $pieces, string $glueFormat, ?Closure $stringConvert = null): ?string {
         $s = null;
         if (!isset($stringConvert)) {
             $stringConvert = function ($piece) {
@@ -71,16 +69,14 @@ class ArrayUtil
         return $s;
     }
 
-    public static function peek(array $stack)
-    {
+    public static function peek(array $stack): mixed {
         return array_pop($stack);
     }
 
     /**
      * gibt NULL zurück wenn der Array leer ist
      */
-    public static function first(array $stack)
-    {
+    public static function first(array $stack): mixed {
         return array_shift($stack);
     }
 
@@ -89,8 +85,7 @@ class ArrayUtil
      *
      * $array ist nicht modifiziert!
      */
-    public static function push(array $array, $value)
-    {
+    public static function push(array $array, mixed $value): array {
         array_push($array, $value);
         return $array;
     }
@@ -109,12 +104,11 @@ class ArrayUtil
      *   A::insert($array, 1, -2);
      *   => array(0,0,0,0,1,2,3)
      *
-     * @param array $array der zu modifizierende Array (unbedingt numerisch)
-     * @param array $item das Item welches eingefügt werden soll
+     * @param array<mixed> $array der zu modifizierende Array (unbedingt numerisch)
+     * @param array<mixed> $item das Item welches eingefügt werden soll
      * @param int $offset von 0 - count($array) und -1 - -count(Array)-1. Das eingefügte Item bekommt dieses Offset. kann -1 für das Ende des Arrays sein. -2 für das Einfügen vor dem letzten Element usw
      */
-    public static function insert(array &$array, $item, $offset)
-    {
+    public static function insert(array &$array, mixed $item, mixed $offset): array {
         return self::insertArray($array, [$item], $offset);
     }
 
@@ -125,12 +119,11 @@ class ArrayUtil
      * Die Keys in $subject werden verändert
      *
      * siehe tests
-     * @param array $subject dieses Array wird verändert
-     * @param array $array dieses Array wird in $subject an Position $offset eingefügt
+     * @param array<mixed> $subject dieses Array wird verändert
+     * @param array<mixed> $array dieses Array wird in $subject an Position $offset eingefügt
      * @param int|const $offset kann self::END für das hinzufügen von $array am Ende. Kann negativ sein (z.b. -1 für das letzte elemente) für die position vor dem Element von hinten gezählt
      */
-    public static function insertArray(array &$subject, array $array, $offset)
-    {
+    public static function insertArray(array &$subject, array $array, mixed $offset): array {
         $length = count($subject);
 
         $offsetArg = $offset;
@@ -160,8 +153,7 @@ class ArrayUtil
      * @param bool $searchStrict if false only the value will be replace
      * @return array
      */
-    public static function remove(array &$array, $item, $searchStrict = true)
-    {
+    public static function remove(array &$array, mixed $item, bool $searchStrict = true): array {
         if (($key = array_search($item, $array, $searchStrict)) !== false) {
             array_splice($array, $key, 1);
         }
@@ -174,18 +166,16 @@ class ArrayUtil
      *
      * schmeisst kein notice, wenn der Index nicht gesetzt ist
      */
-    public static function index(array $array, $i)
-    {
+    public static function index(array $array, mixed $i): mixed {
         return array_key_exists($i, $array) ? $array[$i] : null;
     }
 
-    public static function &indexRef(array &$array, $i)
+    public static function &indexRef(array &$array, mixed $i)
     {
         return $array[$i];
     }
 
-    public static function set(array &$array, $key, $value)
-    {
+    public static function set(array &$array, mixed $key, mixed $value): array {
         $array[$key] = $value;
         return $array;
     }
@@ -195,19 +185,16 @@ class ArrayUtil
      *
      * @param string $glue ohne %s darin (nicht wie bei join)
      */
-    public static function implode(array $array, $glue, Closure $closure)
-    {
+    public static function implode(array $array, string $glue, Closure $closure): string {
         return implode($glue, array_map($closure, (array) $array, array_keys($array)));
     }
 
-    public static function shuffle(array $array)
-    {
+    public static function shuffle(array $array): array {
         shuffle($array);
         return $array;
     }
 
-    public static function randomValue(array $array)
-    {
+    public static function randomValue(array $array): mixed {
         $key = array_rand($array, 1);
         return $array[$key];
     }
@@ -220,8 +207,7 @@ class ArrayUtil
      *
      * print_r(A::keys($myComplexArray)); ist eine schöne übersicht des Array-Inhaltes
      */
-    public static function keys($array)
-    {
+    public static function keys(mixed $array): array {
         $ret = [];
 
         foreach ($array as $key => $value) {
@@ -245,8 +231,7 @@ class ArrayUtil
      * d. h. der modifzierte Schlüssel an Position 1 erhält die (optional modifizierte) value von Position 1
      * @return array
      */
-    public static function mapKeys(array $array, Closure $keyClosure, ?Closure $valueClosure = null)
-    {
+    public static function mapKeys(array $array, Closure $keyClosure, ?Closure $valueClosure = null): array {
         $keys = array_map($keyClosure, array_keys($array));
 
         $values = array_values($array);
@@ -264,24 +249,21 @@ class ArrayUtil
      * in numeric Arrays muss die Reihenfolge nicht unbedingt von 0-x sein!
      * @return 'assoc'|'numeric'
      */
-    public static function getType(array $array)
-    {
+    public static function getType(array $array): string {
         return (count(array_filter(array_keys($array), 'is_string')) > 0) ? 'assoc' : 'numeric';
     }
 
     /**
      * @return bool
      */
-    public static function isNumeric(array $array)
-    {
+    public static function isNumeric(array $array): bool {
         return self::getType($array) === 'numeric';
     }
 
     /**
      * @return bool
      */
-    public static function isAssoc(array $array)
-    {
+    public static function isAssoc(array $array): bool {
         return self::getType($array) === 'assoc';
     }
 
@@ -291,8 +273,7 @@ class ArrayUtil
      * @FIXME es muss is_$type existieren
      * @return bool
      */
-    public static function isOnlyType(array $array, $type)
-    {
+    public static function isOnlyType(array $array, string $type): bool {
         return (count(array_filter(array_values($array), 'is_' . $type)) === count($array));
     }
 
@@ -304,8 +285,7 @@ class ArrayUtil
      * @param int $absLength
      * @return array
      */
-    public static function fillUp(array $array, $value, $absLength)
-    {
+    public static function fillUp(array $array, mixed $value, int $absLength): array {
         $fillNum = $absLength - count($array);
 
         /* nichts zu tun, da array schon voll (oder zu voll) */
@@ -321,8 +301,7 @@ class ArrayUtil
      *
      * respects the association keys from $items
      */
-    public static function pluck(array $items, $property)
-    {
+    public static function pluck(array $items, mixed $property): array {
         $props = [];
 
         if (count($items) > 0) {
@@ -343,8 +322,7 @@ class ArrayUtil
      * returns the stringified array
      * @return array
      */
-    public static function stringify(array $items)
-    {
+    public static function stringify(array $items): array {
         return array_map(function ($item) {
             return (string) $item;
         }, $items);
@@ -359,12 +337,11 @@ class ArrayUtil
      * but this function has the keys passed as second parameter
      * the new array is NOT renumbered
      *
-     * @param array $array will not be modified
+     * @param array<mixed> $array will not be modified
      * @param closure $filter bool function($key, $value)
      * @return array with same keys as the input array (if not filtered)
      */
-    public static function filterKeys(array $array, Closure $filter)
-    {
+    public static function filterKeys(array $array, Closure $filter): array {
         $filtered = [];
         //@TODO maybe something with array_filter as callback is faster here? benchmark?
 
@@ -383,8 +360,7 @@ class ArrayUtil
      * @param mixed $property see pluck() for details
      * @return array
      */
-    public static function indexBy(array $array, $property)
-    {
+    public static function indexBy(array $array, mixed $property): array {
         $ret = [];
 
         if (count($array) > 0) {

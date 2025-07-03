@@ -16,7 +16,7 @@ class Url
      * (muss nicht unbedingt aktuell sein)
      * @var string
      */
-    protected $url;
+    protected mixed $url = null;
 
     /**
      * @var string
@@ -28,9 +28,9 @@ class Url
      */
     protected $hostParts = [];
 
-    protected $port;
-    protected $user;
-    protected $password;
+    protected mixed $port = null;
+    protected mixed $user = null;
+    protected mixed $password = null;
 
     /**
      * @var array
@@ -47,9 +47,9 @@ class Url
     /**
      * @var string ohne # davor
      */
-    protected $fragment;
+    protected mixed $fragment = null;
 
-    public function __construct($url = null)
+    public function __construct(mixed $url = null)
     {
         $this->url = $url;
 
@@ -61,7 +61,7 @@ class Url
     /**
      * @param string $url
      */
-    public function parseFrom($url)
+    public function parseFrom(mixed $url)
     {
         $url = (string) trim($url);
 
@@ -148,7 +148,7 @@ class Url
     /**
      * @param string $host
      */
-    public function setHost($host)
+    public function setHost(mixed $host)
     {
         $this->hostParts = explode('.', $host);
         return $this;
@@ -190,7 +190,7 @@ class Url
     /**
      * Adds an host part onto the beginning
      */
-    public function addSubDomain($domain): void
+    public function addSubDomain(mixed $domain): void
     {
         array_unshift($this->hostParts, $domain);
     }
@@ -199,7 +199,7 @@ class Url
      * @return array
      */
     public function getPath()
-    {
+    : array {
         return $this->path;
     }
 
@@ -210,7 +210,7 @@ class Url
         return $this;
     }
 
-    public function addPathPart($string)
+    public function addPathPart(mixed $string)
     {
         $this->path[] = $string;
         return $this;
@@ -219,7 +219,7 @@ class Url
     /**
      * Modifies the current URL with adding an relative Url to the pathParts
      */
-    public function addRelativeUrl($relativeUrl)
+    public function addRelativeUrl(mixed $relativeUrl)
     {
         $this->pathTrailingSlash = S::endsWith($relativeUrl, '/');
 
@@ -236,7 +236,7 @@ class Url
      * @param int $num 1-basierend
      * @return string|null
      */
-    public function getPathPart($num)
+    public function getPathPart(mixed $num)
     {
         if ($num < 1) {
             throw new \InvalidArgumentException('Num ist 1-basierend');
@@ -308,7 +308,7 @@ class Url
         return $this->scheme;
     }
 
-    public function setScheme($scheme)
+    public function setScheme(mixed $scheme)
     {
         $this->scheme = $scheme;
         return $this;
@@ -326,7 +326,7 @@ class Url
      * @param int port
      * @chainable
      */
-    public function setPort($port)
+    public function setPort(mixed $port)
     {
         $this->port = $port;
         return $this;
@@ -344,7 +344,7 @@ class Url
      * @param string user
      * @chainable
      */
-    public function setUser($user)
+    public function setUser(mixed $user)
     {
         $this->user = $user;
         return $this;
@@ -362,7 +362,7 @@ class Url
      * @param string password
      * @chainable
      */
-    public function setPassword($password)
+    public function setPassword(mixed $password)
     {
         $this->password = $password;
         return $this;
@@ -380,14 +380,14 @@ class Url
      * @param mixed pathTrailingSlash
      * @chainable
      */
-    public function setPathTrailingSlash($pathTrailingSlash)
+    public function setPathTrailingSlash(mixed $pathTrailingSlash)
     {
         $this->pathTrailingSlash = $pathTrailingSlash;
         return $this;
     }
 
     public function __toString()
-    {
+    : string {
         try {
             return (string) $this->toString();
         } catch (\Exception $e) {

@@ -65,12 +65,12 @@ class DateTime extends \DateTime
 
     public static function create($time = null, ?DateTimeZone $object = null): static
     { // alias
-        return new static($time, $object);
+        return new self($time, $object);
     }
 
     public static function now(DateTimeZone $object = null): static
     {
-        return new static(time(),$object);
+        return new self(time(),$object);
     }
 
     public static function createFromJSON($json): static
@@ -187,7 +187,7 @@ class DateTime extends \DateTime
             throw new ParsingException('Aus ' . Code::varInfo($time) . ' konnte keinen Zeitinformationen des Formates: ' . Code::varInfo($format) . ' geparst werden. lastErrors: ' . print_r(DateTime::getLastErrors(), true));
         }
 
-        return new static($ret);
+        return new self($ret);
     }
 
     /**

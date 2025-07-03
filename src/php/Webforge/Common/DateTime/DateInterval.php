@@ -7,11 +7,11 @@ use Webforge\Common\Preg;
 class DateInterval extends \DateInterval
 {
   /**
-   * @var int microseconds of the interval
+   * @var array<string, int> microseconds of the interval indexed by object hash
    */
-    protected static $usData = [];
+    protected static array $usData = [];
 
-    public function __construct($interval_spec)
+    public function __construct(string $interval_spec)
     {
         $interval_spec = $this->convertSimpleSpec($interval_spec);
         parent::__construct($interval_spec);
@@ -43,15 +43,18 @@ class DateInterval extends \DateInterval
     public function format($string): string
     {
         $ret = parent::format($string);
+        if ($ret === null) {
+            return null;
+        }
 
         if (mb_stripos($string, '%u')) {
-            $ret = preg_replace('/(?<!%)%u/u', $this->getUS(), $ret);
+            $ret = preg_replace('/(?<!%)%u/u', (string) $this->getUS(), $ret);
             $ret = preg_replace('/(?<!%)%U/u', sprintf('%02d', $this->getUS()), $ret);
         }
 
         if (mb_stripos($string, '%n')) {
-            $ret = preg_replace('/(?<!%)%n/u', sprintf('%d', $this->getUS() / 1000), $ret);
-            $ret = preg_replace('/(?<!%)%N/u', sprintf('%02d', $this->getUS() / 1000), $ret);
+            $ret = preg_replace('/(?<!%)%n/u', sprintf('%d', (int)($this->getUS() / 1000)), $ret);
+            $ret = preg_replace('/(?<!%)%N/u', sprintf('%02d', (int)($this->getUS() / 1000)), $ret);
         }
 
         return $ret;
@@ -87,9 +90,9 @@ class DateInterval extends \DateInterval
         return $ret;
     }
 
-    public static function create($spec)
+    public static function create(string $spec): static
     {
-        return new static($spec);
+        return new self($spec);
     }
 
     /**
@@ -103,7 +106,7 @@ class DateInterval extends \DateInterval
     /**
      * @param int
      */
-    public function setUS($us)
+    public function setUS(int $us): self
     {
         self::$usData[spl_object_hash($this)] = $us;
         return $this;

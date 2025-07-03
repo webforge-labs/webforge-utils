@@ -10,7 +10,7 @@ class FileNotFoundException extends \Webforge\Common\Exception
 
     public static function fromFile(File $file, $msg = null, $code = 0)
     {
-        $ex = new static(sprintf($msg ?: 'The file %s cannot be found.', $file, $code));
+        $ex = new self(sprintf($msg ?: 'The file %s cannot be found.', $file, $code));
         $ex->setNotFoundFile($file);
 
         return $ex;

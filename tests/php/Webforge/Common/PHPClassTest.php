@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -10,17 +10,17 @@ class PHPClassTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $this->phpClass = new PHPClass(__CLASS__);
+        $this->phpClass = new PHPClass(self::class);
     }
 
     public function testImplementsClassInterface(): void
     {
-        self::assertInstanceOf('Webforge\Common\ClassInterface', $this->phpClass);
+        self::assertInstanceOf(\Webforge\Common\ClassInterface::class, $this->phpClass);
     }
 
     public function testNamespaceAndNameAndFQNAreSetFromFQNString(): void
     {
-        self::assertEquals(__CLASS__, $this->phpClass->getFQN());
+        self::assertEquals(self::class, $this->phpClass->getFQN());
         self::assertEquals('PHPClassTest', $this->phpClass->getName());
         self::assertEquals(__NAMESPACE__, $this->phpClass->getNamespace());
     }
@@ -60,7 +60,7 @@ class PHPClassTest extends \PHPUnit\Framework\TestCase
 
     public function testToStringContainsFQN(): void
     {
-        self::assertStringContainsString(__CLASS__, (string) $this->phpClass);
+        self::assertStringContainsString(self::class, (string) $this->phpClass);
     }
 
     public function testReflectionCanbeReplacedForTests(): void
@@ -73,7 +73,7 @@ class PHPClassTest extends \PHPUnit\Framework\TestCase
 
     public function testEquals(): void
     {
-        self::assertTrue($this->phpClass->equals(new PHPClass(__CLASS__)));
-        self::assertFalse($this->phpClass->equals(new PHPClass(__CLASS__ . 'Nope')));
+        self::assertTrue($this->phpClass->equals(new PHPClass(self::class)));
+        self::assertFalse($this->phpClass->equals(new PHPClass(self::class . 'Nope')));
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\DateTime;
 
@@ -15,7 +15,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals($expectedFormat, $date->i18n_format($formatString, $lang));
     }
 
-    public static function i18nFormats()
+    public static function i18nFormats(): array
     {
         $tests = [];
 
@@ -102,14 +102,14 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideFormatSpan
      */
-    public function testGetWeekday($day, $date, $assertion): void
+    public function testGetWeekday(int $day, \Webforge\Common\DateTime\DateTime $date, string $assertion): void
     {
         self::assertEquals($assertion, $date->getWeekday($day)->format('d.m.Y'));
     }
 
     public function testParseFromRFC1123(): void
     {
-        self::assertInstanceof('Webforge\Common\DateTime\DateTime', DateTime::parse(DateTime::RFC1123, 'Thu, 10 Nov 2011 07:28:18 GMT'));
+        self::assertInstanceof(\Webforge\Common\DateTime\DateTime::class, DateTime::parse(DateTime::RFC1123, 'Thu, 10 Nov 2011 07:28:18 GMT'));
     }
 
     public function testCoolSettersAndGetters(): void
@@ -148,7 +148,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals('07.08.2014', $date->format('d.m.Y'));
     }
 
-    public static function provideFormatSpan()
+    public static function provideFormatSpan(): array
     {
         return [
 
@@ -229,7 +229,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideBefore
      */
-    public function testBefore($expected, $subjectDate, $objectDate): void
+    public function testBefore($expected, string $subjectDate, string $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
@@ -237,7 +237,10 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals($expected, $subject->isBefore($object), 'failed asserting that: ' . $subjectDate . '->isBefore(' . $objectDate . ')');
     }
 
-    public static function provideBefore()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideBefore(): array
     {
         $tests = [];
 
@@ -255,7 +258,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideAfter
      */
-    public function testAfter($expected, $subjectDate, $objectDate): void
+    public function testAfter($expected, string $subjectDate, string $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
@@ -263,7 +266,10 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals($expected, $subject->isAfter($object), 'failed asserting that: ' . $subjectDate . '->isAfter(' . $objectDate . ')');
     }
 
-    public static function provideAfter()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideAfter(): array
     {
         $tests = [];
 
@@ -281,7 +287,7 @@ class DateTimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideEqual
      */
-    public function testEqual($expected, $subjectDate, $objectDate): void
+    public function testEqual($expected, string $subjectDate, string $objectDate): void
     {
         $subject = new DateTime($subjectDate);
         $object = new DateTime($objectDate);
@@ -289,7 +295,10 @@ class DateTimeTest extends \Webforge\Common\TestCase
         self::assertEquals($expected, $subject->isEqual($object), 'failed asserting that: ' . $subjectDate . '->isEqual(' . $objectDate . ')');
     }
 
-    public static function provideEqual()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideEqual(): array
     {
         $tests = [];
 

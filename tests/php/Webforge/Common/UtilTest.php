@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -29,7 +29,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty(Util::varInfo($typeSample));
     }
 
-    public static function provideAllTypes()
+    public static function provideAllTypes(): array
     {
         $tests = [];
 

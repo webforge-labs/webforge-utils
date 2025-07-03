@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -7,13 +7,8 @@ namespace Webforge\Common;
  */
 class TestValueObject
 {
-    protected $prop1;
-    protected $prop2;
-
-    public function __construct($p1Value, $p2Value)
+    public function __construct(protected $prop1, protected $prop2)
     {
-        $this->prop1 = $p1Value;
-        $this->prop2 = $p2Value;
     }
 
     public function getProp1()
@@ -21,7 +16,7 @@ class TestValueObject
         return $this->prop1;
     }
 
-    public function setProp1($p1Value)
+    public function setProp1($p1Value): static
     {
         $this->prop1 = $p1Value;
         return $this;
@@ -32,7 +27,7 @@ class TestValueObject
         return $this->prop2;
     }
 
-    public function setProp2($p2Value)
+    public function setProp2($p2Value): static
     {
         $this->prop2 = $p2Value;
         return $this;

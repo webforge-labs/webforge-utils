@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\DateTime;
 
@@ -7,12 +7,12 @@ class TimeTest extends \Webforge\Common\TestCase
     /**
      * @dataProvider provideFormatSpan
      */
-    public function testFormatSpan($seconds, $assertion): void
+    public function testFormatSpan(int $seconds, string $assertion): void
     {
         self::assertEquals($assertion, Time::formatSpan($seconds, '%H:%I:%S'));
     }
 
-    public static function provideFormatSpan()
+    public static function provideFormatSpan(): array
     {
         return [
             [60, '00:01:00'],

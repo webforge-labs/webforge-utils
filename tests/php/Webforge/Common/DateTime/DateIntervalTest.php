@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\DateTime;
 
@@ -15,7 +15,7 @@ class DateIntervalTest extends \Webforge\Common\TestCase
 
     public function testConstruct(): void
     {
-        self::assertInstanceOf('Webforge\Common\DateTime\DateInterval', $this->interval);
+        self::assertInstanceOf(\Webforge\Common\DateTime\DateInterval::class, $this->interval);
     }
 
     /**
@@ -28,7 +28,10 @@ class DateIntervalTest extends \Webforge\Common\TestCase
         self::assertEquals($expectedInterval->format($format), $actualInterval->format($format));
     }
 
-    public static function provideSimpleSpec()
+    /**
+     * @return list<array{DateInterval, mixed}>
+     */
+    public static function provideSimpleSpec(): array
     {
         $tests = [];
         $test = function ($intervalSpec, $testSpec) use (&$tests): void {

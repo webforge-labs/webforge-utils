@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -251,7 +251,7 @@ JAVASCRIPT;
         );
     }
 
-    public static function provideSubstring()
+    public static function provideSubstring(): array
     {
         $tests = [];
 
@@ -284,12 +284,12 @@ JAVASCRIPT;
     /**
      * @dataProvider getSymmetricWrapTests
      */
-    public function testSymmetricWrap($input, $symmetric, $expected): void
+    public function testSymmetricWrap(string $input, $symmetric, $expected): void
     {
         self::assertEquals($expected, S::swrap($input, $symmetric));
     }
 
-    public static function getSymmetricWrapTests()
+    public static function getSymmetricWrapTests(): array
     {
         $tests = [];
 
@@ -329,7 +329,7 @@ JAVASCRIPT;
     /**
      * @dataProvider provideMiniTemplate
      */
-    public function testMiniTemplate($template, $vars, $expected): void
+    public function testMiniTemplate($template, array $vars, $expected): void
     {
         self::assertEquals(
             $expected,
@@ -337,7 +337,10 @@ JAVASCRIPT;
         );
     }
 
-    public static function provideMiniTemplate()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideMiniTemplate(): array
     {
         $tests = [];
 
@@ -382,7 +385,10 @@ JAVASCRIPT;
         );
     }
 
-    public static function provideCamelCaseToDash()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideCamelCaseToDash(): array
     {
         $tests = [];
 
@@ -397,7 +403,10 @@ JAVASCRIPT;
         return $tests;
     }
 
-    public static function provideDashToCamelCase()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideDashToCamelCase(): array
     {
         $tests = [];
 

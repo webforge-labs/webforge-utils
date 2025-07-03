@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -46,7 +46,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($query, $url->getQuery(), $verbose);
     }
 
-    public static function provideTestApi()
+    public static function provideTestApi(): array
     {
         $urls = [];
         $urls[0] = [
@@ -159,7 +159,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function provideAbsRelativeUrls()
+    public static function provideAbsRelativeUrls(): array
     {
         $tests = [];
 

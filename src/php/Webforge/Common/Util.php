@@ -66,8 +66,7 @@ class Util
      * - resource:$resourcetype
      * - object:$class
      */
-    public static function getType($var)
-    {
+    public static function getType(mixed $var): string {
         $type = gettype($var);
 
         if ($type == 'object') {
@@ -98,8 +97,7 @@ class Util
      * @param mixed $var
      * @return string
      */
-    public static function typeInfo($var)
-    {
+    public static function typeInfo(mixed $var): string {
         $string = gettype($var);
 
         if ($string == 'object') {
@@ -120,8 +118,7 @@ class Util
     /**
      * @return Closure
      */
-    public static function castGetterFromSample($getter, $sampleObject)
-    {
+    public static function castGetterFromSample(mixed $getter, mixed $sampleObject): Closure {
         if (!($getter instanceof Closure)) {
             if (mb_strpos($getter, 'get') !== 0) {
                 if (ClassUtil::hasPublicProperty($sampleObject, $getter)) {
@@ -150,7 +147,7 @@ class Util
      * @param array|Traversable|mixed $collection
      * @return array
      */
-    public static function castArray($collection)
+    public static function castArray(mixed $collection): array
     {
         if ($collection instanceof Collection) {
             return $collection->toArray();

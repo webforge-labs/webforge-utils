@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\System;
 
@@ -17,7 +17,7 @@ class FileTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$absPathPrefix = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:\\' : '/';
+        self::$absPathPrefix = str_starts_with(PHP_OS, 'WIN') ? 'D:\\' : '/';
     }
 
     protected function setUp(): void
@@ -31,21 +31,21 @@ class FileTest extends TestCase
     }
 
     // erstellt einen Pfad mit trailing slash
-    public static function path()
+    public static function path(): string
     {
         return implode(DIRECTORY_SEPARATOR, func_get_args()) . DIRECTORY_SEPARATOR;
     }
 
-    public static function absPath()
+    public static function absPath(): string
     {
         return self::$absPathPrefix . implode(DIRECTORY_SEPARATOR, func_get_args()) . DIRECTORY_SEPARATOR;
     }
 
     public function testFactoryReturnsAFile(): void
     {
-        self::assertInstanceOf('Webforge\Common\System\File', File::factory($this->dirPath . 'somefile.txt'));
-        self::assertInstanceOf('Webforge\Common\System\File', File::factory($this->dir, 'somefile.txt'));
-        self::assertInstanceOf('Webforge\Common\System\File', File::factory('somefile.txt', $this->dir));
+        self::assertInstanceOf(\Webforge\Common\System\File::class, File::factory($this->dirPath . 'somefile.txt'));
+        self::assertInstanceOf(\Webforge\Common\System\File::class, File::factory($this->dir, 'somefile.txt'));
+        self::assertInstanceOf(\Webforge\Common\System\File::class, File::factory('somefile.txt', $this->dir));
     }
 
     public function testConstructor(): void
@@ -67,7 +67,7 @@ class FileTest extends TestCase
 
     public function testWrappedConstructor(): void
     {
-        $fileString = 'phar://' . ($pf = substr(PHP_OS, 0, 3) == 'WIN' ? 'D:/' : '/') . 'does/not/matter/my.phar.gz/i/am/wrapped/class.php';
+        $fileString = 'phar://' . ($pf = str_starts_with(PHP_OS, 'WIN') ? 'D:/' : '/') . 'does/not/matter/my.phar.gz/i/am/wrapped/class.php';
 
         $file = new File($fileString);
         self::assertEquals('php', $file->getExtension());
@@ -119,7 +119,10 @@ class FileTest extends TestCase
         self::assertEquals($expectedURL, $file->getURL($dir));
     }
 
-    public static function provideGetURL()
+    /**
+     * @return list<array{mixed, mixed, mixed}>
+     */
+    public static function provideGetURL(): array
     {
         $tests = [];
         $test = function ($file, $dir, $url) use (&$tests): void {
@@ -190,7 +193,7 @@ class FileTest extends TestCase
     {
         self::assertFalse($this->dir->exists());
 
-        $this->expectException('Webforge\Common\System\Exception');
+        $this->expectException(\Webforge\Common\System\Exception::class);
 
         $this->dir->getFile('new.txt')->writeContents('some-content');
     }
@@ -210,7 +213,7 @@ class FileTest extends TestCase
         $file->delete();
     }
 
-    protected function setupNoExtensionFile()
+    protected function setupNoExtensionFile(): \Webforge\Common\System\File
     {
         $dir = vfsStream::setup('extension-files', null, [
       'thefile.php' => '<?php // its php',
@@ -241,7 +244,10 @@ class FileTest extends TestCase
         );
     }
 
-    public static function providefindExtension()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function providefindExtension(): array
     {
         $tests = [];
 
@@ -263,7 +269,7 @@ class FileTest extends TestCase
     {
         $noExtensionFile = $this->setupNoExtensionFile();
 
-        $this->expectException('Webforge\Common\Exception\FileNotFoundException');
+        $this->expectException(\Webforge\Common\Exception\FileNotFoundException::class);
 
         $noExtensionFile->findExtension(['nil', 'nihil', 'none']);
     }

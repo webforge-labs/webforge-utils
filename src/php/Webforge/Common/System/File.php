@@ -26,30 +26,30 @@ class File
      * Name of File without Extension
      * @var string
      */
-    protected $name;
+    protected mixed $name;
 
     /**
      * File Ending (if any) without .
      * @var string
      */
-    protected $extension;
+    protected mixed $extension;
 
     /**
      * @var Webforge\Common\System\Dir
      */
-    protected $directory;
+    protected mixed $directory;
 
     /**
      * @var string
      */
-    protected $mimeType;
+    protected mixed $mimeType;
 
     /**
      * Cache for hash (sha1)
      */
-    protected $sha1;
+    protected mixed $sha1;
 
-    public function __construct($arg1, $arg2 = null)
+    public function __construct(mixed $arg1, $arg2 = null)
     {
         if ($arg1 instanceof Dir) {
             $this->constructDefault($arg2, $arg1);
@@ -73,14 +73,14 @@ class File
      * @return self
      */
     public static function createTemporary($extension = null)
-    {
+    : static {
         $tmpfile = tempnam(sys_get_temp_dir(), mb_substr(uniqid(), 0, 3));
 
         if ($extension) {
             rename($tmpfile, $tmpfile = $tmpfile . '.' . ltrim($extension, '.'));
         }
 
-        return new static($tmpfile);
+        return new self($tmpfile);
     }
 
     /**
@@ -141,8 +141,8 @@ class File
      * @return self
      */
     public static function factory($arg1, $arg2 = null)
-    {
-        return new static($arg1, $arg2);
+    : static {
+        return new self($arg1, $arg2);
     }
 
     /**
@@ -154,7 +154,7 @@ class File
      * @param int $flags File::EXCLUSIVE
      * @chainable
      */
-    public function writeContents($contents, $flags = null)
+    public function writeContents(mixed $contents, $flags = null)
     {
         if ($this->exists() && !$this->isWriteable()) {
             throw new Exception('Dateiinhalt kann nicht geschrieben werden. (exists/writeable) ' . $this);
@@ -190,8 +190,8 @@ class File
      *
      * @return string
      */
-    public function getContents($maxLength = null)
-    {
+    public function getContents(mixed $maxLength = null)
+    : string {
         if (isset($maxLength)) {
             $ret = @file_get_contents(
                 (string)$this,
@@ -230,7 +230,7 @@ class File
      * @return bool
      */
     public function move(File $fileDestination, $overwrite = false)
-    {
+    : static {
         if (!$this->exists()) {
             throw new Exception('Quelle von move existiert nicht. ' . $this);
         }
@@ -252,9 +252,10 @@ class File
         if ($ret) {
             $this->setDirectory($fileDestination->getDirectory());
             $this->setName($fileDestination->getName());
+            return $this;
         }
 
-        return $ret;
+        throw new Exception('Failed to move file from ' . $this . ' to ' . $fileDestination);
     }
 
     /**
@@ -262,8 +263,8 @@ class File
      *
      * @chainable
      */
-    public function copy($destination)
-    {
+    public function copy(mixed $destination)
+    : static {
         if (!$this->exists()) {
             throw new Exception('Source from copy does not exist: ' . $this);
         }
@@ -311,7 +312,7 @@ class File
      * @param octal $mode
      * @chainable
      */
-    public function chmod($mode)
+    public function chmod(mixed $mode)
     {
         $ret = chmod((string) $this, $mode);
 
@@ -327,7 +328,7 @@ class File
      * @return bool
      */
     public function exists()
-    {
+    : bool {
         return mb_strlen($this->getName()) > 0 && is_file((string) $this);
     }
 
@@ -364,7 +365,7 @@ class File
      * @param string $name filename with extension
      * @chainable
      */
-    public function setName($name)
+    public function setName(mixed $name)
     {
         if (($pos = mb_strrpos($name, '.')) !== false) {
             $this->name = mb_substr($name, 0, $pos);
@@ -381,8 +382,8 @@ class File
      *
      * @return string
      */
-    public function getName($extension = self::WITH_EXTENSION)
-    {
+    public function getName(mixed $extension = self::WITH_EXTENSION)
+    : string {
         if (isset($this->extension) && $extension == self::WITH_EXTENSION) {
             return $this->name . '.' . $this->extension;
         } else {
@@ -434,7 +435,7 @@ class File
         return $this->getOSPath($this->directory->getOS(), Dir::WINDOWS_WITH_CYGWIN);
     }
 
-    public function getOSPath($os, $flags = 0x000000)
+    public function getOSPath(mixed $os, $flags = 0x000000)
     {
         $dir = $this->getDirectory()->getOSPath($os, $flags);
 
@@ -445,7 +446,7 @@ class File
      * @return tring
      */
     public function __toString()
-    {
+    : string {
         $dir = (string) $this->getDirectory();
 
         return $dir . $this->getName();
@@ -503,7 +504,7 @@ class File
      * @param string $extension die Erweiterung (der . davor ist optional)
      * @chainable
      */
-    public function setExtension($extension = null)
+    public function setExtension(mixed $extension = null)
     {
         if ($extension != null && mb_strpos($extension, '.') === 0) {
             $this->extension = mb_substr($extension, 1);
@@ -559,9 +560,9 @@ class File
      * @param string $string der Pfad zur Datei
      * @return File die extrahierte Datei aus dem Pfad
      */
-    public function extract($string)
+    public function extract(mixed $string)
     {
-        return new static(self::extractFilename($string));
+        return new self(self::extractFilename($string));
     }
 
     /**
@@ -656,7 +657,7 @@ class File
     /**
      * Overwrites the sha1 hash from File
      */
-    public function setSha1($sha1)
+    public function setSha1(mixed $sha1)
     {
         $this->sha1 = $sha1;
         return $this;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common;
 
@@ -57,7 +57,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function provideExpandNamespace()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideExpandNamespace(): array
     {
         $tests = [];
 
@@ -65,17 +68,17 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
             $tests[] = func_get_args();
         };
 
-        $test('ClassUtil', 'Webforge\Common', 'Webforge\Common\ClassUtil');
-        $test('\ClassUtil', 'Webforge\Common', 'Webforge\Common\ClassUtil');
-        $test('ClassUtil', 'Webforge\Common\\', 'Webforge\Common\ClassUtil');
-        $test('ClassUtil', '\Webforge\Common\\', 'Webforge\Common\ClassUtil');
-        $test('ClassUtil', '\Webforge\Common', 'Webforge\Common\ClassUtil');
-        $test('\ClassUtil', '\Webforge\Common', 'Webforge\Common\ClassUtil');
+        $test('ClassUtil', 'Webforge\Common', \Webforge\Common\ClassUtil::class);
+        $test('\ClassUtil', 'Webforge\Common', \Webforge\Common\ClassUtil::class);
+        $test('ClassUtil', 'Webforge\Common\\', \Webforge\Common\ClassUtil::class);
+        $test('ClassUtil', '\Webforge\Common\\', \Webforge\Common\ClassUtil::class);
+        $test('ClassUtil', '\Webforge\Common', \Webforge\Common\ClassUtil::class);
+        $test('\ClassUtil', '\Webforge\Common', \Webforge\Common\ClassUtil::class);
 
-        $test('Webforge\Common\ArrayUtil', '\Webforge\Common', 'Webforge\Common\ArrayUtil');
-        $test('\Webforge\Common\ArrayUtil', '\Webforge\Common', 'Webforge\Common\ArrayUtil');
-        $test('\Webforge\Common\ArrayUtil', 'Webforge\Common', 'Webforge\Common\ArrayUtil');
-        $test('Webforge\Common\ArrayUtil', 'Webforge\Common', 'Webforge\Common\ArrayUtil');
+        $test(\Webforge\Common\ArrayUtil::class, '\Webforge\Common', \Webforge\Common\ArrayUtil::class);
+        $test(\Webforge\Common\ArrayUtil::class, '\Webforge\Common', \Webforge\Common\ArrayUtil::class);
+        $test(\Webforge\Common\ArrayUtil::class, 'Webforge\Common', \Webforge\Common\ArrayUtil::class);
+        $test(\Webforge\Common\ArrayUtil::class, 'Webforge\Common', \Webforge\Common\ArrayUtil::class);
 
         return $tests;
     }
@@ -88,7 +91,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedFQN, ClassUtil::setNamespace($className, $namespace));
     }
 
-    public static function provideSetNamespace()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideSetNamespace(): array
     {
         $tests = [];
 
@@ -107,7 +113,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    public static function provideGetNamespace()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideGetNamespace(): array
     {
         $tests = [];
 
@@ -117,11 +126,11 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
 
         // unfortunately classes do have to exist for php reflection
 
-        $test('Webforge\Common\ClassUtil', 'Webforge\Common');
+        $test(\Webforge\Common\ClassUtil::class, 'Webforge\Common');
         $test('Traversable', null);
 
         // exception?
-        $test('\Webforge\Common\ClassUtil', 'Webforge\Common');
+        $test(\Webforge\Common\ClassUtil::class, 'Webforge\Common');
         $test('\\Traversable', null);
 
         // undefined! (phpReflection throws error)
@@ -130,7 +139,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
         return $tests;
     }
 
-    public static function provideGetClassName()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideGetClassName(): array
     {
         $tests = [];
 
@@ -140,10 +152,10 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
 
         // unfortunately classes do have to exist for php reflection
 
-        $test('Webforge\Common\ClassUtil', 'ClassUtil');
+        $test(\Webforge\Common\ClassUtil::class, 'ClassUtil');
         $test('Traversable', 'Traversable');
 
-        $test('\Webforge\Common\ClassUtil', 'ClassUtil');
+        $test(\Webforge\Common\ClassUtil::class, 'ClassUtil');
         $test('\\Traversable', 'Traversable');
 
         // undefined! (phpReflection throws error)
@@ -154,11 +166,11 @@ class ClassUtilTest extends \PHPUnit\Framework\TestCase
 
     public function testCreatesNewInstancesOfObjectsWithNewClassInstance(): void
     {
-        $refl = ClassUtil::newClassInstance('ReflectionClass', [__CLASS__]);
-        self::assertEquals(__CLASS__, $refl->getName());
+        $refl = ClassUtil::newClassInstance('ReflectionClass', [self::class]);
+        self::assertEquals(self::class, $refl->getName());
 
-        $refl = ClassUtil::newClassInstance(new \ReflectionClass('ReflectionClass'), [__CLASS__]);
-        self::assertEquals(__CLASS__, $refl->getName());
+        $refl = ClassUtil::newClassInstance(new \ReflectionClass('ReflectionClass'), [self::class]);
+        self::assertEquals(self::class, $refl->getName());
     }
 
     public function testNewClassInstanceCanOnlyDoStringOrReflectionClass(): void

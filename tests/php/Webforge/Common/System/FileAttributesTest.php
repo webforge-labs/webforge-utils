@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\System;
 
@@ -14,16 +14,16 @@ class FileAttributesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetModifiedTimeReturnsATimestamp(): void
     {
-        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getModifiedTime());
+        self::assertInstanceOf(\Webforge\Common\DateTime\DateTime::class, $this->file->getModifiedTime());
     }
 
     public function testGetCreateTimeReturnsATimestamp(): void
     {
-        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getCreationTime());
+        self::assertInstanceOf(\Webforge\Common\DateTime\DateTime::class, $this->file->getCreationTime());
     }
 
     public function testgetAccessTimeReturnsATimestamp(): void
     {
-        self::assertInstanceOf('Webforge\Common\DateTime\DateTime', $this->file->getAccessTime());
+        self::assertInstanceOf(\Webforge\Common\DateTime\DateTime::class, $this->file->getAccessTime());
     }
 }

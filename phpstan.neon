@@ -8,9 +8,9 @@ parameters:
         - src
         - tests
 
-    #excludePaths:
-    #    analyse:
-    #        - tests/
+    excludePaths:
+        analyse:
+            - tests/
 
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%&project=webforge-utils'
 

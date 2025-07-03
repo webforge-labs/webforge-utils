@@ -66,19 +66,19 @@ class Dir
      */
     private $path = [];
 
-    protected $prefix;
+    protected mixed $prefix = null;
 
     /**
      * The name of the streamwrapper if path is wrapped
      *
      * @var string
      */
-    protected $wrapper;
+    protected mixed $wrapper = null;
 
     /**
      * @var bool
      */
-    protected $cygwin;
+    protected mixed $cygwin;
 
     /**
      * Globale ignores for directories
@@ -94,7 +94,7 @@ class Dir
      * directories do not have to exist
      * @param string|Dir $path
      */
-    public function __construct($path = null)
+    public function __construct(mixed $path = null)
     {
         if ($path instanceof Dir) {
             $path = $path->getPath();
@@ -112,7 +112,7 @@ class Dir
      * @return Dir
      */
     public static function factory($path = null)
-    {
+    : static {
         return new static($path);
     }
 
@@ -133,7 +133,7 @@ class Dir
     /**
     * Creates the dir from a relative URL in relation to $base
     *
-    * @return Psc\System\Dir
+    * @return static
     */
     public static function createFromURL($url, ?Dir $base = null)
     {
@@ -148,7 +148,7 @@ class Dir
      * Creates a temporary Directory
      */
     public static function createTemporary()
-    {
+    : static {
         $file = File::createTemporary();
         $tempname = $file->getName();
         $file->delete();
@@ -161,7 +161,7 @@ class Dir
     /**
      * @param string $path mit trailin DIRECTORY_SEPERATOR
      */
-    public function setPath($path)
+    public function setPath(mixed $path)
     {
         $path = trim($path);
 
@@ -317,7 +317,7 @@ class Dir
      * @deprecated
      * @param string only the name of the wrapper like file or vfs or phar
      */
-    public function setWrapper($wrapperName)
+    public function setWrapper(mixed $wrapperName)
     {
         return $this->wrapWith($wrapperName);
     }
@@ -327,7 +327,7 @@ class Dir
      *
      * @param string only the name of the wrapper like file or vfs or phar
      */
-    public function wrapWith($wrapperName, $driveStyle = null)
+    public function wrapWith(mixed $wrapperName, $driveStyle = null)
     {
         $this->wrapper = $wrapperName;
 
@@ -398,7 +398,7 @@ class Dir
      * @param string $path
      * @return Dir (neue instance)
      */
-    public function expand($path)
+    public function expand(mixed $path)
     {
         if (mb_strpos($path, '.') === 0) {
             return $this->sub($path);
@@ -511,8 +511,8 @@ class Dir
      * @param string|Dir $dir das Verzeichnis muss relativ sein
      * @chainable
      */
-    public function append($dir)
-    {
+    public function append(mixed $dir)
+    : static {
         if ($dir == null) {
             return $this;
         }
@@ -547,8 +547,8 @@ class Dir
      * @param string $subDirUrl with / at the end and / inbetween (dont' use backslash!)
      * @return Dir
      */
-    public function sub($subDirUrl)
-    {
+    public function sub(mixed $subDirUrl)
+    : static {
         $sub = clone $this;
         return $sub->append($subDirUrl);
     }
@@ -569,7 +569,7 @@ class Dir
      *
      * @chainable
      */
-    public function slice($start, $length = null)
+    public function slice(mixed $start, $length = null)
     {
         if (func_num_args() == 1) {
             $this->path = array_slice($this->path, $start);
@@ -607,8 +607,8 @@ class Dir
      * @param int $sort eine Konstante die bestimmt, wie die Dateien in Verzeichnissen sortiert ausgegeben werden sollen
      * @return array mit Dir und File
      */
-    public function getContents($extensions = null, array $ignores = null, $sort = null, $subDirs = null)
-    {
+    public function getContents(mixed $extensions = null, array $ignores = null, $sort = null, $subDirs = null)
+    : array {
         if (!$this->exists()) {
             throw new Exception('Verzeichnis existiert nicht: ' . $this);
         }
@@ -674,15 +674,9 @@ class Dir
             /* alphabetisch sortieren */
             if ($sort & self::SORT_ALPHABETICAL) {
                 if ($order == 'asc') {
-                    $function = create_function(
-                        '$a,$b',
-                        'return strcasecmp($a->getName(),$b->getName()); '
-                    );
+                    $function = fn($a,$b) => strcasecmp($a->getName(),$b->getName());
                 } else {
-                    $function = create_function(
-                        '$a,$b',
-                        'return strcasecmp($b->getName(),$a->getName()); '
-                    );
+                    $function = fn($a,$b) => strcasecmp($b->getName(),$a->getName());
                 }
 
                 uasort($content, $function);
@@ -699,7 +693,7 @@ class Dir
      * @param bool $subdirs wenn TRUE wird auch in Subverzeichnissen gesucht
      * @see getContents()
      */
-    public function getFiles($extensions = null, ?array $ignores = null, $subdirs = true)
+    public function getFiles(mixed $extensions = null, ?array $ignores = null, $subdirs = true)
     {
         if (is_string($extensions) && mb_strpos($extensions, '.') === 0) {
             $extensions = mb_substr($extensions, 1);
@@ -778,7 +772,7 @@ class Dir
      * @param int $flags
      * @chainable
      */
-    public function chmod($mode, $flags = null)
+    public function chmod(mixed $mode, $flags = null)
     {
         $ret = chmod((string) $this, $mode);
 
@@ -841,7 +835,7 @@ class Dir
      * @chainable
      */
     public function copy(Dir $destination, $extensions = null, $ignores = null, $subDirs = null)
-    {
+    : static {
         if ((string) $destination == (string) $this) {
             throw new Exception('Kann nicht kopieren: Zielverzeichnis und Quellverzeichns sind gleich.');
         }
@@ -875,7 +869,7 @@ class Dir
      * @chainable
      */
     public function move(Dir $destination)
-    {
+    : static {
         $ret = @rename((string) $this, (string) $destination);
 
         $errInfo = 'Kann Verzeichnis ' . $this . ' nicht nach ' . $destination . ' verschieben / umbenennen.';
@@ -958,7 +952,7 @@ class Dir
      *
      * wenn flat = TRUE ist, werden auch Unterverzeichnisse durchsucht. dies "flatted" die Files dann into $destination
      */
-    public function copyFiles($extension, Dir $destination, $flat = false, array $ignores = null)
+    public function copyFiles(mixed $extension, Dir $destination, $flat = false, array $ignores = null)
     {
         foreach ($this->getFiles($extension, $ignores, $flat) as $f) {
             $f->copy(new File($destination, $f->getName()));
@@ -978,7 +972,7 @@ class Dir
      * @param string|File $file
      * @return File
      */
-    public function getFile($file)
+    public function getFile(mixed $file)
     {
         if ($file instanceof File) {
             $fileName = $file->getName();
@@ -1005,7 +999,7 @@ class Dir
      * @return bool
      */
     public function exists()
-    {
+    : bool {
         if (count($this->path) == 0) {
             return false;
         }
@@ -1058,7 +1052,7 @@ class Dir
      * @return bool
      */
     public function isAbsolute()
-    {
+    : bool {
         return $this->prefix !== null;
     }
 
@@ -1080,8 +1074,8 @@ class Dir
      * the path is returned for the current Operating System
      * @return string
      */
-    public function getPath($flags = 0x000000)
-    {
+    public function getPath(mixed $flags = 0x000000)
+    : string {
         $ds = $this->getDS();
 
         $trail = $flags & self::WITHOUT_TRAILINGSLASH ? '' : $ds;
@@ -1108,7 +1102,7 @@ class Dir
      * @return string
      * @param const $os self::WINDOWS|self::UNIX
      */
-    public function getOSPath($os, $flags = 0x000000)
+    public function getOSPath(mixed $os, $flags = 0x000000)
     {
         $osDS = $this->getOSDS($os, $flags);
 
@@ -1158,7 +1152,7 @@ class Dir
      *
      * @return \ or /
      */
-    public function getOSDS($os, $flags = 0x000000)
+    public function getOSDS(mixed $os, $flags = 0x000000)
     {
         return ($this->isWrapped() || $this->isCygwin() || ($flags & self::WINDOWS_WITH_CYGWIN) || $os === self::UNIX) ? '/' : '\\';
     }
@@ -1198,7 +1192,7 @@ class Dir
      * @return bool
      */
     public function equals(Dir $dir)
-    {
+    : bool {
         return $this->getPath() === $dir->getPath();
     }
 
@@ -1206,7 +1200,7 @@ class Dir
      * @return array
      */
     public function getPathArray()
-    {
+    : array {
         return $this->path;
     }
 
@@ -1216,7 +1210,7 @@ class Dir
      * @return string
      */
     public function getName()
-    {
+    : string {
         if (count($this->path) > 0) {
             return $this->path[count($this->path) - 1];
         }
@@ -1260,11 +1254,11 @@ class Dir
     }
 
     public function __toString()
-    {
+    : string {
         return $this->getPath();
     }
 
-    public function getQuotedString($flags = 0)
+    public function getQuotedString(mixed $flags = 0)
     {
         $str = (string) $this;
 

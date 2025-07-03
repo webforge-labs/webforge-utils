@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\System;
 
@@ -26,30 +26,30 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     public function testThatTheFactoryReturnsADir(): void
     {
-        self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factory(__DIR__ . DIRECTORY_SEPARATOR));
+        self::assertInstanceOf(\Webforge\Common\System\Dir::class, Dir::factory(__DIR__ . DIRECTORY_SEPARATOR));
     }
 
     public function testThatTheTSFactoryReturnsADir_andWorksWithoutTrailingSlash(): void
     {
-        self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factoryTS(__DIR__));
+        self::assertInstanceOf(\Webforge\Common\System\Dir::class, Dir::factoryTS(__DIR__));
     }
 
     public function testFactoryTSCanHaveAnEmptyPath(): void
     {
-        self::assertInstanceOf('Webforge\Common\System\Dir', Dir::factoryTS());
+        self::assertInstanceOf(\Webforge\Common\System\Dir::class, Dir::factoryTS());
     }
 
     /**
      * @dataProvider providePathsWithoutTrailingSlash
      */
-    public function testFactoryDoesNotLikeDirectoriesWithoutSlash($erroneous): void
+    public function testFactoryDoesNotLikeDirectoriesWithoutSlash(string $erroneous): void
     {
         $this->expectException(\Webforge\Common\System\Exception::class);
 
         new Dir($erroneous);
     }
 
-    public static function providePathsWithoutTrailingSlash()
+    public static function providePathsWithoutTrailingSlash(): array
     {
         return [
           ['/var/local/missing/trail'],
@@ -78,7 +78,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function provideDifferentPaths()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideDifferentPaths(): array
     {
         $tests = [];
 
@@ -160,7 +163,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAbsoluteOrRelative
      */
-    public function testAbsoluteOrRelative($path, $isAbsolute): void
+    public function testAbsoluteOrRelative(string $path, $isAbsolute): void
     {
         $dir = new Dir($path);
         if ($isAbsolute) {
@@ -175,12 +178,15 @@ class DirTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideAbsoluteOrRelative
      */
-    public function testIsAbsolutePath($path, $isAbsolute): void
+    public function testIsAbsolutePath(string $path, $isAbsolute): void
     {
         self::assertEquals($isAbsolute, Dir::isAbsolutePath($path), '::isAbsolutePath(' . $path . ')');
     }
 
-    public static function provideAbsoluteOrRelative()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideAbsoluteOrRelative(): array
     {
         $tests = [];
 
@@ -259,9 +265,9 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMACTime_Acceptance(): void
     {
-        self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getModifiedTime());
-        self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getCreateTime());
-        self::assertInstanceof('Webforge\Common\DateTime\DateTime', $this->dir->getAccessTime());
+        self::assertInstanceof(\Webforge\Common\DateTime\DateTime::class, $this->dir->getModifiedTime());
+        self::assertInstanceof(\Webforge\Common\DateTime\DateTime::class, $this->dir->getCreateTime());
+        self::assertInstanceof(\Webforge\Common\DateTime\DateTime::class, $this->dir->getAccessTime());
     }
 
     public function testCygwinPathsAreTreatedCorrectly(): void
@@ -284,7 +290,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedPath, Dir::fixToUnixPath($actualPath));
     }
 
-    public static function provideFixToUnixPath()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideFixToUnixPath(): array
     {
         $tests = [];
 
@@ -315,7 +324,10 @@ class DirTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function provideCreateFromURL()
+    /**
+     * @return list<list<mixed>>
+     */
+    public static function provideCreateFromURL(): array
     {
         $tests = [];
 

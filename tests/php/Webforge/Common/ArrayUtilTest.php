@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Psc;
 
@@ -154,13 +154,16 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideInsert_OOB
      */
-    public function testInsert_OOB($array, $offset): void
+    public function testInsert_OOB(array $array, $offset): void
     {
         $this->expectException(\OutOfBoundsException::class);
         A::insert($array, null, $offset);
     }
 
-    public static function provideInsert_OOB()
+    /**
+     * @return list<array{mixed, mixed}>
+     */
+    public static function provideInsert_OOB(): array
     {
         $tests = [];
 
@@ -193,9 +196,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
     {
         $array = [[0 => 'eins'],[0 => 'zwei'],[0 => 'drei']];
 
-        self::assertEquals('eins<- ->zwei<- ->drei', A::implode($array, '<- ->', function ($value) {
-            return $value[0];
-        }));
+        self::assertEquals('eins<- ->zwei<- ->drei', A::implode($array, '<- ->', fn ($value) => $value[0]));
     }
 
     public function testImplode_keys(): void
@@ -207,9 +208,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
             A::implode(
                             $array,
                             '<- ->',
-                            function ($value, $key) {
-                              return '[' . $key . ']' . mb_strtoupper($value);
-                          }
+                            fn ($value, $key): string => '[' . $key . ']' . mb_strtoupper($value)
                         )
         );
     }
@@ -220,9 +219,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals('[1]eins [2]zwei [3]drei ', A::join($array, '[%2$s]%1$s '));
         self::assertEquals('[1]eins [2]zwei [3]drei ', A::joinc($array, '[%2$s]%1$s '));
-        self::assertEquals('[1]EINS [2]ZWEI [3]DREI ', A::joinc($array, '[%2$s]%1$s ', function ($value) {
-            return mb_strtoupper($value);
-        }));
+        self::assertEquals('[1]EINS [2]ZWEI [3]DREI ', A::joinc($array, '[%2$s]%1$s ', fn ($value) => mb_strtoupper($value)));
     }
 
     public function testIndex(): void
@@ -313,9 +310,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
                              ],
             A::mapKeys(
                             $array,
-                            function ($key) {
-                                       return ucfirst($key);
-                                   }
+                            fn ($key): string => ucfirst($key)
                         )
         );
 
@@ -326,12 +321,8 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
                              ],
             A::mapKeys(
                             $array,
-                            function ($key) {
-                                       return ucfirst($key);
-                                   },
-                            function ($value) {
-                                       return strtoupper($value);
-                                   }
+                            fn ($key): string => ucfirst($key),
+                            fn ($value) => strtoupper($value)
                         )
         );
     }
@@ -387,7 +378,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function getPluckTests()
+    public static function getPluckTests(): array
     {
         $tests = [];
 
@@ -427,9 +418,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
       'Accept' => '*/*'
     ];
 
-        $filter = function ($headerName, $headerValue) {
-            return $headerName != 'Content-Length';
-        };
+        $filter = (fn ($headerName, $headerValue): bool => $headerName != 'Content-Length');
 
         self::assertEquals(
             [
@@ -463,9 +452,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             (array) json_decode('{ "left": { "dir": "left", "code": 97 }, "right": { "dir": "right", "code": 100 } }'),
-            A::indexBy($array, function ($item) {
-          return $item->dir;
-      })
+            A::indexBy($array, fn ($item) => $item->dir)
         );
     }
 

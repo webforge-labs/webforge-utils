@@ -7,9 +7,9 @@ namespace Webforge\Common\DateTime;
  */
 class Date extends DateTime
 {
-    public static function createFromDateTime(DateTime $dateTime)
+    public static function createFromDateTime(DateTime $dateTime): static
     {
-        $date = new static($dateTime->format('U'));
+        $date = new self($dateTime->format('U'));
         //$date->setTime(0,0,0); // macht constructor schon
 
         return $date;

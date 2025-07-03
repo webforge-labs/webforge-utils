@@ -92,10 +92,10 @@ class Preg
      * @return string|array
      * @see PHP::preg_replace
      */
-    public static function replace($subject, $pattern, $replace, $limit = -1, &$count = null)
+    public static function replace(mixed $subject, string $pattern, mixed $replace, int $limit = -1, ?int &$count = null): array|string|null
     {
         $pattern = self::set_u_modifier($pattern, true);
-        return (preg_replace($pattern, $replace, $subject, $limit, $count));
+        return preg_replace($pattern, $replace, $subject, $limit, $count);
     }
 
     /**
@@ -113,7 +113,7 @@ class Preg
      * </code>
      * @see PHP::preg_replace_callback
      */
-    public static function replace_callback($subject, $pattern, $callback, $limit = -1)
+    public static function replace_callback(mixed $subject, string $pattern, callable $callback, int $limit = -1): array|string|null
     {
         return preg_replace_callback(self::set_u_modifier($pattern, true), $callback, $subject, $limit);
     }
