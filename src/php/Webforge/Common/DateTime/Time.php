@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\DateTime;
 
 class Time
@@ -9,9 +11,8 @@ class Time
    *
    * @param float $timespan in Sekunden
    * @param string $format http://de2.php.net/manual/de/dateinterval.format.php
-   * @return string
    */
-    public static function formatSpan($timespan, $format = '%Y years %M Months %D days %I Minutes %S seconds %H hours %n milliseconds')
+    public static function formatSpan($timespan, $format = '%Y years %M Months %D days %I Minutes %S seconds %H hours %n milliseconds'): string
     {
         $dv = Time::getDateInterval($timespan);
 
@@ -20,10 +21,9 @@ class Time
 
     /**
      * @param float $timespan in Sekunden
-     * @return DateInterval
      * @TODO Tests schreiben
      */
-    public static function getDateInterval($timespan)
+    public static function getDateInterval($timespan): DateInterval
     {
         /* Man könnte meinen, dass es einfach return new DateInterval('PT'.$timespan.'S') auch tut
           dann werden aber die Sekunden nicht auf Jahre / Tage / Monate verteilt.
@@ -61,10 +61,9 @@ class Time
         }
     }
     /**
-     * @return DateTime
      * @TODO Tests schreiben
      */
-    public static function getFirstOfMonth($month = null, $year = null)
+    public static function getFirstOfMonth($month = null, $year = null): \Webforge\Common\DateTime\DateTime
     {
         if (!isset($month)) {
             $month = date('m');
@@ -76,10 +75,9 @@ class Time
     }
 
     /**
-     * @return DateTime
      * @TODO Tests schreiben
      */
-    public static function getLastOfMonth($month = null, $year = null)
+    public static function getLastOfMonth($month = null, $year = null): \Webforge\Common\DateTime\DateTime
     {
         if (!isset($month)) {
             $month = date('m');
@@ -91,10 +89,9 @@ class Time
     }
 
     /**
-     * @return int
      * @TODO Tests schreiben
      */
-    public static function getDaysNumOfMonth($month = null, $year = null)
+    public static function getDaysNumOfMonth($month = null, $year = null): int
     {
         if (!isset($month)) {
             $month = date('m');
@@ -106,10 +103,7 @@ class Time
         return (int) $first->format('t');
     }
 
-    /**
-     * @return int
-     */
-    public static function getAge(DateTime $birthday, $now = null)
+    public static function getAge(DateTime $birthday, $now = null): int
     {
         if (!isset($now)) {
             $now = DateTime::now();

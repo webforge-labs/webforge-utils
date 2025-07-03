@@ -55,7 +55,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['stechuhr', 'ps-webforge', 'com'],
             ['index.php'],
-            []
+            [],
         ];
 
         $urls[1] = [
@@ -64,7 +64,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['sebastian-bergmann', 'de'],
             ['archives', '797-Global-Variables-and-PHPUnit.html'],
-            []
+            [],
         ];
 
         $urls[2] = [
@@ -73,7 +73,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['tiptoi', 'philipp', 'zpintern'],
             ['test'],
-            []
+            [],
         ];
 
         $urls[3] = [
@@ -82,7 +82,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['www', 'google', 'com'],
             [],
-            []
+            [],
         ];
 
         $urls[4] = [
@@ -101,7 +101,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['www', 'google', 'de'],
             ['search'],
-            ['q' => 'symfony request handler', 'ie' => 'utf-8']
+            ['q' => 'symfony request handler', 'ie' => 'utf-8'],
         ];
 
         $urls[6] = [
@@ -110,7 +110,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['127', '0', '0', '1'],
             [],
-            []
+            [],
         ];
 
         $urls[7] = [
@@ -128,7 +128,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['stechuhr', 'ps-webforge', 'com'],
             ['index.php', 'path', 'to', 'heaven'],
-            ['lang' => 'nix']
+            ['lang' => 'nix'],
         ];
 
         $urls[9] = [
@@ -137,7 +137,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'http',
             ['stechuhr', 'ps-webforge', 'com'],
             ['index.php', 'path', 'to', 'heaven'],
-            ['lang' => 'nix']
+            ['lang' => 'nix'],
         ];
 
         return $urls;
@@ -166,19 +166,19 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $tests[] = [
             'http://www.example.com',
             '/relative/url/file.html',
-            'http://www.example.com/relative/url/file.html'
+            'http://www.example.com/relative/url/file.html',
         ];
 
         $tests[] = [
             'http://www.example.com/',
             '/relative/url/file.html',
-            'http://www.example.com/relative/url/file.html'
+            'http://www.example.com/relative/url/file.html',
         ];
 
         $tests[] = [
             'http://www.example.com/sub/dir',
             '/relative/url/file.html',
-            'http://www.example.com/sub/dir/relative/url/file.html'
+            'http://www.example.com/sub/dir/relative/url/file.html',
         ];
 
         /* YAGNI? */

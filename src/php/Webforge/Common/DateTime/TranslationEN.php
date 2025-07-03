@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\DateTime;
 
 class TranslationEN extends Translation
@@ -18,7 +20,7 @@ class TranslationEN extends Translation
     9 => 'September',
     10 => 'October',
     11 => 'November',
-    12 => 'December'
+    12 => 'December',
   ];
 
     public $weekdays = [
@@ -53,6 +55,6 @@ class TranslationEN extends Translation
     9 => 'Sep',
     10 => 'Oct',
     11 => 'Nov',
-    12 => 'Dec'
+    12 => 'Dec',
   ];
 }

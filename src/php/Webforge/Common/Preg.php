@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use Psc\Code\Code;
@@ -24,7 +26,7 @@ class Preg
      * @see PHP::preg_match
      * @see PHP::preg_match_all
      */
-    public static function match($subject, $pattern, &$matches = null, $flags = null, $offset = 0)
+    public static function match($subject, $pattern, &$matches = null, $flags = null, $offset = 0): int
     {
         $pattern = self::set_u_modifier($pattern, true);
 
@@ -55,28 +57,17 @@ class Preg
     }
 
     // @codeCoverageIgnoreStart
-    public static function getError($error)
+    public static function getError($error): ?string
     {
-        switch ($error) {
-      case PREG_NO_ERROR:
-        return 'There was no error.';
-
-      case PREG_INTERNAL_ERROR:
-        return 'Internal Error in Preg Library.';
-
-      case PREG_BACKTRACK_LIMIT_ERROR:
-        return 'Backtrack limit exhausted.';
-
-      case PREG_RECURSION_LIMIT_ERROR:
-        return 'Recursion limit exhausted.';
-
-      case PREG_BAD_UTF8_ERROR:
-        return 'Subject contains Bad UTF8';
-
-      case PREG_BAD_UTF8_OFFSET_ERROR:
-        return 'Bad UTF8 Offset.';
-    }
-        return null;
+        return match ($error) {
+            PREG_NO_ERROR => 'There was no error.',
+            PREG_INTERNAL_ERROR => 'Internal Error in Preg Library.',
+            PREG_BACKTRACK_LIMIT_ERROR => 'Backtrack limit exhausted.',
+            PREG_RECURSION_LIMIT_ERROR => 'Recursion limit exhausted.',
+            PREG_BAD_UTF8_ERROR => 'Subject contains Bad UTF8',
+            PREG_BAD_UTF8_OFFSET_ERROR => 'Bad UTF8 Offset.',
+            default => null,
+        };
     }
     // @codeCoverageIgnoreEnd
 
@@ -89,7 +80,6 @@ class Preg
      * @param mixed $replace Ersetzungen (string oder array aus strings)
      * @param int $limit Optionale maximale Ersetzungsanzahl (-1 == No limit)
      * @param int $count Wird mit der Anzahl der Ersetzungsaktionen befüllt werden
-     * @return string|array
      * @see PHP::preg_replace
      */
     public static function replace(mixed $subject, string $pattern, mixed $replace, int $limit = -1, ?int &$count = null): array|string|null
@@ -124,14 +114,13 @@ class Preg
      * Gibt das Regex-Pattern mit u modifier zurück oder ohne u modifier zurück
      * @param string $pattern Das Regex-Pattern
      * @param bool $add wenn true wird der modifier hinzugefügt, ansonsten entfernt
-     * @return string
      */
-    protected static function set_u_modifier($pattern, $add = true)
+    protected static function set_u_modifier($pattern, $add = true): string
     {
         return self::setModifier($pattern, 'u', $add);
     }
 
-    public static function setModifier($pattern, $modifier, $add = true)
+    public static function setModifier($pattern, string $modifier, $add = true)
     {
         /* aufsplitten */
         $delimiter = mb_substr($pattern, 0, 1);
@@ -157,7 +146,7 @@ class Preg
      * @param int|int[] $set ist dies ein array von ints werden die offset aus dem matching zurückgegeben (nicht gecheckt)
      * @return string|null|array  gibt immer dann NULL ($default) zurück wenn nichts gematched hat
      */
-    public static function qmatch($string, $rx, $set = 1, $default = null)
+    public static function qmatch($string, $rx, $set = 1, $default = null): string|array|null
     {
         $m = [];
         if (self::match($string, $rx, $m) > 0) {
@@ -176,9 +165,8 @@ class Preg
      * Ein rxArray ist ein Array der als Schlüssel Reguläre Ausdrücke (fertig escaped etc) hat und als werte den Zielwert
      *
      * @param rxArray $rxArray
-     * @return mixed
      */
-    public static function matchArray($rxArray, $value, $do = self::THROW_EXCEPTION)
+    public static function matchArray($rxArray, $value, $do = self::THROW_EXCEPTION): mixed
     {
         foreach ($rxArray as $rx => $target) {
             if (self::match($value, $rx) > 0) {
@@ -197,9 +185,8 @@ class Preg
      * So wie matchArray jedoch stoppt dies nicht nach der ersten Bedingung
      *
      * returns the corrosponding values of all matching keys
-     * @return array
      */
-    public static function matchFullArray($rxArray, $value, $do = self::THROW_EXCEPTION)
+    public static function matchFullArray($rxArray, $value, $do = self::THROW_EXCEPTION): array
     {
         $targets = [];
         foreach ($rxArray as $rx => $target) {

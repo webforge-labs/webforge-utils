@@ -1,33 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use Webforge\Common\Exception\InExceptionExportable;
 
 class Exception extends \Exception implements Exception\MessageException
 {
-  /**
-   * @chainable
-   */
-    public function setMessage($msg)
+    public function setMessage($msg): static
     {
         $this->message = $msg;
         return $this;
     }
 
-    /**
-     * @chainable
-     */
-    public function appendMessage($msg)
+    public function appendMessage($msg): static
     {
         $this->message .= $msg;
         return $this;
     }
 
-    /**
-     * @chainable
-     */
-    public function prependMessage($msg)
+    public function prependMessage($msg): static
     {
         $this->message = $msg . $this->message;
         return $this;
@@ -37,14 +30,13 @@ class Exception extends \Exception implements Exception\MessageException
      * Returns a nicer string Representation for the Exception
      *
      * @param string $format text|html
-     * @return string
      */
-    public function toString($format = 'text', $relativeDir = null, $relativeDirLabel = null)
+    public function toString($format = 'text', $relativeDir = null, ?string $relativeDirLabel = null): string
     {
         return self::getExceptionText($this, $format, $relativeDir, $relativeDirLabel);
     }
 
-    public static function getExceptionText(\Exception $e, $format = 'html', $relativeDir = null, $relativeDirLabel = 'ROOT')
+    public static function getExceptionText(\Exception $e, $format = 'html', $relativeDir = null, string $relativeDirLabel = 'ROOT'): string
     {
         $cr = $format == 'html' ? "<br />\n" : "\n";
 
@@ -71,7 +63,7 @@ class Exception extends \Exception implements Exception\MessageException
             $text .= $cr . '<b>Fatal Error:</b> ';
         }
 
-        $text .= 'Uncaught exception \'' . get_class($e) . '\' with message:' . $cr;
+        $text .= 'Uncaught exception \'' . $e::class . '\' with message:' . $cr;
         if ($e instanceof InExceptionExportable) {
             $text .= str_replace("\n", $cr, wordwrap($e->exportExceptionText(), 140, "\n")) . $cr;
         } else {

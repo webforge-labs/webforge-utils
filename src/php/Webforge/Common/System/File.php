@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\System;
 
 use BadMethodCallException;
@@ -12,7 +14,7 @@ use Webforge\Common\Util as Code;
 /**
  * @todo refactor exceptions to be multi-lingual (english / german)
  */
-class File
+class File implements \Stringable
 {
     public const EXCLUSIVE = 0x000001;
 
@@ -24,32 +26,24 @@ class File
 
     /**
      * Name of File without Extension
-     * @var string
      */
-    protected mixed $name;
+    protected string $name;
 
     /**
      * File Ending (if any) without .
-     * @var string
      */
-    protected mixed $extension;
+    protected string $extension;
 
-    /**
-     * @var Webforge\Common\System\Dir
-     */
-    protected mixed $directory;
+    protected Dir $directory;
 
-    /**
-     * @var string
-     */
-    protected mixed $mimeType;
+    protected string $mimeType;
 
     /**
      * Cache for hash (sha1)
      */
     protected mixed $sha1;
 
-    public function __construct(mixed $arg1, $arg2 = null)
+    public function __construct(mixed $arg1, mixed $arg2 = null)
     {
         if ($arg1 instanceof Dir) {
             $this->constructDefault($arg2, $arg1);
@@ -63,17 +57,15 @@ class File
                 $signatur[] = Code::getType($arg);
             }
 
-            throw new BadMethodCallException('No Constructor defined for ' . get_class($this) . ' with: ' . implode(', ', $signatur));
+            throw new BadMethodCallException('No Constructor defined for ' . static::class . ' with: ' . implode(', ', $signatur));
         }
     }
 
     /**
      * Creates a temporary File in the system temp directory
-     *
-     * @return self
      */
-    public static function createTemporary($extension = null)
-    : static {
+    public static function createTemporary($extension = null): static
+    {
         $tmpfile = tempnam(sys_get_temp_dir(), mb_substr(uniqid(), 0, 3));
 
         if ($extension) {
@@ -85,10 +77,8 @@ class File
 
     /**
      * Creates the file from a relative URL in relation to $base
-     *
-     * @return self
      */
-    public static function createFromURL($url, ?Dir $base = null)
+    public static function createFromURL($url, ?Dir $base = null): self
     {
         if (!isset($base)) {
             $base = new Dir('.' . DIRECTORY_SEPARATOR);
@@ -113,7 +103,7 @@ class File
         $dir = null;
         try {
             $dir = Dir::extract($file);
-        } catch (Exception $e) {
+        } catch (Exception) {
             /* kein Verzeichnis vorhanden, vll ein Notice? (aber eigentlich sollte dies ja auch okay sein */
         }
 
@@ -137,11 +127,7 @@ class File
         }
     }
 
-    /**
-     * @return self
-     */
-    public static function factory($arg1, $arg2 = null)
-    : static {
+    public static function factory($arg1, $arg2 = null): static {
         return new self($arg1, $arg2);
     }
 
@@ -152,9 +138,8 @@ class File
      *
      * @param string $contents
      * @param int $flags File::EXCLUSIVE
-     * @chainable
      */
-    public function writeContents(mixed $contents, $flags = null)
+    public function writeContents(mixed $contents, $flags = null): static
     {
         if ($this->exists() && !$this->isWriteable()) {
             throw new Exception('Dateiinhalt kann nicht geschrieben werden. (exists/writeable) ' . $this);
@@ -187,11 +172,8 @@ class File
 
     /**
      * Returns the contents of the file
-     *
-     * @return string
      */
-    public function getContents(mixed $maxLength = null)
-    : string {
+    public function getContents(mixed $maxLength = null): string {
         if (isset($maxLength)) {
             $ret = @file_get_contents(
                 (string)$this,
@@ -229,8 +211,7 @@ class File
      *
      * @return bool
      */
-    public function move(File $fileDestination, $overwrite = false)
-    : static {
+    public function move(File $fileDestination, $overwrite = false): static {
         if (!$this->exists()) {
             throw new Exception('Quelle von move existiert nicht. ' . $this);
         }
@@ -243,7 +224,7 @@ class File
             throw new Exception('Das ZielVerzeichnis von move existiert nicht: ' . $fileDestination->getDirectory());
         }
 
-        if ($fileDestination->exists() && $overwrite && substr(PHP_OS, 0, 3) == 'WIN') {
+        if ($fileDestination->exists() && $overwrite && str_starts_with(PHP_OS, 'WIN')) {
             $fileDestination->delete();
         }
 
@@ -260,11 +241,8 @@ class File
 
     /**
      * Copys the file to another file or into an directory
-     *
-     * @chainable
      */
-    public function copy(mixed $destination)
-    : static {
+    public function copy(mixed $destination): static {
         if (!$this->exists()) {
             throw new Exception('Source from copy does not exist: ' . $this);
         }
@@ -292,9 +270,8 @@ class File
      * Deletes the file (if exists)
      *
      * returns true if the file could be deleted
-     * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         if (!$this->isWriteable()) {
             return false;
@@ -310,9 +287,8 @@ class File
      *
      * $file->chmod(0644);  for: u+rw g+rw a+r
      * @param octal $mode
-     * @chainable
      */
-    public function chmod(mixed $mode)
+    public function chmod(mixed $mode): static
     {
         $ret = chmod((string) $this, $mode);
 
@@ -325,34 +301,25 @@ class File
 
     /**
      * Does the file exist physically?
-     * @return bool
      */
-    public function exists()
-    : bool {
+    public function exists(): bool {
         return mb_strlen($this->getName()) > 0 && is_file((string) $this);
     }
 
     /**
      * Überprüft ob eine Datei lesbar ist
-     * @return bool
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return is_readable((string) $this);
     }
 
-    /**
-     * @return bool
-     */
-    public function isWriteable()
+    public function isWriteable(): bool
     {
         return $this->exists() && is_writable((string) $this);
     }
 
-    /**
-     * @return bool
-     */
-    public function isRelative()
+    public function isRelative(): bool
     {
         return $this->directory->isRelative();
     }
@@ -363,9 +330,8 @@ class File
      * If extension is NOT found in $name extension won't be replaced
      *
      * @param string $name filename with extension
-     * @chainable
      */
-    public function setName(mixed $name)
+    public function setName(mixed $name): static
     {
         if (($pos = mb_strrpos($name, '.')) !== false) {
             $this->name = mb_substr($name, 0, $pos);
@@ -379,11 +345,8 @@ class File
 
     /**
      * Returns the full name of the file (with or without extension)
-     *
-     * @return string
      */
-    public function getName(mixed $extension = self::WITH_EXTENSION)
-    : string {
+    public function getName(mixed $extension = self::WITH_EXTENSION): string {
         if (isset($this->extension) && $extension == self::WITH_EXTENSION) {
             return $this->name . '.' . $this->extension;
         } else {
@@ -393,28 +356,22 @@ class File
 
     /**
      * Sets the directory of the file
-     * @chainable
      */
-    public function setDirectory(Dir $directory)
+    public function setDirectory(Dir $directory): static
     {
         $this->directory = $directory;
         return $this;
     }
 
-    /**
-     * @return Dir
-     */
-    public function getDirectory()
+    public function getDirectory(): \Webforge\Common\System\Dir
     {
         return $this->directory;
     }
 
     /**
      * Returns the filename with quotes if dir or file have whitespace in their names
-     *
-     * @return string
      */
-    public function getQuotedString()
+    public function getQuotedString(): string
     {
         $str = (string) $this;
 
@@ -427,15 +384,13 @@ class File
 
     /**
      * Returns on Unix an Unix path and on Windows an Cygdrive compatible path
-     *
-     * @return string
      */
-    public function getUnixOrCygwinPath()
+    public function getUnixOrCygwinPath(): string
     {
         return $this->getOSPath($this->directory->getOS(), Dir::WINDOWS_WITH_CYGWIN);
     }
 
-    public function getOSPath(mixed $os, $flags = 0x000000)
+    public function getOSPath(mixed $os, $flags = 0x000000): string
     {
         $dir = $this->getDirectory()->getOSPath($os, $flags);
 
@@ -445,17 +400,13 @@ class File
     /**
      * @return tring
      */
-    public function __toString()
-    : string {
+    public function __toString(): string {
         $dir = (string) $this->getDirectory();
 
         return $dir . $this->getName();
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getModifiedTime()
+    public function getModifiedTime(): \Webforge\Common\DateTime\DateTime
     {
         if (!$this->exists()) {
             throw new Exception('Kann keine mtime für eine Datei zurückgeben die nicht existiert. ' . $this);
@@ -464,10 +415,7 @@ class File
         return new Datetime(filemtime((string) $this));
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getAccessTime()
+    public function getAccessTime(): \Webforge\Common\DateTime\DateTime
     {
         if (!$this->exists()) {
             throw new Exception('Kann keine atime für eine Datei zurückgeben die nicht existiert. ' . $this);
@@ -477,17 +425,13 @@ class File
 
     /**
      * @discouraged
-     * @return DateTime
      */
-    public function getCreateTime()
+    public function getCreateTime(): DateTime
     {
         return $this->getCreationTime();
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getCreationTime()
+    public function getCreationTime(): \Webforge\Common\DateTime\DateTime
     {
         if (!$this->exists()) {
             throw new Exception('Kann keine ctime für eine Datei zurückgeben die nicht existiert. ' . $this);
@@ -502,9 +446,8 @@ class File
      * ist <var>$extension</var> === NULL wird die Extension gelöscht
      *
      * @param string $extension die Erweiterung (der . davor ist optional)
-     * @chainable
      */
-    public function setExtension(mixed $extension = null)
+    public function setExtension(mixed $extension = null): static
     {
         if ($extension != null && mb_strpos($extension, '.') === 0) {
             $this->extension = mb_substr($extension, 1);
@@ -517,10 +460,8 @@ class File
 
     /**
      * Returns the extension (if any) of a filename without the .
-     *
-     * @return string|null
      */
-    public static function extractExtension($name)
+    public static function extractExtension($name): ?string
     {
         if (($pos = mb_strrpos($name, '.')) !== false) {
             return mb_substr($name, $pos + 1);
@@ -539,7 +480,7 @@ class File
      * $dir->getFile('thefile')->findExtension(array('js', 'csv')); // returns thefile.js
      * $dir->getFile('thefile')->findExtension(array('html', 'csv')); // returns thefile.csv
      */
-    public function findExtension(array $possibleExtensions)
+    public function findExtension(array $possibleExtensions): static
     {
         foreach ($possibleExtensions as $extension) {
             $file = clone $this;
@@ -560,7 +501,7 @@ class File
      * @param string $string der Pfad zur Datei
      * @return File die extrahierte Datei aus dem Pfad
      */
-    public function extract(mixed $string)
+    public function extract(mixed $string): self
     {
         return new self(self::extractFilename($string));
     }
@@ -571,7 +512,7 @@ class File
      * @param string $string ein Pfad zu einer Datei
      * @return string name der Datei
      */
-    public static function extractFilename($string)
+    public static function extractFilename($string): string
     {
         if (mb_strlen($string) == 0) {
             throw new Exception('Cannot extract filename from empty string');
@@ -595,9 +536,8 @@ class File
      * Resolves relative parts of the path to absolute ones
      *
      * the getcwd() directory is used as "."
-     * @chainable
      */
-    public function resolvePath()
+    public function resolvePath(): static
     {
         $this->directory->resolvePath();
         return $this;
@@ -605,10 +545,8 @@ class File
 
     /**
      * Modifies the directory to be a relative directory in relation to $dir
-     *
-     * @chainable
      */
-    public function makeRelativeTo(Dir $dir)
+    public function makeRelativeTo(Dir $dir): static
     {
         $this->directory->makeRelativeTo($dir);
         return $this;
@@ -617,7 +555,7 @@ class File
     /**
      * @return int in bytes
      */
-    public function getSize()
+    public function getSize(): int|false
     {
         return filesize((string) $this);
     }
@@ -627,13 +565,13 @@ class File
      *
      * @return string with forward slashes and the names rawurlencoded
      */
-    public function getURL(?Dir $relativeDir = null)
+    public function getURL(?Dir $relativeDir = null): string
     {
         // rtrim entfernt den TrailingSlash der URL (der eigentlich nie da sein sollte, außer falls directoryURL nur "/" ist)
         return rtrim($this->directory->getURL($relativeDir), '/') . '/' . rawurlencode($this->getName(self::WITH_EXTENSION));
     }
 
-    public function getHTMLEscapedUrl(?Dir $relativeDir = null)
+    public function getHTMLEscapedUrl(?Dir $relativeDir = null): string
     {
         return rtrim($this->directory->getURL($relativeDir), '/') . '/' . \Psc\HTML\HTML::esc(rawurlencode($this->getName(self::WITH_EXTENSION)));
     }
@@ -643,9 +581,8 @@ class File
      *
      * Attention: the file must exist
      * the hash is cached
-     * @return string
      */
-    public function getSha1()
+    public function getSha1(): string
     {
         if (!isset($this->sha1)) {
             $this->sha1 = sha1_file((string) $this);
@@ -657,7 +594,7 @@ class File
     /**
      * Overwrites the sha1 hash from File
      */
-    public function setSha1(mixed $sha1)
+    public function setSha1(mixed $sha1): static
     {
         $this->sha1 = $sha1;
         return $this;
@@ -665,10 +602,8 @@ class File
 
     /**
      * Returns the Extension of the file (if any) without the .
-     *
-     * @returns string
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
@@ -682,9 +617,8 @@ class File
      * @param string $name
      * @param bool $lower return name in low
      * @param int $maxlen default is 250, cuts the filename at maxlen
-     * @return string
      */
-    public static function safeName($name, $lower = false, $maxlen = 250)
+    public static function safeName($name, $lower = false, $maxlen = 250): string|array|null
     {
         $noalpha = ['Á','É','Í','Ó','Ú','Ý','á','é','í','ó','ú','ý','Â','Ê','Î','Ô','Û','â','ê','î','ô','û','À','È','Ì','Ò','Ù','à','è','ì','ò','ù','Ä','Ë','Ï','Ö','Ü','ä','ë','ï','ö','ü','ÿ','Ã','ã','Õ','õ','Å','å','Ñ','ñ','Ç','ç','@','°','º','ª', 'ß'];
         $alpha = ['A','E','I','O','U','Y','a','e','i','o','u','y','A','E','I','O','U','a','e','i','o','u','A','E','I','O','U','a','e','i','o','u','Ae','E','I','Oe','Ue','ae','e','i','oe','ue','y','A','a','O','o','A','a','N','n','C','c','a','o','o','a', 'ss'];

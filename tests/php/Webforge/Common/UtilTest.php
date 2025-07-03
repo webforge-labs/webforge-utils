@@ -60,7 +60,8 @@ class UtilTest extends \PHPUnit\Framework\TestCase
     public function testCastArray($item, $expected): void
     {
         $this->assertEquals(
-            $expected, Util::castArray($item),
+            $expected,
+            Util::castArray($item),
         );
     }
 

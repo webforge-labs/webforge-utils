@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use Closure;
@@ -18,9 +20,8 @@ class Util
      * it's slow!
      *
      * @param mixed $var
-     * @return string
      */
-    public static function varInfo($var, $type = null)
+    public static function varInfo($var, $type = null): string
     {
         if ($var === null) {
             return 'NULL';
@@ -37,9 +38,7 @@ class Util
         } elseif ($type == 'array') {
             return sprintf(
                 'array(%s)',
-                A::implode($var, ', ', function ($item) {
-            return Util::varInfo($item);
-        })
+                A::implode($var, ', ', fn ($item): string => Util::varInfo($item))
             );
         } elseif ($var instanceof Info) {
             return $var->getVarInfo();
@@ -70,7 +69,7 @@ class Util
         $type = gettype($var);
 
         if ($type == 'object') {
-            return 'object:' . get_class($var);
+            return 'object:' . $var::class;
         }
         if ($type == 'boolean') {
             return 'bool';
@@ -94,14 +93,12 @@ class Util
      * Diese Funktion wirklich nur zu Debug-Zwecken benutzen (in Exceptions), da sie sehr langsam ist
      *
      * Gbit den Typ und weitere Informationen zum Typ zurück
-     * @param mixed $var
-     * @return string
      */
     public static function typeInfo(mixed $var): string {
         $string = gettype($var);
 
         if ($string == 'object') {
-            $string .= ' (' . get_class($var) . ')';
+            $string .= ' (' . $var::class . ')';
         }
 
         if ($string == 'array') {
@@ -115,28 +112,19 @@ class Util
         return $string;
     }
 
-    /**
-     * @return Closure
-     */
     public static function castGetterFromSample(mixed $getter, mixed $sampleObject): Closure {
         if (!($getter instanceof Closure)) {
             if (mb_strpos($getter, 'get') !== 0) {
                 if (ClassUtil::hasPublicProperty($sampleObject, $getter)) {
                     $prop = $getter;
-                    $getter = function ($o) use ($prop) {
-                        return $o->$prop;
-                    };
+                    $getter = (fn ($o) => $o->$prop);
                 } else {
                     $get = 'get' . ucfirst($getter);
-                    $getter = function ($o) use ($get) {
-                        return $o->$get();
-                    };
+                    $getter = (fn ($o) => $o->$get());
                 }
             } else {
                 $get = $getter;
-                $getter = function ($o) use ($get) {
-                    return $o->$get();
-                };
+                $getter = (fn ($o) => $o->$get());
             }
         }
 
@@ -145,7 +133,6 @@ class Util
 
     /**
      * @param array|Traversable|mixed $collection
-     * @return array
      */
     public static function castArray(mixed $collection): array
     {

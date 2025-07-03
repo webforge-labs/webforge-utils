@@ -206,10 +206,10 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             '[0]EINS<- ->[1]ZWEI<- ->[2]DREI',
             A::implode(
-                            $array,
-                            '<- ->',
-                            fn ($value, $key): string => '[' . $key . ']' . mb_strtoupper($value)
-                        )
+                $array,
+                '<- ->',
+                fn ($value, $key): string => '[' . $key . ']' . mb_strtoupper($value)
+            )
         );
     }
 
@@ -278,9 +278,9 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         'display' => true,
         'subTemplate' => [
           'value1' => 'info1',
-          'value2' => 'info2'
-        ]
-      ]
+          'value2' => 'info2',
+        ],
+      ],
     ];
 
         self::assertEquals(
@@ -289,9 +289,9 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
                                       'display' => 'boolean',
                                       'subTemplate' => [
                                         'value1' => 'string',
-                                        'value2' => 'string'
-                                      ]
-                                    ]
+                                        'value2' => 'string',
+                                      ],
+                                    ],
                              ],
             A::keys($vars)
         );
@@ -306,24 +306,24 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             ['Key1' => 'value1',
                               'Key2' => 'value2',
-                              'Key3' => 'value3'
+                              'Key3' => 'value3',
                              ],
             A::mapKeys(
-                            $array,
-                            fn ($key): string => ucfirst($key)
-                        )
+                $array,
+                fn ($key): string => ucfirst($key)
+            )
         );
 
         self::assertEquals(
             ['Key1' => 'VALUE1',
                               'Key2' => 'VALUE2',
-                              'Key3' => 'VALUE3'
+                              'Key3' => 'VALUE3',
                              ],
             A::mapKeys(
-                            $array,
-                            fn ($key): string => ucfirst($key),
-                            fn ($value) => strtoupper($value)
-                        )
+                $array,
+                fn ($key): string => ucfirst($key),
+                fn ($value) => strtoupper($value)
+            )
         );
     }
 
@@ -385,26 +385,26 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         $tests[] = [
       json_decode('[{"name": "moe", "age": 40}, {"name": "larry", "age": 50}, {"name": "curly", "age": 60}]'),
       'name',
-      ['moe','larry','curly']
+      ['moe','larry','curly'],
     ];
 
         // special case where the sample object tester is NULL
         $tests[] = [
       json_decode('[{"name": null, "age": 40}, {"name": "larry", "age": 50}, {"name": "curly", "age": 60}]'),
       'name',
-      [null,'larry','curly']
+      [null,'larry','curly'],
     ];
 
         $tests[] = [
       [new PHPClass('Namespaced\one'), new PHPClass('Namespaced\two')],
       'name',
-      ['one', 'two']
+      ['one', 'two'],
     ];
 
         $tests[] = [
       [],
       'not there',
-      []
+      [],
     ];
 
         return $tests;
@@ -415,7 +415,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         $headers = [
       'Content-Type' => 'application/json',
       'Content-Length' => 723,
-      'Accept' => '*/*'
+      'Accept' => '*/*',
     ];
 
         $filter = (fn ($headerName, $headerValue): bool => $headerName != 'Content-Length');
@@ -423,7 +423,7 @@ class ArrayUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             [
         'Content-Type' => 'application/json',
-        'Accept' => '*/*'
+        'Accept' => '*/*',
       ],
             A::filterKeys($headers, $filter),
             'A::filterKeys does not filter'

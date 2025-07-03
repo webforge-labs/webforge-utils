@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\DateTime;
 
 use DateTimeZone;
@@ -7,7 +9,7 @@ use InvalidArgumentException;
 use Webforge\Common\Exception;
 use Webforge\Common\Util as Code;
 
-class DateTime extends \DateTime
+class DateTime extends \DateTime implements \Stringable
 {
     public const MON = 1;
     public const TUE = 2;
@@ -70,7 +72,7 @@ class DateTime extends \DateTime
 
     public static function now(DateTimeZone $object = null): static
     {
-        return new self(time(),$object);
+        return new self(time(), $object);
     }
 
     public static function createFromJSON($json): static
@@ -82,15 +84,12 @@ class DateTime extends \DateTime
         }
     }
 
-    public static function createFromMysql($string, DateTimeZone $timezone = null)
+    public static function createFromMysql($string, DateTimeZone $timezone = null): \Webforge\Common\DateTime\DateTime
     {
         return self::parse('Y-m-d H:i:s', $string, $timezone);
     }
 
-    /**
-     * @return bool
-     */
-    public function isYesterday(?DateTime $now = null)
+    public function isYesterday(?DateTime $now = null): bool
     {
         if (!isset($now)) {
             $now = self::now();
@@ -102,10 +101,7 @@ class DateTime extends \DateTime
         return $this->format('d.m.Y') === $now->format('d.m.Y');
     }
 
-    /**
-     * @return bool
-     */
-    public function isToday(?DateTime $now = null)
+    public function isToday(?DateTime $now = null): bool
     {
         if (!isset($now)) {
             $now = self::now();
@@ -116,17 +112,17 @@ class DateTime extends \DateTime
         return $this->format('d.m.Y') === $now->format('d.m.Y');
     }
 
-    public function isBefore(DateTime $other)
+    public function isBefore(DateTime $other): bool
     {
         return $this->getTimestamp() < $other->getTimestamp();
     }
 
-    public function isAfter(DateTime $other)
+    public function isAfter(DateTime $other): bool
     {
         return $this->getTimestamp() > $other->getTimestamp();
     }
 
-    public function isEqual(DateTime $other)
+    public function isEqual(DateTime $other): bool
     {
         return $this->getTimestamp() == $other->getTimestamp();
     }
@@ -135,9 +131,8 @@ class DateTime extends \DateTime
      * Gibt Zurück ob der angegebene Timestamp in der Woche des aktuellen Timestamps (now) ist
      *
      * Die Woche beginnt bei Montag.
-     * @return bool
      */
-    public function isWeekDay(?DateTime $now = null)
+    public function isWeekDay(?DateTime $now = null): bool
     {
         if (!isset($now)) {
             $now = self::now();
@@ -156,10 +151,7 @@ class DateTime extends \DateTime
         return DateInterval::createFromDateInterval(parent::diff($object, $absolute));
     }
 
-    /**
-     * @return DateTime
-     */
-    public function copy($relativeDateIntervalString = null)
+    public function copy($relativeDateIntervalString = null): static
     {
         $date = clone $this;
 
@@ -175,7 +167,7 @@ class DateTime extends \DateTime
      *
      * http://www.php.net/manual/de/datetime.createfromformat.php
      */
-    public static function parse($format, $time, ?DateTimeZone $timezone = null)
+    public static function parse($format, $time, ?DateTimeZone $timezone = null): self
     {
         if (!isset($timezone) && date_default_timezone_get() != '') {
             $timezone = new DateTimeZone(date_default_timezone_get());
@@ -198,9 +190,8 @@ class DateTime extends \DateTime
      * Wollen wir den Montag des Sonntages liegt das Datum in der Vergangenheit
      *
      * ist heute also Sonntag der 20.3.2011 und der Parameter ist MON gibt Funktion Montag den 14.03.2011 zurück (gleiche Uhrzeit wie jetzt)
-     * @return DateTime
      */
-    public function getWeekday($day)
+    public function getWeekday($day): self
     {
         $weekday = $this->format('w');
         /* das *-1 sortiert die Woche so (diese ist dann invers zu key, wo mo 6 ist):
@@ -220,7 +211,7 @@ class DateTime extends \DateTime
         return $target;
     }
 
-    public function i18n_format($format, $lang = 'de')
+    public function i18n_format($format, $lang = 'de'): ?string
     {
         $origformat = $format;
         if ($this->empty) {
@@ -236,24 +227,11 @@ class DateTime extends \DateTime
         $format = $this->format(str_replace(array_keys($constants), array_values($constants), $format));
 
         $search = $replace = [];
-        switch ($lang) {
-      case 'de':
-      case 'de_DE':
-        $transl = new TranslationDE();
-        break;
-
-      case 'en':
-      case 'en_GB':
-      case 'en_US':
-      default:
-        $transl = new TranslationEN();
-        break;
-
-      case 'fr':
-      case 'fr_FR':
-        $transl = new TranslationFR();
-        break;
-    }
+        $transl = match ($lang) {
+            'de', 'de_DE' => new TranslationDE(),
+            'fr', 'fr_FR' => new TranslationFR(),
+            default => new TranslationEN(),
+        };
 
         foreach ($constants as $constant => $NULL) {
             $search[] = '!' . $constant;
@@ -280,10 +258,10 @@ class DateTime extends \DateTime
         return str_replace($search, $replace, $format);
     }
 
-    public function getWalkableFields()
+    public function getWalkableFields(): array
     {
         return ['date' => $this->format('U'),
-                 'timezone' => $this->getTimezone()->getName()
+                 'timezone' => $this->getTimezone()->getName(),
                 ];
     }
 
@@ -291,11 +269,11 @@ class DateTime extends \DateTime
     {
         return (object) [
       'date' => $this->format('U'),
-      'timezone' => $this->getTimezone()->getName()
+      'timezone' => $this->getTimezone()->getName(),
     ];
     }
 
-    public static function import(\stdClass $o)
+    public static function import(\stdClass $o): \Webforge\Common\DateTime\DateTime
     {
         return self::parse('U', $o->date, new DateTimeZone($o->getTimeZone()));
     }
@@ -304,7 +282,7 @@ class DateTime extends \DateTime
     /**
      * @param int $year unbedingt ein int
      */
-    public function setYear($year)
+    public function setYear($year): static
     {
         if (!is_int($year)) {
             throw new InvalidArgumentException('Parameter 1 muss ein Integer sein');
@@ -313,27 +291,27 @@ class DateTime extends \DateTime
         return $this;
     }
 
-    public function getMonth()
+    public function getMonth(): int
     {
         return (int) $this->format('m');
     }
 
-    public function getDay()
+    public function getDay(): int
     {
         return (int) $this->format('d');
     }
 
-    public function getYear()
+    public function getYear(): int
     {
         return (int) $this->format('Y');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->format('U');
     }
 
-    public function getVarInfo()
+    public function getVarInfo(): string
     {
         return '[DateTime: ' . $this->format('d.m.Y H:i:s') . ' ' . $this->getTimezone()->getName() . ']';
     }

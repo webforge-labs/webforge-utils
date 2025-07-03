@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use ReflectionClass;
 use Webforge\Common\StringUtil as S;
 
-class PHPClass implements ClassInterface
+class PHPClass implements ClassInterface, \Stringable
 {
   /**
    * @var string
@@ -45,9 +47,8 @@ class PHPClass implements ClassInterface
      * Returns the Fully Qualified Name of the Class
      *
      * this is the whole path including Namespace without a backslash before
-     * @return string
      */
-    public function getFQN()
+    public function getFQN(): string
     {
         return $this->namespace . $this->name;
     }
@@ -56,9 +57,8 @@ class PHPClass implements ClassInterface
      * returns the Name of the Class
      *
      * its the Name of the FQN without the Namespace
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -67,9 +67,8 @@ class PHPClass implements ClassInterface
      * Sets the Name of the Class
      *
      * this is not the FQN, its only the FQN without the namespace
-     * @chainable
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->reflection = null;
         $this->name = trim($name, '\\');
@@ -81,26 +80,20 @@ class PHPClass implements ClassInterface
      *
      * @return string The namespace has no \ before and after
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         // i think its faster to compute the FQN with concatenation add the trailingslash in the setter and remove the trailslash here
         return isset($this->namespace) ? rtrim($this->namespace, '\\') : null;
     }
 
-    /**
-     * @chainable
-     */
-    public function setNamespace($ns)
+    public function setNamespace($ns): static
     {
         $this->reflection = null;
         $this->namespace = $ns != null ? ltrim(S::expand($ns, '\\', S::END), '\\') : null;
         return $this;
     }
 
-    /**
-     * @return ReflectionClass
-     */
-    public function getReflection()
+    public function getReflection(): ReflectionClass
     {
         if (!isset($this->reflection)) {
             $this->reflection = new ReflectionClass($this->getFQN());
@@ -112,24 +105,18 @@ class PHPClass implements ClassInterface
     /**
      * Used in tests for webforge-types
      */
-    public function injectReflection($refl)
+    public function injectReflection(?\ReflectionClass $refl): static
     {
         $this->reflection = $refl;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function equals(ClassInterface $otherClass)
+    public function equals(ClassInterface $otherClass): bool
     {
         return $this->getFQN() === $otherClass->getFQN();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getFQN();
     }

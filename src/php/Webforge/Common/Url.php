@@ -1,22 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use RuntimeException;
 use Webforge\Common\StringUtil as S;
 
-class Url
+class Url implements \Stringable
 {
     public const HTTP = 'http';
     public const HTTPS = 'https';
-
-    /**
-     * Der Cache für die URL
-     *
-     * (muss nicht unbedingt aktuell sein)
-     * @var string
-     */
-    protected mixed $url = null;
 
     /**
      * @var string
@@ -49,11 +43,15 @@ class Url
      */
     protected mixed $fragment = null;
 
-    public function __construct(mixed $url = null)
+    public function __construct(/**
+     * Der Cache für die URL
+     *
+     * (muss nicht unbedingt aktuell sein)
+     */
+    protected mixed $url = null
+    )
     {
-        $this->url = $url;
-
-        if (isset($url)) {
+        if (isset($this->url)) {
             $this->parseFrom($this->url);
         }
     }
@@ -61,7 +59,7 @@ class Url
     /**
      * @param string $url
      */
-    public function parseFrom(mixed $url)
+    public function parseFrom(mixed $url): static
     {
         $url = (string) trim($url);
 
@@ -95,7 +93,7 @@ class Url
         return $this;
     }
 
-    public function toString()
+    public function toString(): string
     {
         $url = $this->getScheme() . '://';
 
@@ -140,7 +138,7 @@ class Url
      *
      * @return string ohne http:// davor und / dahinter
      */
-    public function getHost()
+    public function getHost(): string
     {
         return implode('.', $this->hostParts);
     }
@@ -148,7 +146,7 @@ class Url
     /**
      * @param string $host
      */
-    public function setHost(mixed $host)
+    public function setHost(mixed $host): static
     {
         $this->hostParts = explode('.', $host);
         return $this;
@@ -157,7 +155,7 @@ class Url
     /**
      * @return SimpleURL
      */
-    public function getHostURL()
+    public function getHostURL(): self
     {
         $url = new self();
         $url->setScheme($this->scheme);
@@ -173,15 +171,13 @@ class Url
 
     /**
      * Gibt den Name des Hosts nach . getrennt zurück
-     *
-     * @return array
      */
-    public function getHostParts()
+    public function getHostParts(): array
     {
         return $this->hostParts;
     }
 
-    public function setHostParts(array $parts)
+    public function setHostParts(array $parts): static
     {
         $this->hostParts = $parts;
         return $this;
@@ -195,22 +191,18 @@ class Url
         array_unshift($this->hostParts, $domain);
     }
 
-    /**
-     * @return array
-     */
-    public function getPath()
-    : array {
+    public function getPath(): array {
         return $this->path;
     }
 
-    public function setPath(array $parts)
+    public function setPath(array $parts): static
     {
         $this->pathTrailingSlash = false;
         $this->path = $parts;
         return $this;
     }
 
-    public function addPathPart(mixed $string)
+    public function addPathPart(mixed $string): static
     {
         $this->path[] = $string;
         return $this;
@@ -219,7 +211,7 @@ class Url
     /**
      * Modifies the current URL with adding an relative Url to the pathParts
      */
-    public function addRelativeUrl(mixed $relativeUrl)
+    public function addRelativeUrl(mixed $relativeUrl): static
     {
         $this->pathTrailingSlash = S::endsWith($relativeUrl, '/');
 
@@ -234,9 +226,8 @@ class Url
      *
      * Gibt NULL zurück wenn der Part nicht gesetzt ist
      * @param int $num 1-basierend
-     * @return string|null
      */
-    public function getPathPart(mixed $num)
+    public function getPathPart(mixed $num): ?string
     {
         if ($num < 1) {
             throw new \InvalidArgumentException('Num ist 1-basierend');
@@ -251,7 +242,7 @@ class Url
     /**
      * @return string ohne / davor und mit optionalem / dahinter (wenn pathTrailingSlash === TRUE ist)
      */
-    public function getPathString()
+    public function getPathString(): ?string
     {
         if (count($this->path) === 0) {
             return null;
@@ -268,7 +259,7 @@ class Url
     /**
      * @return string ohne ? davor
      */
-    public function getQueryString()
+    public function getQueryString(): string
     {
         return http_build_query($this->query, '', '&');
     }
@@ -281,24 +272,18 @@ class Url
         return $this->query;
     }
 
-    public function setQuery(array $query)
+    public function setQuery(array $query): static
     {
         $this->query = $query;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isHTTP()
+    public function isHTTP(): bool
     {
         return $this->scheme === self::HTTP;
     }
 
-    /**
-     * @return bool
-     */
-    public function isHTTPs()
+    public function isHTTPs(): bool
     {
         return $this->scheme === self::HTTPS;
     }
@@ -308,86 +293,70 @@ class Url
         return $this->scheme;
     }
 
-    public function setScheme(mixed $scheme)
+    public function setScheme(mixed $scheme): static
     {
         $this->scheme = $scheme;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
 
     /**
      * @param int port
-     * @chainable
      */
-    public function setPort(mixed $port)
+    public function setPort(mixed $port): static
     {
         $this->port = $port;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUser()
+    public function getUser(): string
     {
         return $this->user;
     }
 
     /**
      * @param string user
-     * @chainable
      */
-    public function setUser(mixed $user)
+    public function setUser(mixed $user): static
     {
         $this->user = $user;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
      * @param string password
-     * @chainable
      */
-    public function setPassword(mixed $password)
+    public function setPassword(mixed $password): static
     {
         $this->password = $password;
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPathTrailingSlash()
+    public function getPathTrailingSlash(): mixed
     {
         return $this->pathTrailingSlash;
     }
 
     /**
      * @param mixed pathTrailingSlash
-     * @chainable
      */
-    public function setPathTrailingSlash(mixed $pathTrailingSlash)
+    public function setPathTrailingSlash(mixed $pathTrailingSlash): static
     {
         $this->pathTrailingSlash = $pathTrailingSlash;
         return $this;
     }
 
-    public function __toString()
-    : string {
+    public function __toString(): string
+    {
         try {
             return (string) $this->toString();
         } catch (\Exception $e) {

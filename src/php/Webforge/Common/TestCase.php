@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use Webforge\Common\System\Dir;

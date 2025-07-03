@@ -34,7 +34,7 @@ class DirCopyTest extends TestCase
       '/main.html',
       '/img/0.gif',
       '/css/sample.css',
-      '/js/vendor/pack.js'
+      '/js/vendor/pack.js',
     ];
 
         foreach ($files as $url) {
@@ -43,10 +43,7 @@ class DirCopyTest extends TestCase
         }
     }
 
-    /**
-     * @return Webforge\Common\System\Dir
-     */
-    protected function createTemporary()
+    protected function createTemporary(): Webforge\Common\System\Dir
     {
         $this->temps[] = $dir = Dir::createTemporary();
 

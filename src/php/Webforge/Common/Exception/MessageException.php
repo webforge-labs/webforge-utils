@@ -1,21 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\Exception;
 
 interface MessageException
 {
-  /**
-   * @chainable
-   */
-    public function setMessage($msg);
+    public function setMessage($msg): self;
 
-    /**
-     * @chainable
-     */
-    public function appendMessage($msg);
+    public function appendMessage($msg): self;
 
-    /**
-     * @chainable
-     */
-    public function prependMessage($msg);
+    public function prependMessage($msg): self;
 }

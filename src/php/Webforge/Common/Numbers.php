@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 class Numbers
 {
     public const USE_LOCALE = 0x000001;
 
-    public static function parseFloat($floatString, $thousandsSep = self::USE_LOCALE, $decimalPoint = self::USE_LOCALE)
+    public static function parseFloat($floatString, $thousandsSep = self::USE_LOCALE, $decimalPoint = self::USE_LOCALE): float
     {
         $locale = localeconv();
         if ($thousandsSep === self::USE_LOCALE) {

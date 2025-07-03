@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\DateTime;
 
 /**
@@ -21,7 +23,7 @@ class Date extends DateTime
         $this->setTime(0, 0, 0);
     }
 
-    public function getVarInfo()
+    public function getVarInfo(): string
     {
         return '[Date: ' . $this->format('d.m.Y') . ' ' . $this->getTimezone()->getName() . ']';
     }

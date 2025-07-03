@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use InvalidArgumentException;
@@ -12,7 +14,7 @@ class ClassUtil
    *
    * @return string always without a \ in front
    */
-    public static function expandNamespace($className, $namespace)
+    public static function expandNamespace($className, $namespace): string
     {
         if (mb_strpos($className, '\\', 1) !== false) {
             return ltrim($className, '\\');
@@ -26,12 +28,12 @@ class ClassUtil
      *
      * @return string always without a \ in front
      */
-    public static function setNamespace($className, $namespace)
+    public static function setNamespace($className, $namespace): string
     {
         return trim($namespace, '\\') . '\\' . trim($className, '\\');
     }
 
-    public static function getNamespace($className)
+    public static function getNamespace($className): ?string
     {
         $className = ltrim($className, '\\');
         if (($pos = mb_strrpos($className, '\\')) !== false) {
@@ -41,7 +43,7 @@ class ClassUtil
         return null;
     }
 
-    public static function getClassName($fqn)
+    public static function getClassName($fqn): string
     {
         $fqn = ltrim($fqn, '\\');
         if (($pos = mb_strrpos($fqn, '\\')) !== false) {
@@ -55,7 +57,7 @@ class ClassUtil
      * @param string $class the full qualified class name
      * @return instanceOf $class
      */
-    public static function newClassInstance($class, array $constructorArgs)
+    public static function newClassInstance($class, array $constructorArgs): object
     {
         if ($class instanceof ReflectionClass) {
             $refl = $class;
@@ -70,10 +72,8 @@ class ClassUtil
 
     /**
      * Returns if the $object instance has the $property as public property
-     *
-     * @return bool
      */
-    public static function hasPublicProperty($object, $property)
+    public static function hasPublicProperty($object, $property): bool
     {
         return array_key_exists($property, (array) $object);
     }

@@ -53,7 +53,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
     {
         return [
           ['/var/local/missing/trail'],
-          ['D:\www\missing\trail']
+          ['D:\www\missing\trail'],
         ];
     }
 
@@ -368,7 +368,7 @@ class DirTest extends \PHPUnit\Framework\TestCase
         }
 
         self::assertEquals(
-            sprintf('%04o', 0744),
+            sprintf('%04o', 0o744),
             sprintf('%04o', Dir::$defaultMod),
             'defaultMod for historical reasons should be used for this test (otherwise its useless)'
         );
@@ -382,11 +382,11 @@ class DirTest extends \PHPUnit\Framework\TestCase
 
             $newDir->create();
 
-            $perms = fileperms((string) $newDir) & 0777;
+            $perms = fileperms((string) $newDir) & 0o777;
             $umask = umask();
 
             self::assertEquals(
-                sprintf('%04o', 0777 & ~$umask),
+                sprintf('%04o', 0o777 & ~$umask),
                 sprintf('%04o', $perms),
                 'Permission for dir should be umasked. (it should have used 0777 for creating)'
             );

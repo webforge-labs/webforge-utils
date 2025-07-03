@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 interface ClassInterface
@@ -7,25 +9,19 @@ interface ClassInterface
   /**
    * @return string the full qualified name (namespace + name without backslash in front)
    */
-    public function getFQN();
+    public function getFQN(): string;
 
     /**
      * @return string the name of the class (without namespace)
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * @return string the namespace of the class without trailing backslash
      */
-    public function getNamespace();
+    public function getNamespace(): string;
 
-    /**
-     * @return ReflectionClass
-     */
-    public function getReflection();
+    public function getReflection(): \ReflectionClass;
 
-    /**
-     * @return bool
-     */
-    public function equals(ClassInterface $other);
+    public function equals(ClassInterface $other): bool;
 }

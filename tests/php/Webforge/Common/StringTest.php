@@ -91,30 +91,30 @@ class StringTest extends \PHPUnit\Framework\TestCase
     public function testLineNumbersWithoutEOLOnEnd(): void
     {
         $string = <<<'JAVASCRIPT'
-jQuery.when( jQuery.psc.loaded() ).then( function(main) {
-  main.getLoader().onReady(['Psc.UI.Main', 'Psc.UI.Tabs'], function () {
-    var j = new Psc.UI.Main({
-      'tabs': new Psc.UI.Tabs({
-        'widget': $('#psc-ui-tabs')
-      })
-    });
-  });
- });
-});
-JAVASCRIPT;
+            jQuery.when( jQuery.psc.loaded() ).then( function(main) {
+              main.getLoader().onReady(['Psc.UI.Main', 'Psc.UI.Tabs'], function () {
+                var j = new Psc.UI.Main({
+                  'tabs': new Psc.UI.Tabs({
+                    'widget': $('#psc-ui-tabs')
+                  })
+                });
+              });
+             });
+            });
+            JAVASCRIPT;
 
         $expect = <<<'JAVASCRIPT'
-1  jQuery.when( jQuery.psc.loaded() ).then( function(main) {
-2    main.getLoader().onReady(['Psc.UI.Main', 'Psc.UI.Tabs'], function () {
-3      var j = new Psc.UI.Main({
-4        'tabs': new Psc.UI.Tabs({
-5          'widget': $('#psc-ui-tabs')
-6        })
-7      });
-8    });
-9   });
-10 });
-JAVASCRIPT;
+            1  jQuery.when( jQuery.psc.loaded() ).then( function(main) {
+            2    main.getLoader().onReady(['Psc.UI.Main', 'Psc.UI.Tabs'], function () {
+            3      var j = new Psc.UI.Main({
+            4        'tabs': new Psc.UI.Tabs({
+            5          'widget': $('#psc-ui-tabs')
+            6        })
+            7      });
+            8    });
+            9   });
+            10 });
+            JAVASCRIPT;
 
         self::assertEquals($expect, S::lineNumbers($string));
     }
@@ -259,23 +259,23 @@ JAVASCRIPT;
 
         $tests[] = [
       '0123',
-      $string, 0, 4
+      $string, 0, 4,
     ];
 
         $tests[] = [
       '',
-      $string, 0, 0
+      $string, 0, 0,
     ];
 
         $tests[] = [
       $string,
-      $string, 0, 10
+      $string, 0, 10,
     ];
 
         // never use weirdo -1 or else
         $tests[] = [
       '0',
-      $string, 0, -1
+      $string, 0, -1,
     ];
 
         return $tests;
@@ -296,31 +296,31 @@ JAVASCRIPT;
         $tests[] = [
       '2-TAF_0001',
       '(',
-      '(2-TAF_0001)'
+      '(2-TAF_0001)',
     ];
 
         $tests[] = [
       '2-TAF_0001',
       '[',
-      '[2-TAF_0001]'
+      '[2-TAF_0001]',
     ];
 
         $tests[] = [
       '2-TAF_0001',
       '[',
-      '[2-TAF_0001]'
+      '[2-TAF_0001]',
     ];
 
         $tests[] = [
       '2-TAF_0001',
       ']',
-      ']2-TAF_0001]'
+      ']2-TAF_0001]',
     ];
 
         $tests[] = [
       "what's up",
       '"',
-      '"what\'s up"'
+      '"what\'s up"',
     ];
 
         return $tests;

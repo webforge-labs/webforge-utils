@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 class StringUtil
@@ -16,9 +18,8 @@ class StringUtil
      *
      * @param string $string
      * @param string $prefix
-     * @return bool
      */
-    public static function startsWith($string, $prefix)
+    public static function startsWith($string, $prefix): bool
     {
         return (mb_strpos($string, $prefix) === 0);
     }
@@ -29,7 +30,7 @@ class StringUtil
      * @param string $string
      * @param string $suffix
      */
-    public static function endsWith($string, $suffix)
+    public static function endsWith($string, $suffix): bool
     {
         return (mb_strrpos($string, $suffix) === mb_strlen($string) - mb_strlen($suffix));
     }
@@ -39,9 +40,8 @@ class StringUtil
      *
      * @param string $code  code with $br as EOL
      * @param string $br    the EOL in $code, its unexpected if its not right
-     * @return string
      */
-    public static function indent($code, $indent = 2, $br = "\n")
+    public static function indent($code, $indent = 2, string $br = "\n"): string
     {
         // for performance reasons prefixLines is not used
         if ($indent == 0 || $code == '') {
@@ -59,10 +59,8 @@ class StringUtil
      * Adds a prefix before every new line (after every EOL)
      *
      * this is the generic function for indent()
-     *
-     * @return string
      */
-    public static function prefixLines($msg, $prefix, $eol = "\n")
+    public static function prefixLines($msg, string $prefix, string $eol = "\n"): string
     {
         if (static::endsWith($msg, $eol)) {
             return $prefix . str_replace($eol, $eol . $prefix, mb_substr($msg, 0, -1)) . $eol;
@@ -74,12 +72,10 @@ class StringUtil
     /**
      * Number the lines in the string
      *
-     * @param string $code
      * @param string $eol the eol from $code
      * @param int $begin the number of the first line found
-     * @return string
      */
-    public static function lineNumbers($code, $eol = "\n", $begin = 1)
+    public static function lineNumbers(string $code, string $eol = "\n", $begin = 1): string|array|null
     {
         $cut = false;
         if (!static::endsWith($code, $eol)) {
@@ -92,7 +88,7 @@ class StringUtil
         $linedCode = Preg::replace_callback(
             $code,
             '/(.*?)' . $eol . '/',
-            function ($match) use (&$cnt, $padWhite) {
+            function ($match) use (&$cnt, $padWhite): string {
           return sprintf('%s %s', StringUtil::padRight((string) $cnt++, $padWhite, ' '), $match[0]);
       }
         );
@@ -108,9 +104,8 @@ class StringUtil
      * Cuts the text (hard) at the given position, if its longer than given length
      *
      * it appends (when cut) the $ender to the string
-     * @return string
      */
-    public static function cut($string, $length, $ender = '…')
+    public static function cut($string, $length, string $ender = '…'): string
     {
         $length = (int) $length;
         if (mb_strlen($string) > $length) {
@@ -129,7 +124,7 @@ class StringUtil
      *
      * $teaser = S::cutAtLast($longText, 300, " ");
      */
-    public static function cutAtLast($string, $length, $atChar, $ender = '…')
+    public static function cutAtLast($string, $length, $atChar, string $ender = '…')
     {
         $length = (int) $length;
 
@@ -154,16 +149,15 @@ class StringUtil
      * Generates a Random string from specific length
      *
      * the range of chars [a-z0-9] is used
-     * @return string
      */
-    public static function random($length)
+    public static function random($length): string
     {
         if ($length <= 0) {
             return '';
         }
         $str = '';
         for ($i = 0; $i < $length; $i++) {
-            $rand = rand(0, 35);
+            $rand = random_int(0, 35);
             if ($rand >= 10) {
                 $str .= chr(ord('a') + $rand - 10);
             } // a - z
@@ -177,30 +171,24 @@ class StringUtil
 
     /**
      * Upcase the first letter
-     *
-     * @return string
      */
-    public static function ucfirst($string)
+    public static function ucfirst($string): string
     {
         return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
 
     /**
      * Lowercase the first letter
-     *
-     * @return string
      */
-    public static function lcfirst($string)
+    public static function lcfirst($string): string
     {
         return mb_strtolower(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
 
     /**
      * Show EOLs in Text (for debugging)
-     *
-     * @return string
      */
-    public static function eolVisible($string)
+    public static function eolVisible($string): string
     {
         return str_replace(
             ["\r", "\n", "-r-\r-n-\n"],
@@ -211,10 +199,8 @@ class StringUtil
 
     /**
      * Normalize Text EOLs to unix lineends
-     *
-     * @return string
      */
-    public static function fixEOL($string)
+    public static function fixEOL($string): string
     {
         return str_replace(["\r\n", "\r"], "\n", $string);
     }
@@ -224,43 +210,26 @@ class StringUtil
      *
      * often unified diffs are hard to read. Use something like this:
      * $test->assertEquals($expected, $actual, S::debugEquals($expected, $actual));
-     * @return string
      */
-    public static function debugEquals($expected, $actual)
+    public static function debugEquals($expected, $actual): string
     {
         return sprintf("expected>>>\n%s<<<\n\nactual>>>\n%s<<<\n", $expected, $actual);
     }
 
     /**
      * Fills the string with $fill on its left until $length
-     *
-     * @return string
      */
-    public static function padLeft($string, $length, $fill = ' ')
+    public static function padLeft($string, $length, $fill = ' '): string
     {
         return str_pad($string, $length, $fill, STR_PAD_LEFT);
     }
 
     /**
      * Fills the string with $fill on its right until $length
-     *
-     * @return string
      */
-    public static function padRight($string, $length, $fill = ' ')
+    public static function padRight($string, $length, $fill = ' '): string
     {
         return str_pad($string, $length, $fill, STR_PAD_RIGHT);
-    }
-
-    /**
-     * Returns a substring $from position $to position
-     *
-     * the use of this function is discouraged
-     * @deprecated
-     * @return string
-     */
-    public static function substring($string, $from, $to)
-    {
-        return mb_substr($string, $from, abs($from - $to));
     }
 
     /**
@@ -273,10 +242,8 @@ class StringUtil
      * expand withString: "Custom", self::START
      * String => CustomString
      * CustomString => CustomString
-     *
-     * @return string
      */
-    public static function expand($string, $withString, $type = self::END)
+    public static function expand($string, string $withString, $type = self::END): string
     {
         if ($type === self::END) {
             if (!self::endsWith($string, $withString)) {
@@ -293,7 +260,7 @@ class StringUtil
     /**
      * Wrap the string with a char or chars
      */
-    public static function wrap($string, $wrap)
+    public static function wrap(string $string, string $wrap): string
     {
         return $wrap . $string . $wrap;
     }
@@ -308,7 +275,7 @@ class StringUtil
      * [ => ]
      * ( => )
      */
-    public static function swrap($string, $symmetricWrapper)
+    public static function swrap(string $string, $symmetricWrapper): string
     {
         if ($symmetricWrapper === '[') {
             return '[' . $string . ']';
@@ -321,17 +288,13 @@ class StringUtil
 
     /**
      * Replace %var% with values in the string
-     *
-     * @return string
      */
-    public static function miniTemplate($string, array $vars)
+    public static function miniTemplate($string, array $vars): string
     {
         return str_replace(
             // replace %key%
             array_map(
-                function ($a) {
-                    return "%" . $a . "%";
-                },
+                fn ($a): string => "%" . $a . "%",
                 array_keys($vars)
             ),
             array_values($vars),
@@ -339,20 +302,12 @@ class StringUtil
         );
     }
 
-    /**
-     * @return string
-     */
-    public static function dashToCamelCase($string)
+    public static function dashToCamelCase($string): string
     {
-        return ucfirst(Preg::replace_callback($string, '/\-([a-zA-Z])/', function ($match) {
-            return mb_strtoupper($match[1]);
-        }));
+        return ucfirst(Preg::replace_callback($string, '/\-([a-zA-Z])/', fn ($match) => mb_strtoupper($match[1])));
     }
 
-    /**
-     * @return string
-     */
-    public static function camelCaseToDash($camelName)
+    public static function camelCaseToDash($camelName): string
     {
         if (Preg::match($camelName, '/^[A-Z0-9]+$/')) {
             return mb_strtolower($camelName);

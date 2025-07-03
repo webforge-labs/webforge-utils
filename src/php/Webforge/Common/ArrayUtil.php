@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common;
 
 use Closure;
@@ -52,9 +54,7 @@ class ArrayUtil
     public static function joinc(array $pieces, string $glueFormat, ?Closure $stringConvert = null): ?string {
         $s = null;
         if (!isset($stringConvert)) {
-            $stringConvert = function ($piece) {
-                return (string) $piece;
-            };
+            $stringConvert = (fn ($piece): string => (string) $piece);
         }
 
         foreach ($pieces as $key => $piece) {
@@ -151,7 +151,6 @@ class ArrayUtil
      * only the first item matched will be removed
      * @TODO FIXME: boolean trap
      * @param bool $searchStrict if false only the value will be replace
-     * @return array
      */
     public static function remove(array &$array, mixed $item, bool $searchStrict = true): array {
         if (($key = array_search($item, $array, $searchStrict)) !== false) {
@@ -229,7 +228,6 @@ class ArrayUtil
      *
      * danach werden beide in gleichbleibender Reihenfolge zusammengefügt
      * d. h. der modifzierte Schlüssel an Position 1 erhält die (optional modifizierte) value von Position 1
-     * @return array
      */
     public static function mapKeys(array $array, Closure $keyClosure, ?Closure $valueClosure = null): array {
         $keys = array_map($keyClosure, array_keys($array));
@@ -253,16 +251,10 @@ class ArrayUtil
         return (count(array_filter(array_keys($array), 'is_string')) > 0) ? 'assoc' : 'numeric';
     }
 
-    /**
-     * @return bool
-     */
     public static function isNumeric(array $array): bool {
         return self::getType($array) === 'numeric';
     }
 
-    /**
-     * @return bool
-     */
     public static function isAssoc(array $array): bool {
         return self::getType($array) === 'assoc';
     }
@@ -271,7 +263,6 @@ class ArrayUtil
      * Gibt TRUE zurück wenn alle Typen der Values des Arrays auf der ersten Ebene dem angegeben Typ entsprechen
      *
      * @FIXME es muss is_$type existieren
-     * @return bool
      */
     public static function isOnlyType(array $array, string $type): bool {
         return (count(array_filter(array_values($array), 'is_' . $type)) === count($array));
@@ -281,9 +272,6 @@ class ArrayUtil
      * Füllt Werte an den angegeben Array an, mit $value als Wert, bis $absLength als Gesamtlänge erreicht ist
      *
      * Der übergebene Array wird nicht modifiziert
-     * @param mixed $value
-     * @param int $absLength
-     * @return array
      */
     public static function fillUp(array $array, mixed $value, int $absLength): array {
         $fillNum = $absLength - count($array);
@@ -320,12 +308,9 @@ class ArrayUtil
      *
      * leaves the original array unmodified
      * returns the stringified array
-     * @return array
      */
     public static function stringify(array $items): array {
-        return array_map(function ($item) {
-            return (string) $item;
-        }, $items);
+        return array_map(fn ($item): string => (string) $item, $items);
     }
 
     /**
@@ -358,7 +343,6 @@ class ArrayUtil
      * Returns an array with the index constructred from objects in the collection
      *
      * @param mixed $property see pluck() for details
-     * @return array
      */
     public static function indexBy(array $array, mixed $property): array {
         $ret = [];

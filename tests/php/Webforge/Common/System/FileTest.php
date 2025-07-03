@@ -218,7 +218,7 @@ class FileTest extends TestCase
         $dir = vfsStream::setup('extension-files', null, [
       'thefile.php' => '<?php // its php',
       'thefile.js' => 'define(function () {})',
-      'thefile.csv' => 'foo,bar,baz'
+      'thefile.csv' => 'foo,bar,baz',
     ]);
 
         $dir = new Dir(vfsStream::url('extension-files') . '/');

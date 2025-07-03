@@ -39,6 +39,11 @@ return (new Config())
         'no_closing_tag' => true,
         'single_blank_line_at_eof' => true,
         'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
+
+        'phpdoc_to_return_type' => true,
+        '@PHP80Migration' => true,
+        '@PHP81Migration' => true,
+        '@PHP82Migration' => true,
     ])
     ->setFinder($finder)
     ->setUnsupportedPhpVersionAllowed(true)

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Webforge\Common\DateTime;
 
 use Webforge\Common\Preg;
 
-class DateInterval extends \DateInterval
+class DateInterval extends \DateInterval implements \Stringable
 {
   /**
    * @var array<string, int> microseconds of the interval indexed by object hash
@@ -21,10 +23,8 @@ class DateInterval extends \DateInterval
 
     /**
      * Nimmt eine intuitive IntervalSpezifikation (wie bei MySQL) und formt diese in PHP-spec um
-     *
-     * @return string
      */
-    public function convertSimpleSpec($spec)
+    public function convertSimpleSpec($spec): string
     {
         if (($year = Preg::qmatch($spec, '/^([0-9]+) YEARs?/i', 1, false)) !== false) {
             return sprintf('P%dY', $year);
@@ -62,10 +62,8 @@ class DateInterval extends \DateInterval
 
     /**
      * Returns a new instanceof DateTime with time added from this interval
-     *
-     * @return DateTime
      */
-    public function addTo(DateTime $dateTime)
+    public function addTo(DateTime $dateTime): DateTime
     {
         $dateTime = clone $dateTime;
         $dateTime->add($this);
@@ -74,11 +72,8 @@ class DateInterval extends \DateInterval
 
     /**
      * Create a DateInterval from an PHP Dateinterval
-     *
-     * @param DateInterval $interval
-     * @return DateInterval
      */
-    public static function createFromDateInterval(\DateInterval $interval)
+    public static function createFromDateInterval(\DateInterval $interval): self
     {
         if ($interval instanceof DateInterval) {
             return $interval;
@@ -95,10 +90,7 @@ class DateInterval extends \DateInterval
         return new self($spec);
     }
 
-    /**
-     * @return int
-     */
-    public function getUS()
+    public function getUS(): int
     {
         return self::$usData[spl_object_hash($this)];
     }
@@ -112,7 +104,7 @@ class DateInterval extends \DateInterval
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->format('%R Y%Y M%M D%D H%H I%I S%S');
     }

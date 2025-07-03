@@ -11,7 +11,7 @@ class PregTest extends \PHPUnit\Framework\TestCase
         $this->matchers = [
       '/web-dl/i' => 'one',
       '/^mother/' => 'two',
-      '/German/' => 'three'
+      '/German/' => 'three',
     ];
     }
 
@@ -81,9 +81,9 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertNotEquals(
             'two',
             Preg::matchArray(
-          $this->matchers,
-          'mother.web-dl'
-      )
+                $this->matchers,
+                'mother.web-dl'
+            )
         );
     }
     public function testMatchArrayMatchesTHEFIRSTRegexFromArray(): void
@@ -91,9 +91,9 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             'one',
             Preg::matchArray(
-          $this->matchers,
-          'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD'
-      )
+                $this->matchers,
+                'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD'
+            )
         );
     }
 
@@ -102,9 +102,9 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             ['one','three'],
             Preg::matchFullArray(
-          $this->matchers,
-          'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD'
-      )
+                $this->matchers,
+                'How.I.Met.Your.Mother.S06E13.Schlechte.Nachrichten.German.Dubbed.WEB-DL.XViD'
+            )
         );
     }
 
@@ -113,10 +113,10 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             'noMatchDefaultValue',
             Preg::matchFullArray(
-          $this->matchers,
-          'doesnotmatch',
-          'noMatchDefaultValue'
-      )
+                $this->matchers,
+                'doesnotmatch',
+                'noMatchDefaultValue'
+            )
         );
     }
 
@@ -125,10 +125,10 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             'noMatchDefaultValue',
             Preg::matchArray(
-          $this->matchers,
-          'doesnotmatch',
-          'noMatchDefaultValue'
-      )
+                $this->matchers,
+                'doesnotmatch',
+                'noMatchDefaultValue'
+            )
         );
     }
 
@@ -156,12 +156,12 @@ class PregTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             'WEB-DL',
             Preg::matchArray(
-          [
+                [
           '/dvdrip/i' => 'DVDRip',
-          '/WEB-DL/i' => 'WEB-DL'
+          '/WEB-DL/i' => 'WEB-DL',
         ],
-          $value
-      )
+                $value
+            )
         );
     }
 
