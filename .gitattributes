@@ -1,0 +1,14 @@
+/.github export-ignore
+/.phpunit.cache export-ignore
+/tests export-ignore
+/.dockerignore export-ignore
+/.gitignore export-ignore
+/.php-cs-fixer.cache export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/bootstrap.php export-ignore
+/docker-compose.yaml export-ignore
+/justfile export-ignore
+/phpstan.neon export-ignore
+/phpunit.dist.xml export-ignore
+/rector.php export-ignore
+/.gitattributes export-ignore
