@@ -29,6 +29,6 @@ up:
 watch-phpstan *args='':
     find config/ src/ tests/ -type f -name '*.php' | entr j phpstan "${@}"
 
-release-interactive: fix phpunit phpstan
+release-interactive: fix phpunit
     release-it
 
