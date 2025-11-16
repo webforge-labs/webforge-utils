@@ -68,7 +68,7 @@ class DateTime extends \DateTime
         return new self($time, $object);
     }
 
-    public static function now(DateTimeZone $object = null): static
+    public static function now(?DateTimeZone $object = null): static
     {
         return new self(time(),$object);
     }
@@ -82,7 +82,7 @@ class DateTime extends \DateTime
         }
     }
 
-    public static function createFromMysql($string, DateTimeZone $timezone = null)
+    public static function createFromMysql($string, ?DateTimeZone $timezone = null)
     {
         return self::parse('Y-m-d H:i:s', $string, $timezone);
     }

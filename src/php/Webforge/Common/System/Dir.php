@@ -603,11 +603,11 @@ class Dir
      * Ignores werden trotzdem angewandt.
      *
      * @param array|string $extensions ein Array von Dateiendungen oder eine einzelne Dateiendung
-     * @param array $ignores ein Array von Regulären Ausdrücken, die auf den Dateinamen/Verzeichnisnamen (ohne den kompletten Pfad) angewandt werden
+     * @param array|null $ignores ein Array von Regulären Ausdrücken, die auf den Dateinamen/Verzeichnisnamen (ohne den kompletten Pfad) angewandt werden
      * @param int $sort eine Konstante die bestimmt, wie die Dateien in Verzeichnissen sortiert ausgegeben werden sollen
      * @return array mit Dir und File
      */
-    public function getContents(mixed $extensions = null, array $ignores = null, $sort = null, $subDirs = null)
+    public function getContents(mixed $extensions = null, ?array $ignores = null, $sort = null, $subDirs = null)
     : array {
         if (!$this->exists()) {
             throw new Exception('Verzeichnis existiert nicht: ' . $this);
@@ -952,7 +952,7 @@ class Dir
      *
      * wenn flat = TRUE ist, werden auch Unterverzeichnisse durchsucht. dies "flatted" die Files dann into $destination
      */
-    public function copyFiles(mixed $extension, Dir $destination, $flat = false, array $ignores = null)
+    public function copyFiles(mixed $extension, Dir $destination, $flat = false, ?array $ignores = null)
     {
         foreach ($this->getFiles($extension, $ignores, $flat) as $f) {
             $f->copy(new File($destination, $f->getName()));
