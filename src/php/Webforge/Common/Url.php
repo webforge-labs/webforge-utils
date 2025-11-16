@@ -195,11 +195,7 @@ class Url
         array_unshift($this->hostParts, $domain);
     }
 
-    /**
-     * @return array
-     */
-    public function getPath()
-    : array {
+    public function getPath(): array {
         return $this->path;
     }
 
@@ -386,8 +382,7 @@ class Url
         return $this;
     }
 
-    public function __toString()
-    : string {
+    public function __toString(): string {
         try {
             return (string) $this->toString();
         } catch (\Exception $e) {

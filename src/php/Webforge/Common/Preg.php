@@ -89,7 +89,6 @@ class Preg
      * @param mixed $replace Ersetzungen (string oder array aus strings)
      * @param int $limit Optionale maximale Ersetzungsanzahl (-1 == No limit)
      * @param int $count Wird mit der Anzahl der Ersetzungsaktionen befüllt werden
-     * @return string|array
      * @see PHP::preg_replace
      */
     public static function replace(mixed $subject, string $pattern, mixed $replace, int $limit = -1, ?int &$count = null): array|string|null

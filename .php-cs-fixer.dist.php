@@ -18,7 +18,7 @@ return (new Config())
         'void_return' => true,
         'no_empty_statement' => true,
         'no_unused_imports' => true,
-        'declare_strict_types' => true,
+        'declare_strict_types' => false,
         'no_extra_blank_lines' => true,
         'no_whitespace_in_blank_line' => true,
         'no_blank_lines_after_class_opening' => true,

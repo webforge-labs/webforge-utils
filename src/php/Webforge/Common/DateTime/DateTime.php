@@ -70,7 +70,7 @@ class DateTime extends \DateTime
 
     public static function now(?DateTimeZone $object = null): static
     {
-        return new self(time(),$object);
+        return new self(time(), $object);
     }
 
     public static function createFromJSON($json): static

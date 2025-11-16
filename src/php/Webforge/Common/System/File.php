@@ -72,8 +72,7 @@ class File
      *
      * @return self
      */
-    public static function createTemporary($extension = null)
-    : static {
+    public static function createTemporary($extension = null): static {
         $tmpfile = tempnam(sys_get_temp_dir(), mb_substr(uniqid(), 0, 3));
 
         if ($extension) {
@@ -140,8 +139,7 @@ class File
     /**
      * @return self
      */
-    public static function factory($arg1, $arg2 = null)
-    : static {
+    public static function factory($arg1, $arg2 = null): static {
         return new self($arg1, $arg2);
     }
 
@@ -187,11 +185,8 @@ class File
 
     /**
      * Returns the contents of the file
-     *
-     * @return string
      */
-    public function getContents(mixed $maxLength = null)
-    : string {
+    public function getContents(mixed $maxLength = null): string {
         if (isset($maxLength)) {
             $ret = @file_get_contents(
                 (string)$this,
@@ -229,8 +224,7 @@ class File
      *
      * @return bool
      */
-    public function move(File $fileDestination, $overwrite = false)
-    : static {
+    public function move(File $fileDestination, $overwrite = false): static {
         if (!$this->exists()) {
             throw new Exception('Quelle von move existiert nicht. ' . $this);
         }
@@ -263,8 +257,7 @@ class File
      *
      * @chainable
      */
-    public function copy(mixed $destination)
-    : static {
+    public function copy(mixed $destination): static {
         if (!$this->exists()) {
             throw new Exception('Source from copy does not exist: ' . $this);
         }
@@ -325,10 +318,8 @@ class File
 
     /**
      * Does the file exist physically?
-     * @return bool
      */
-    public function exists()
-    : bool {
+    public function exists(): bool {
         return mb_strlen($this->getName()) > 0 && is_file((string) $this);
     }
 
@@ -379,11 +370,8 @@ class File
 
     /**
      * Returns the full name of the file (with or without extension)
-     *
-     * @return string
      */
-    public function getName(mixed $extension = self::WITH_EXTENSION)
-    : string {
+    public function getName(mixed $extension = self::WITH_EXTENSION): string {
         if (isset($this->extension) && $extension == self::WITH_EXTENSION) {
             return $this->name . '.' . $this->extension;
         } else {
@@ -445,8 +433,7 @@ class File
     /**
      * @return tring
      */
-    public function __toString()
-    : string {
+    public function __toString(): string {
         $dir = (string) $this->getDirectory();
 
         return $dir . $this->getName();

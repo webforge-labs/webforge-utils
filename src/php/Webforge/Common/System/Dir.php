@@ -111,8 +111,7 @@ class Dir
      * @param string $path with trailing slash
      * @return Dir
      */
-    public static function factory($path = null)
-    : static {
+    public static function factory($path = null): static {
         return new static($path);
     }
 
@@ -147,8 +146,7 @@ class Dir
     /**
      * Creates a temporary Directory
      */
-    public static function createTemporary()
-    : static {
+    public static function createTemporary(): static {
         $file = File::createTemporary();
         $tempname = $file->getName();
         $file->delete();
@@ -511,8 +509,7 @@ class Dir
      * @param string|Dir $dir das Verzeichnis muss relativ sein
      * @chainable
      */
-    public function append(mixed $dir)
-    : static {
+    public function append(mixed $dir): static {
         if ($dir == null) {
             return $this;
         }
@@ -547,8 +544,7 @@ class Dir
      * @param string $subDirUrl with / at the end and / inbetween (dont' use backslash!)
      * @return Dir
      */
-    public function sub(mixed $subDirUrl)
-    : static {
+    public function sub(mixed $subDirUrl): static {
         $sub = clone $this;
         return $sub->append($subDirUrl);
     }
@@ -607,8 +603,7 @@ class Dir
      * @param int $sort eine Konstante die bestimmt, wie die Dateien in Verzeichnissen sortiert ausgegeben werden sollen
      * @return array mit Dir und File
      */
-    public function getContents(mixed $extensions = null, ?array $ignores = null, $sort = null, $subDirs = null)
-    : array {
+    public function getContents(mixed $extensions = null, ?array $ignores = null, $sort = null, $subDirs = null): array {
         if (!$this->exists()) {
             throw new Exception('Verzeichnis existiert nicht: ' . $this);
         }
@@ -674,9 +669,9 @@ class Dir
             /* alphabetisch sortieren */
             if ($sort & self::SORT_ALPHABETICAL) {
                 if ($order == 'asc') {
-                    $function = fn($a,$b) => strcasecmp($a->getName(),$b->getName());
+                    $function = fn ($a, $b) => strcasecmp($a->getName(), $b->getName());
                 } else {
-                    $function = fn($a,$b) => strcasecmp($b->getName(),$a->getName());
+                    $function = fn ($a, $b) => strcasecmp($b->getName(), $a->getName());
                 }
 
                 uasort($content, $function);
@@ -834,8 +829,7 @@ class Dir
      *
      * @chainable
      */
-    public function copy(Dir $destination, $extensions = null, $ignores = null, $subDirs = null)
-    : static {
+    public function copy(Dir $destination, $extensions = null, $ignores = null, $subDirs = null): static {
         if ((string) $destination == (string) $this) {
             throw new Exception('Kann nicht kopieren: Zielverzeichnis und Quellverzeichns sind gleich.');
         }
@@ -868,8 +862,7 @@ class Dir
      *
      * @chainable
      */
-    public function move(Dir $destination)
-    : static {
+    public function move(Dir $destination): static {
         $ret = @rename((string) $this, (string) $destination);
 
         $errInfo = 'Kann Verzeichnis ' . $this . ' nicht nach ' . $destination . ' verschieben / umbenennen.';
@@ -995,11 +988,7 @@ class Dir
         return $file;
     }
 
-    /**
-     * @return bool
-     */
-    public function exists()
-    : bool {
+    public function exists(): bool {
         if (count($this->path) == 0) {
             return false;
         }
@@ -1048,11 +1037,7 @@ class Dir
         return $this->prefix === null;
     }
 
-    /**
-     * @return bool
-     */
-    public function isAbsolute()
-    : bool {
+    public function isAbsolute(): bool {
         return $this->prefix !== null;
     }
 
@@ -1072,10 +1057,8 @@ class Dir
      * Returns the Path as string
      *
      * the path is returned for the current Operating System
-     * @return string
      */
-    public function getPath(mixed $flags = 0x000000)
-    : string {
+    public function getPath(mixed $flags = 0x000000): string {
         $ds = $this->getDS();
 
         $trail = $flags & self::WITHOUT_TRAILINGSLASH ? '' : $ds;
@@ -1189,28 +1172,19 @@ class Dir
 
     /**
      * Is the path to the other directory the same?
-     * @return bool
      */
-    public function equals(Dir $dir)
-    : bool {
+    public function equals(Dir $dir): bool {
         return $this->getPath() === $dir->getPath();
     }
 
-    /**
-     * @return array
-     */
-    public function getPathArray()
-    : array {
+    public function getPathArray(): array {
         return $this->path;
     }
 
     /**
      * Returns the basename of the directory
-     *
-     * @return string
      */
-    public function getName()
-    : string {
+    public function getName(): string {
         if (count($this->path) > 0) {
             return $this->path[count($this->path) - 1];
         }
@@ -1253,8 +1227,7 @@ class Dir
         return $os;
     }
 
-    public function __toString()
-    : string {
+    public function __toString(): string {
         return $this->getPath();
     }
 

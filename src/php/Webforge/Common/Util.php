@@ -94,8 +94,6 @@ class Util
      * Diese Funktion wirklich nur zu Debug-Zwecken benutzen (in Exceptions), da sie sehr langsam ist
      *
      * Gbit den Typ und weitere Informationen zum Typ zurück
-     * @param mixed $var
-     * @return string
      */
     public static function typeInfo(mixed $var): string {
         $string = gettype($var);
@@ -115,9 +113,6 @@ class Util
         return $string;
     }
 
-    /**
-     * @return Closure
-     */
     public static function castGetterFromSample(mixed $getter, mixed $sampleObject): Closure {
         if (!($getter instanceof Closure)) {
             if (mb_strpos($getter, 'get') !== 0) {
@@ -145,7 +140,6 @@ class Util
 
     /**
      * @param array|Traversable|mixed $collection
-     * @return array
      */
     public static function castArray(mixed $collection): array
     {

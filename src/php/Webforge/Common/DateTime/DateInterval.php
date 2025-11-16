@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Webforge\Common\DateTime;
 
@@ -7,7 +7,7 @@ use Webforge\Common\Preg;
 class DateInterval extends \DateInterval
 {
   /**
-   * @var array<string, int> microseconds of the interval indexed by object hash
+   * @var array<string, int|float> microseconds of the interval indexed by object hash
    */
     protected static array $usData = [];
 
@@ -40,7 +40,7 @@ class DateInterval extends \DateInterval
     /**
      * Zusätzlich zum normalen Format gehen %u (microseconds) und %n (milliseconds) analag %U und %N
      */
-    public function format($string): string
+    public function format(string $string): ?string
     {
         $ret = parent::format($string);
         if ($ret === null) {
@@ -95,18 +95,12 @@ class DateInterval extends \DateInterval
         return new self($spec);
     }
 
-    /**
-     * @return int
-     */
-    public function getUS()
+    public function getUS(): int|float
     {
         return self::$usData[spl_object_hash($this)];
     }
 
-    /**
-     * @param int
-     */
-    public function setUS(int $us): self
+    public function setUS(int|float $us): self
     {
         self::$usData[spl_object_hash($this)] = $us;
         return $this;
