@@ -30,5 +30,6 @@ watch-phpstan *args='':
     find config/ src/ tests/ -type f -name '*.php' | entr j phpstan "${@}"
 
 release-interactive: fix phpunit
-    release-it
+    #!/usr/bin/env bash
+    source ~/.nvm/nvm.sh && nvm use && release-it
 
