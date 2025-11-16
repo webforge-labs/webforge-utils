@@ -40,19 +40,16 @@ class DateInterval extends \DateInterval
     /**
      * Zusätzlich zum normalen Format gehen %u (microseconds) und %n (milliseconds) analag %U und %N
      */
-    public function format(string $string): ?string
+    public function format(string $string): string
     {
         $ret = parent::format($string);
-        if ($ret === null) {
-            return null;
-        }
 
-        if (mb_stripos($string, '%u')) {
+        if (mb_stripos($string, '%u') !== false) {
             $ret = preg_replace('/(?<!%)%u/u', (string) $this->getUS(), $ret);
             $ret = preg_replace('/(?<!%)%U/u', sprintf('%02d', $this->getUS()), $ret);
         }
 
-        if (mb_stripos($string, '%n')) {
+        if (mb_stripos($string, '%n') !== false) {
             $ret = preg_replace('/(?<!%)%n/u', sprintf('%d', (int)($this->getUS() / 1000)), $ret);
             $ret = preg_replace('/(?<!%)%N/u', sprintf('%02d', (int)($this->getUS() / 1000)), $ret);
         }
