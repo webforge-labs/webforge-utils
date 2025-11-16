@@ -1,0 +1,8 @@
+{
+  "gitlab": {
+    "release": true
+  },
+  "npm": {
+    "publish": false
+  }
+}
